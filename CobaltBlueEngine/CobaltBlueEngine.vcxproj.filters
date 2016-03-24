@@ -4,15 +4,33 @@
     <Filter Include="Core">
       <UniqueIdentifier>{10edeae0-b581-4057-9902-66e9b6220689}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{3ecf048c-3ae4-4da7-88d5-03c6d49ce50d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{8c551ad7-8605-4f83-a39a-8179a34b4c37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CobaltBlue.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CobaltBlue.h">
+    <ClInclude Include="Headers\CobaltBlue.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltGraphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\CobaltBlueCore.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\CobaltEngine.h">
+      <Filter>System</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Graphics\CobaltGraphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="System\CobaltEngine.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
