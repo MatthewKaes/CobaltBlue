@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CobaltBlue", "CobaltBlue\CobaltBlue.vcxproj", "{FA6A9E7A-0A96-4967-AEBF-D0582E8F10A5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95} = {534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CobaltBlueEngine", "CobaltBlueEngine\CobaltBlueEngine.vcxproj", "{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA6A9E7A-0A96-4967-AEBF-D0582E8F10A5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FA6A9E7A-0A96-4967-AEBF-D0582E8F10A5}.Debug|Win32.Build.0 = Debug|Win32
+		{FA6A9E7A-0A96-4967-AEBF-D0582E8F10A5}.Release|Win32.ActiveCfg = Release|Win32
+		{FA6A9E7A-0A96-4967-AEBF-D0582E8F10A5}.Release|Win32.Build.0 = Release|Win32
+		{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}.Debug|Win32.ActiveCfg = Debug|Win32
+		{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}.Debug|Win32.Build.0 = Debug|Win32
+		{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}.Release|Win32.ActiveCfg = Release|Win32
+		{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
