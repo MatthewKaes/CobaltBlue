@@ -1,5 +1,9 @@
-#define EXPORT __declspec( dllexport )
+#ifdef COBALTENGINEAPI
+#define COBALTAPI __declspec( dllexport )
+#else
+#define COBALTAPI __declspec( dllimport )
+#endif
 
 extern "C" {
-  EXPORT void Test();
+  COBALTAPI void Test();
 }
