@@ -87,6 +87,8 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     ShowCursor(false);
   }
 
+  Graphics.Initialize(screenWidth, screenHeight, fullScreen, m_hwnd);
+
   return;
 }
 
@@ -130,13 +132,21 @@ void CobaltEngine::Run()
     }
 
     // If windows signals to end the application then exit out.
-    if (msg.message == WM_QUIT || Input.Pressed(Inputs::F12))
+    if (msg.message == WM_QUIT || !Frame())
     {
       done = true;
     }
   }
 
   return;
+}
+
+bool CobaltEngine::Frame()
+{
+  if (Input.Pressed(Inputs::F12))
+    return false;
+
+  return Graphics.Frame();
 }
 
 LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
