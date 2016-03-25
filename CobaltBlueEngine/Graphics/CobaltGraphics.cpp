@@ -8,12 +8,12 @@ bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen
   m_full = fullScreen;
   m_window = window;
 
-  return true;
+  return m_DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR);
 }
 
 void CobaltGraphics::Shutdown()
 {
-
+  m_DirectX.Shutdown();
 }
 
 bool CobaltGraphics::Frame()
@@ -23,5 +23,8 @@ bool CobaltGraphics::Frame()
 
 bool CobaltGraphics::Render()
 {
+  m_DirectX.BeginScene(0.0f, 1.0f, 1.0f, 1.0f);
+  
+  m_DirectX.EndScene();
   return true;
 }

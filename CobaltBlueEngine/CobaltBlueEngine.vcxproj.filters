@@ -13,6 +13,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{6056e944-611a-410b-9662-19d79110bfb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{30b78a0b-4d3c-4ae9-ac88-498f39905e5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h">
@@ -33,6 +36,9 @@
     <ClInclude Include="Headers\InputTable.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Direct3d.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -43,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="Input\CobaltInput.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Header\Direct3d.cpp">
+      <Filter>DirectX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

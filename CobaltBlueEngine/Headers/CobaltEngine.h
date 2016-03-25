@@ -5,7 +5,7 @@
 #include "CobaltInput.h"
 #include "CobaltGraphics.h"
 
-class COBALTAPI CobaltEngine {
+class CobaltEngine {
 public:
   // Core Functions
   CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen);
@@ -26,8 +26,5 @@ private:
 };
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
-static CobaltEngine* EngineHandle = 0;
-CobaltInput CobaltEngine::Input;
-CobaltGraphics CobaltEngine::Graphics;
 
 #endif

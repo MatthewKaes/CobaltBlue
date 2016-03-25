@@ -4,7 +4,7 @@
 #include "CobaltBlueCore.h"
 #include "InputTable.h"
 
-class COBALTAPI CobaltInput
+class CobaltInput
 {
 public:
   // API Friend classes

@@ -2,8 +2,9 @@
 #define COBALTBLUEGRAPHICS
 
 #include "CobaltBlueCore.h"
+#include "Direct3d.h"
 
-class COBALTAPI CobaltGraphics
+class CobaltGraphics
 {
 public:
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window);
@@ -16,6 +17,7 @@ private:
   unsigned m_height;
   bool m_full;
   HWND m_window;
+  Direct3D m_DirectX;
 };
 
 #endif

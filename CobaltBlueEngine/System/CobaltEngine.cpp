@@ -1,6 +1,10 @@
 #define COBALTENGINEAPI
 #include "CobaltEngine.h"
 
+static CobaltEngine* EngineHandle = 0;
+CobaltInput CobaltEngine::Input;
+CobaltGraphics CobaltEngine::Graphics;
+
 CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen)
 {
   WNDCLASSEX wc;
