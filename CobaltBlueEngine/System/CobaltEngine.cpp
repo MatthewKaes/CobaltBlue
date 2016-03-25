@@ -35,7 +35,8 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
   // Setup the screen settings depending on whether it is running in full screen or in windowed mode.
-  if (fullScreen)
+  m_fullScreenMode = fullScreen;
+  if (m_fullScreenMode)
   {
     // If full screen set the screen to maximum size of the users desktop and 32bit.
     memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
@@ -85,6 +86,28 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   {
     ShowCursor(false);
   }
+
+  return;
+}
+
+CobaltEngine::~CobaltEngine()
+{
+  ShowCursor(true);
+
+  // Fix the display settings if leaving full screen mode.
+  if (m_fullScreenMode)
+  {
+    ChangeDisplaySettings(NULL, 0);
+  }
+
+  DestroyWindow(m_hwnd);
+  m_hwnd = NULL;
+
+  UnregisterClass(m_appName, m_hinstance);
+  m_hinstance = NULL;
+
+  // Release the pointer to this class.
+  EngineHandle = NULL;
 
   return;
 }
