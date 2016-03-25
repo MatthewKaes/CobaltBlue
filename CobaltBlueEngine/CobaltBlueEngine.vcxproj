@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
+    <ClCompile Include="Input\CobaltInput.cpp" />
     <ClCompile Include="System\CobaltEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -19,6 +20,8 @@
     <ClInclude Include="Headers\CobaltBlueCore.h" />
     <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltEngine.h" />
+    <ClInclude Include="Headers\CobaltInput.h" />
+    <ClInclude Include="Headers\InputTable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}</ProjectGuid>

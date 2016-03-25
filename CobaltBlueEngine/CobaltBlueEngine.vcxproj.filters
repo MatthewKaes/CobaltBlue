@@ -10,6 +10,9 @@
     <Filter Include="System">
       <UniqueIdentifier>{8c551ad7-8605-4f83-a39a-8179a34b4c37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{6056e944-611a-410b-9662-19d79110bfb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h">
@@ -24,6 +27,12 @@
     <ClInclude Include="Headers\CobaltEngine.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\InputTable.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -31,6 +40,9 @@
     </ClCompile>
     <ClCompile Include="System\CobaltEngine.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\CobaltInput.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

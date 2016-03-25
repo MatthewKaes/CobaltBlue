@@ -130,7 +130,7 @@ void CobaltEngine::Run()
     }
 
     // If windows signals to end the application then exit out.
-    if (msg.message == WM_QUIT)
+    if (msg.message == WM_QUIT || Input.Pressed(Inputs::F12))
     {
       done = true;
     }
@@ -141,7 +141,23 @@ void CobaltEngine::Run()
 
 LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
-  return DefWindowProc(hwnd, umsg, wparam, lparam);
+  switch (umsg)
+  {
+    case WM_KEYDOWN:
+    {
+      Input.KeyDown((unsigned int)wparam);
+      return 0;
+    }
+    case WM_KEYUP:
+    {
+      Input.KeyUp((unsigned int)wparam);
+      return 0;
+    }
+    default:
+    {
+      return DefWindowProc(hwnd, umsg, wparam, lparam);
+    }
+  }
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
