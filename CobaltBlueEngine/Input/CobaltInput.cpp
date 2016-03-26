@@ -1,4 +1,3 @@
-#define COBALTENGINEAPI
 #include "CobaltInput.h"
 
 CobaltInput::CobaltInput()

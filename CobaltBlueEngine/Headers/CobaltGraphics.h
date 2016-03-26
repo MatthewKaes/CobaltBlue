@@ -2,7 +2,7 @@
 #define COBALTBLUEGRAPHICS
 
 #include "CobaltBlueCore.h"
-#include "Direct3d.h"
+#include "CobaltCamera.h"
 
 class CobaltGraphics
 {
@@ -10,6 +10,8 @@ public:
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window);
   void Shutdown();
   bool Frame();
+
+  CobaltCamera Camera;
 
 private:
   bool Render();

@@ -11,14 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DirectX\Direct3d.cpp" />
+    <ClCompile Include="Graphics\CobaltCamera.cpp" />
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
-    <ClCompile Include="Header\Direct3d.cpp" />
     <ClCompile Include="Input\CobaltInput.cpp" />
     <ClCompile Include="System\CobaltEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h" />
     <ClInclude Include="Headers\CobaltBlueCore.h" />
+    <ClInclude Include="Headers\CobaltCamera.h" />
     <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltEngine.h" />
     <ClInclude Include="Headers\CobaltInput.h" />

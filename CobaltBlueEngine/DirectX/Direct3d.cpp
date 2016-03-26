@@ -441,22 +441,19 @@ ID3D11DeviceContext* Direct3D::GetDeviceContext()
   return m_deviceContext;
 }
 
-void Direct3D::GetProjectionMatrix(XMMATRIX& projectionMatrix)
+XMMATRIX Direct3D::GetProjectionMatrix()
 {
-  projectionMatrix = m_projectionMatrix;
-  return;
+  return m_projectionMatrix;
 }
 
-void Direct3D::GetWorldMatrix(XMMATRIX& worldMatrix)
+XMMATRIX Direct3D::GetWorldMatrix()
 {
-  worldMatrix = m_worldMatrix;
-  return;
+  return m_worldMatrix;
 }
 
-void Direct3D::GetOrthoMatrix(XMMATRIX& orthoMatrix)
+XMMATRIX Direct3D::GetOrthoMatrix()
 {
-  orthoMatrix = m_orthoMatrix;
-  return;
+  return m_orthoMatrix;
 }
 
 void Direct3D::GetVideoCardInfo(char* cardName, int& memory)

@@ -1,4 +1,3 @@
-#define COBALTENGINEAPI
 #include "CobaltEngine.h"
 
 static CobaltEngine* EngineHandle = 0;

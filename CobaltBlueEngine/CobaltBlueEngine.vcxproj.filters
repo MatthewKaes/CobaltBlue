@@ -39,6 +39,9 @@
     <ClInclude Include="Headers\Direct3d.h">
       <Filter>DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltCamera.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -50,8 +53,11 @@
     <ClCompile Include="Input\CobaltInput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Header\Direct3d.cpp">
+    <ClCompile Include="DirectX\Direct3d.cpp">
       <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\CobaltCamera.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
