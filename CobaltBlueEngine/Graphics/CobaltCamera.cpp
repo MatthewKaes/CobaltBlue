@@ -1,4 +1,8 @@
 #include "CobaltCamera.h"
+#include <dxgi.h>
+#include <d3dcommon.h>
+#include <d3d11.h>
+#include <DirectXMath.h>
 
 CobaltCamera::CobaltCamera()
 {
@@ -40,9 +44,9 @@ void CobaltCamera::Rotate(float degX, float degY, float degZ)
 
 void CobaltCamera::Update()
 {
-  XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-  XMVECTOR position = DirectX::XMVectorSet(m_posX, m_posY, m_posZ, 0.0f);
-  XMVECTOR lookAt = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+  XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+  XMVECTOR position = XMVectorSet(m_posX, m_posY, m_posZ, 0.0f);
+  XMVECTOR lookAt = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
   float yaw, pitch, roll;
   XMMATRIX rotationMatrix;
 
@@ -55,17 +59,17 @@ void CobaltCamera::Update()
   rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
   // Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-  lookAt = DirectX::XMVector3TransformCoord(lookAt, rotationMatrix);
-  up = DirectX::XMVector3TransformCoord(up, rotationMatrix);
+  lookAt = XMVector3TransformCoord(lookAt, rotationMatrix);
+  up = XMVector3TransformCoord(up, rotationMatrix);
 
   // Translate the rotated camera position to the location of the viewer.
   lookAt = position + lookAt;
 
   // Finally create the view matrix from the three updated vectors.
-  m_viewMatrix = DirectX::XMMatrixLookAtLH(position, lookAt, up);
+  m_viewMatrix = XMMatrixLookAtLH(position, lookAt, up);
 }
 
-XMMATRIX CobaltCamera::GetView()
+void CobaltCamera::GetView(XMMATRIX& viewMatrix)
 {
-  return m_viewMatrix;
+	viewMatrix = m_viewMatrix;
 }

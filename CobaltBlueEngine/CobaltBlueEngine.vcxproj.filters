@@ -16,6 +16,9 @@
     <Filter Include="DirectX">
       <UniqueIdentifier>{30b78a0b-4d3c-4ae9-ac88-498f39905e5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{11a6585f-46e2-407c-b96c-6a08a90aa2d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h">
@@ -42,6 +45,12 @@
     <ClInclude Include="Headers\CobaltCamera.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\ShaderCore.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Model3d.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -59,5 +68,19 @@
     <ClCompile Include="Graphics\CobaltCamera.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX\ShaderCore.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Model3d.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Color.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Color.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

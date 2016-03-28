@@ -2,7 +2,13 @@
 #define COBALTBLUECAMERA
 
 #include "CobaltBlueCore.h"
-#include "Direct3d.h"
+
+#include <dxgi.h>
+#include <d3dcommon.h>
+#include <d3d11.h>
+#include <DirectXMath.h>
+
+using namespace DirectX;
 
 class CobaltCamera 
 {
@@ -15,7 +21,7 @@ public:
   void Rotate(float degX, float degY, float degZ);
 
   void Update();
-  XMMATRIX GetView();
+  void GetView(XMMATRIX& viewMatrix);
 
 private:
   float m_posX;

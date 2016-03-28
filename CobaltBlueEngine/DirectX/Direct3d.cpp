@@ -21,7 +21,7 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   unsigned numModes;
   unsigned numerator;
   unsigned denominator;
-  unsigned stringLength;
+  size_t stringLength;
   DXGI_MODE_DESC* displayModeList;
   DXGI_ADAPTER_DESC adapterDesc;
   int error;
@@ -441,19 +441,19 @@ ID3D11DeviceContext* Direct3D::GetDeviceContext()
   return m_deviceContext;
 }
 
-XMMATRIX Direct3D::GetProjectionMatrix()
+void Direct3D::GetProjectionMatrix(XMMATRIX& projMatrix)
 {
-  return m_projectionMatrix;
+  projMatrix = m_projectionMatrix;
 }
 
-XMMATRIX Direct3D::GetWorldMatrix()
+void Direct3D::GetWorldMatrix(XMMATRIX& worldMatrix)
 {
-  return m_worldMatrix;
+  worldMatrix = m_worldMatrix;
 }
 
-XMMATRIX Direct3D::GetOrthoMatrix()
+void Direct3D::GetOrthoMatrix(XMMATRIX& orthoMatrix)
 {
-  return m_orthoMatrix;
+  orthoMatrix = m_orthoMatrix;
 }
 
 void Direct3D::GetVideoCardInfo(char* cardName, int& memory)

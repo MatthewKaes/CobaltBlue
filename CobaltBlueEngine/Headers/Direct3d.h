@@ -30,9 +30,9 @@ public:
   ID3D11Device* GetDevice();
   ID3D11DeviceContext* GetDeviceContext();
 
-  XMMATRIX GetProjectionMatrix();
-  XMMATRIX GetWorldMatrix();
-  XMMATRIX GetOrthoMatrix();
+  void GetProjectionMatrix(XMMATRIX& projMatrix);
+  void GetWorldMatrix(XMMATRIX& worldMatrix);
+  void GetOrthoMatrix(XMMATRIX& orthoMatrix);
 
   void GetVideoCardInfo(char*, int&);
 
