@@ -15,7 +15,7 @@ class CobaltGraphics
 public:
   friend class Model3D;
 
-  bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window);
+  bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
   void Shutdown();
   bool Frame();
 

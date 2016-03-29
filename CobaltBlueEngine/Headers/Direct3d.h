@@ -14,6 +14,14 @@
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
 
+#define MULTISAMPLE_QUALITY 0
+enum class AntiAlias {
+  None = 1,
+  MSAA2x = 2,
+  MSAA4x = 4,
+  MSAA8x = 8,
+};
+
 using namespace DirectX;
 
 class Direct3D
@@ -21,7 +29,7 @@ class Direct3D
 public:
   Direct3D();
 
-  bool Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear);
+  bool Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear, AntiAlias antiAlias);
   void Shutdown();
 
   void BeginScene(float red, float green, float blue, float alpha);

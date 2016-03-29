@@ -12,17 +12,13 @@ Direct3D::Direct3D()
   m_rasterState = 0;
 }
 
-bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear)
+bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear, AntiAlias antiAlias)
 {
   HRESULT result;
   IDXGIFactory* factory;
   IDXGIAdapter* adapter;
   IDXGIOutput* adapterOutput;
-  unsigned numModes;
-  unsigned numerator;
-  unsigned denominator;
   size_t stringLength;
-  DXGI_MODE_DESC* displayModeList;
   DXGI_ADAPTER_DESC adapterDesc;
   int error;
   DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -59,42 +55,6 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
     return false;
   }
 
-  // Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
-  result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
-  if (FAILED(result))
-  {
-    return false;
-  }
-
-  // Create a list to hold all the possible display modes for this monitor/video card combination.
-  displayModeList = new DXGI_MODE_DESC[numModes];
-  if (!displayModeList)
-  {
-    return false;
-  }
-
-  // Now fill the display mode list structures.
-  result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList);
-  if (FAILED(result))
-  {
-    return false;
-  }
-
-  // Now go through all the display modes and find the one that matches the screen width and height.
-  // When a match is found store the numerator and denominator of the refresh rate for that monitor.
-  for (unsigned i = 0; i < numModes; i++)
-  {
-    if (displayModeList[i].Width == (unsigned int)width)
-    {
-      if (displayModeList[i].Height == (unsigned int)height)
-      {
-        numerator = displayModeList[i].RefreshRate.Numerator;
-        denominator = displayModeList[i].RefreshRate.Denominator;
-      }
-    }
-  }
-
-  // Get the adapter (video card) description.
   result = adapter->GetDesc(&adapterDesc);
   if (FAILED(result))
   {
@@ -111,17 +71,9 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
     return false;
   }
 
-  // Release the display mode list.
-  delete[] displayModeList;
-  displayModeList = 0;
-
   // Release the adapter output.
   adapterOutput->Release();
   adapterOutput = 0;
-
-  // Release the adapter.
-  adapter->Release();
-  adapter = 0;
 
   // Release the factory.
   factory->Release();
@@ -130,64 +82,30 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   // Initialize the swap chain description.
   ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
-  // Set to a single back buffer.
   swapChainDesc.BufferCount = 1;
-
-  // Set the width and height of the back buffer.
   swapChainDesc.BufferDesc.Width = width;
   swapChainDesc.BufferDesc.Height = height;
-
-  // Set regular 32-bit surface for the back buffer.
   swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-  // Set the refresh rate of the back buffer.
-  if (m_vsync_enabled)
-  {
-    swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;
-    swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;
-  }
-  else
-  {
-    swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
-    swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-  }
-
-  // Set the usage of the back buffer.
+  swapChainDesc.BufferDesc.RefreshRate.Numerator = m_vsync_enabled ? 60 : 1;
+  swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
-  // Set the handle for the window to render to.
   swapChainDesc.OutputWindow = window;
-
-  // Turn multisampling off.
-  swapChainDesc.SampleDesc.Count = 1;
-  swapChainDesc.SampleDesc.Quality = 0;
-
-  // Set to full screen or windowed mode.
-  if (fullscreen)
-  {
-    swapChainDesc.Windowed = false;
-  }
-  else
-  {
-    swapChainDesc.Windowed = true;
-  }
-
-  // Set the scan line ordering and scaling to unspecified.
+  swapChainDesc.SampleDesc.Count = (UINT)antiAlias;
+  swapChainDesc.SampleDesc.Quality = MULTISAMPLE_QUALITY;
+  swapChainDesc.Windowed = !fullscreen;
   swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
   swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-  // Discard the back buffer contents after presenting.
   swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-  // Don't set the advanced flags.
   swapChainDesc.Flags = 0;
-
-  // Set the feature level to DirectX 11.
   featureLevel = D3D_FEATURE_LEVEL_11_0;
 
+  unsigned int creationFlags = 0;
+#ifdef _DEBUG
+  creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
   // Create the swap chain, Direct3D device, and Direct3D device context.
-  result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1,
-    D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+  result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, creationFlags, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
   if (FAILED(result))
   {
     return false;
@@ -220,8 +138,8 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   depthBufferDesc.MipLevels = 1;
   depthBufferDesc.ArraySize = 1;
   depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-  depthBufferDesc.SampleDesc.Count = 1;
-  depthBufferDesc.SampleDesc.Quality = 0;
+  depthBufferDesc.SampleDesc.Count = (UINT)antiAlias;
+  depthBufferDesc.SampleDesc.Quality = MULTISAMPLE_QUALITY;
   depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
   depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
   depthBufferDesc.CPUAccessFlags = 0;
@@ -273,7 +191,7 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
 
   // Set up the depth stencil view description.
   depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-  depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+  depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
   depthStencilViewDesc.Texture2D.MipSlice = 0;
 
   // Create the depth stencil view.
@@ -287,14 +205,14 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
   // Setup the raster description which will determine how and what polygons will be drawn.
-  rasterDesc.AntialiasedLineEnable = false;
+  rasterDesc.AntialiasedLineEnable = true;
   rasterDesc.CullMode = D3D11_CULL_BACK;
   rasterDesc.DepthBias = 0;
   rasterDesc.DepthBiasClamp = 0.0f;
   rasterDesc.DepthClipEnable = true;
   rasterDesc.FillMode = D3D11_FILL_SOLID;
   rasterDesc.FrontCounterClockwise = false;
-  rasterDesc.MultisampleEnable = false;
+  rasterDesc.MultisampleEnable = true;
   rasterDesc.ScissorEnable = false;
   rasterDesc.SlopeScaledDepthBias = 0.0f;
 

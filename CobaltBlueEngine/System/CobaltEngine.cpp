@@ -4,7 +4,7 @@ static CobaltEngine* EngineHandle = 0;
 CobaltInput CobaltEngine::Input;
 CobaltGraphics CobaltEngine::Graphics;
 
-CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen)
+CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, AntiAlias antiAlias)
 {
   WNDCLASSEX wc;
   DEVMODE dmScreenSettings;
@@ -90,7 +90,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     ShowCursor(false);
   }
 
-  Graphics.Initialize(screenWidth, screenHeight, fullScreen, m_hwnd);
+  Graphics.Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
 
   return;
 }
@@ -146,7 +146,7 @@ void CobaltEngine::Run()
 
 bool CobaltEngine::Frame()
 {
-  if (Input.Pressed(Inputs::F12))
+  if (Input.Pressed(Inputs::Esc))
     return false;
 
   return Graphics.Frame();

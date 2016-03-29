@@ -1,6 +1,6 @@
 #include "CobaltGraphics.h"
 
-bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window)
+bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias)
 {
   m_width = width;
   m_height = height;
@@ -10,7 +10,7 @@ bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen
   // Set the initial position of the camera.
   Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
-  bool result = m_DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR);
+  bool result = m_DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, antiAlias);
   if (!result)
   {
 	  return false;
