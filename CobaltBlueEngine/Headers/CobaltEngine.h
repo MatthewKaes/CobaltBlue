@@ -8,7 +8,7 @@
 class CobaltEngine {
 public:
   // Core Functions
-  CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, AntiAlias antiAlias);
+  CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, unsigned fps, AntiAlias antiAlias);
   ~CobaltEngine();
   void Run();
   bool Frame();

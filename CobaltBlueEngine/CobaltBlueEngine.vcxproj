@@ -42,6 +42,8 @@
   <ItemGroup>
     <None Include="Shaders\Color.ps" />
     <None Include="Shaders\Color.vs" />
+    <None Include="Shaders\Texture.ps" />
+    <None Include="Shaders\Texture.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}</ProjectGuid>

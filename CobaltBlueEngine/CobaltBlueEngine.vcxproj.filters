@@ -82,5 +82,11 @@
     <None Include="Shaders\Color.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Texture.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Texture.ps">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

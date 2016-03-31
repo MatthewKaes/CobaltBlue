@@ -8,7 +8,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
-  CobaltEngine engine(640, 480, L"Test App", false, AntiAlias::MSAA4x);
+  CobaltEngine engine(1366, 768, L"Test App", false, 60, AntiAlias::MSAA4x);
 
   // Create a test model
   Model3D triangle;
