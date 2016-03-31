@@ -90,7 +90,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     ShowCursor(false);
   }
 
-  Graphics.Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, fps, antiAlias);
+  Graphics.Initialize(screenWidth, screenHeight, fullScreen, fps, m_hwnd, antiAlias);
 
   return;
 }

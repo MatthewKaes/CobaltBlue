@@ -1,6 +1,6 @@
 #include "CobaltGraphics.h"
 
-bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, unsigned fps, AntiAlias antiAlias)
+bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, unsigned fps, HWND window, AntiAlias antiAlias)
 {
   m_width = width;
   m_height = height;
