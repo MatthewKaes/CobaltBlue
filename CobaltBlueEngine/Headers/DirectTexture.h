@@ -26,6 +26,7 @@ public:
 
 private:
   bool LoadTGA(LPCWSTR filename);
+  bool LoadTexture(LPCWSTR filename);
 
   unsigned char* m_textureData;
   unsigned m_width;

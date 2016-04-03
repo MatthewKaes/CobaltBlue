@@ -1,5 +1,8 @@
 #include "DirectTexture.h"
 #include <stdio.h>
+#include <wincodec.h>
+
+#pragma comment(lib, "windowscodecs.lib")
 
 struct TargaHeader
 {
@@ -29,7 +32,7 @@ bool DirectTexture::Initialize(ID3D11Device* device, ID3D11DeviceContext* contex
   D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 
   // Load the targa image data into memory.
-  result = LoadTGA(filename);
+  result = LoadTexture(filename);
   if (!result)
   {
     return false;
@@ -143,7 +146,8 @@ ID3D11ShaderResourceView* DirectTexture::GetTexture()
 
 bool DirectTexture::LoadTGA(LPCWSTR filename) 
 {
-  int bpp, imageSize;
+  int bpp;
+  int imageSize;
   FILE* filePtr;
   unsigned int count;
   TargaHeader targaFileHeader;
@@ -229,6 +233,66 @@ bool DirectTexture::LoadTGA(LPCWSTR filename)
   // Release the targa image data now that it was copied into the destination array.
   delete[] targaImage;
   targaImage = 0;
+
+  return true;
+}
+
+bool DirectTexture::LoadTexture(LPCWSTR filename)
+{
+  if (!lstrcmpiW(filename + lstrlenW(filename) - lstrlenW(L".TGA"), L".TGA"))
+  {
+    return LoadTGA(filename);
+  }
+
+  CoInitialize(NULL);
+  
+  IWICBitmapDecoder* pDecoder = NULL;
+  IWICImagingFactory* pFactory = NULL;
+  IWICBitmapFrameDecode* bitmapSource = NULL;
+  IWICFormatConverter* converter = NULL;
+
+  HRESULT hr = CoCreateInstance(
+    CLSID_WICImagingFactory,
+    NULL,
+    CLSCTX_INPROC_SERVER,
+    IID_PPV_ARGS(&pFactory)
+    );
+
+  hr = pFactory->CreateDecoderFromFilename(filename, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &pDecoder);
+  if (FAILED(hr))
+  {
+    pFactory->Release();
+    return false;
+  }
+
+  hr = pDecoder->GetFrame(0, &bitmapSource);
+  if (FAILED(hr))
+  {
+    pFactory->Release();
+    pDecoder->Release();
+    return false;
+  }
+
+  pFactory->CreateFormatConverter(&converter);
+  converter->Initialize(bitmapSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeMedianCut);
+
+  bitmapSource->GetSize(&m_width, &m_height);
+
+  // Calculate the size of the 32 bit image data.
+  unsigned imageSize = m_width * m_height * 4;
+  m_textureData = new unsigned char[imageSize];
+
+  WICRect sourceRect;
+  sourceRect.X = 0;
+  sourceRect.Y = 0;
+  sourceRect.Width = m_width;
+  sourceRect.Height = m_height;
+  converter->CopyPixels(&sourceRect, m_width * 4, imageSize, m_textureData);
+
+  bitmapSource->Release();
+  pDecoder->Release();
+  pFactory->Release();
+  converter->Release();
 
   return true;
 }
