@@ -8,8 +8,9 @@ using namespace DirectX;
 
 class Model3D {
 public:
-  Model3D(LPWSTR textureFile, TextureType textureType);
+  Model3D();
   ~Model3D();
+  void Create(LPWSTR textureFile, TextureType textureType);
   void Release();
   void Render(ID3D11DeviceContext* context);
 

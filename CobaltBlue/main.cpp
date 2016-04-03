@@ -6,14 +6,47 @@
 
 #include <experimental/filesystem>
 
+class AppScene : public CobaltScene {
+public:
+  void Start(CobaltEngine* engine)
+  {
+    triangle.Create(L"Textures\\stone.png", TextureType::Dynamic);
+  }
+
+  void Update(CobaltEngine* engine)
+  {
+    if (CobaltEngine::Input.Pressed(Inputs::Esc))
+    {
+      engine->Exit();
+      return;
+    }
+
+    if (engine->Input.Pressed(Inputs::Left))
+      engine->Graphics.Camera.Move(-0.1f, 0, 0);
+
+    if (engine->Input.Pressed(Inputs::Right))
+      engine->Graphics.Camera.Move(0.1f, 0, 0);
+
+    if (engine->Input.Pressed(Inputs::Down))
+      engine->Graphics.Camera.Move(0, -0.1f, 0);
+
+    if (engine->Input.Pressed(Inputs::Up))
+      engine->Graphics.Camera.Move(0, 0.1f, 0);
+  }
+
+  void Terminate(CobaltEngine* engine)
+  { 
+  }
+
+private:
+  Model3D triangle;
+};
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
   CobaltEngine engine(1366, 768, L"Test App", false, 60, AntiAlias::MSAA8x);
 
-  // Create a test model
-  Model3D triangle(L"Textures\\stone.png", TextureType::Dynamic);
-
-  engine.Run();
+  engine.Run(new AppScene());
 
   return 0;
 }

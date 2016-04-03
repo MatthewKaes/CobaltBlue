@@ -35,6 +35,7 @@
     <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltEngine.h" />
     <ClInclude Include="Headers\CobaltInput.h" />
+    <ClInclude Include="Headers\CobaltScene.h" />
     <ClInclude Include="Headers\Direct3d.h" />
     <ClInclude Include="Headers\DirectTexture.h" />
     <ClInclude Include="Headers\InputTable.h" />

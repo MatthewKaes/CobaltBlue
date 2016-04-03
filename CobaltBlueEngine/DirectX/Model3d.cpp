@@ -3,17 +3,24 @@
 
 unsigned Model3D::ModelID = 0;
 
-Model3D::Model3D(LPWSTR textureFile, TextureType textureType)
+Model3D::Model3D()
 {
-  m_id = Model3D::ModelID++;
-  CobaltEngine::Graphics.m_modelListings.insert(std::make_pair(m_id, this));
-  InitializeTexture(CobaltEngine::Graphics.m_DirectX.GetDevice(), CobaltEngine::Graphics.m_DirectX.GetDeviceContext(), textureFile, textureType);
-  InitializeBuffers(CobaltEngine::Graphics.m_DirectX.GetDevice());
 }
 
 Model3D::~Model3D()
 {
   Release();
+}
+
+void Model3D::Create(LPWSTR textureFile, TextureType textureType)
+{
+  // Add to the rendering queue.
+  m_id = Model3D::ModelID++;
+  CobaltEngine::Graphics.m_modelListings.insert(std::make_pair(m_id, this));
+
+  // Setup the object.
+  InitializeTexture(CobaltEngine::Graphics.m_DirectX.GetDevice(), CobaltEngine::Graphics.m_DirectX.GetDeviceContext(), textureFile, textureType);
+  InitializeBuffers(CobaltEngine::Graphics.m_DirectX.GetDevice());
 }
 
 void Model3D::Release()

@@ -10,6 +10,11 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   DEVMODE dmScreenSettings;
   int posX, posY;
 
+  // Set the scene information
+  m_currentScene = nullptr;
+  m_nextScene = nullptr;
+  m_exit = false;
+
   // Get the instance of this application.
   m_hinstance = GetModuleHandle(NULL);
 
@@ -117,15 +122,19 @@ CobaltEngine::~CobaltEngine()
   return;
 }
 
-void CobaltEngine::Run()
+void CobaltEngine::Run(CobaltScene* entryScene)
 {
   MSG msg;
-  bool done;
 
   ZeroMemory(&msg, sizeof(MSG));
 
-  done = false;
-  while (!done)
+  // Setup the scene.
+  m_exit = false;
+  m_currentScene = entryScene;
+  m_currentScene->Start(this);
+  m_nextScene = nullptr;
+
+  while (!m_exit)
   {
     // Handle the windows messages.
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -137,7 +146,16 @@ void CobaltEngine::Run()
     // If windows signals to end the application then exit out.
     if (msg.message == WM_QUIT || !Frame())
     {
-      done = true;
+      m_exit = true;
+    }
+
+    // Scene transitions.
+    if (m_nextScene != nullptr)
+    {
+      m_currentScene->Terminate(this);
+      delete m_currentScene;
+      m_currentScene = m_nextScene;
+      m_currentScene->Start(this);
     }
   }
 
@@ -146,22 +164,19 @@ void CobaltEngine::Run()
 
 bool CobaltEngine::Frame()
 {
-  if (Input.Pressed(Inputs::Esc))
-    return false;
-
-  if (Input.Pressed(Inputs::Left))
-    Graphics.Camera.Move(-0.1f, 0, 0);
-
-  if (Input.Pressed(Inputs::Right))
-    Graphics.Camera.Move(0.1f, 0, 0);
-
-  if (Input.Pressed(Inputs::Down))
-    Graphics.Camera.Move(0, -0.1f, 0);
-
-  if (Input.Pressed(Inputs::Up))
-    Graphics.Camera.Move(0, 0.1f, 0);
+  m_currentScene->Update(this);
    
   return Graphics.Frame();
+}
+
+void CobaltEngine::Exit()
+{
+  m_exit = true;
+}
+
+void CobaltEngine::GotoScene(CobaltScene* nextScene)
+{
+  m_nextScene = nextScene;
 }
 
 LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)

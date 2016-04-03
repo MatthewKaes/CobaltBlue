@@ -54,6 +54,9 @@
     <ClInclude Include="Headers\DirectTexture.h">
       <Filter>DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltScene.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
