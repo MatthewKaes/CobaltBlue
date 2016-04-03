@@ -149,6 +149,16 @@ bool CobaltEngine::Frame()
   if (Input.Pressed(Inputs::Esc))
     return false;
 
+  if (Input.Pressed(Inputs::Left))
+    Graphics.Camera.Move(-0.1f, 0, 0);
+
+  if (Input.Pressed(Inputs::Right))
+    Graphics.Camera.Move(0.1f, 0, 0);
+
+    Graphics.Camera.Move(0, -0.1f, 0);
+
+    Graphics.Camera.Move(0, 0.1f, 0);
+   
   return Graphics.Frame();
 }
 
