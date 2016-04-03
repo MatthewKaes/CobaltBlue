@@ -136,17 +136,25 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
   while (!m_exit)
   {
-    // Handle the windows messages.
-    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    bool still_messages = true;
+    while (still_messages)
     {
-      TranslateMessage(&msg);
-      DispatchMessage(&msg);
-    }
+      // Handle the windows messages.
+      if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+      {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+      }
+      else
+      {
+        still_messages = false;
+      }
 
-    // If windows signals to end the application then exit out.
-    if (msg.message == WM_QUIT || !Frame())
-    {
-      m_exit = true;
+      // If windows signals to end the application then exit out.
+      if (msg.message == WM_QUIT || !Frame())
+      {
+        m_exit = true;
+      }
     }
 
     // Scene transitions.
