@@ -11,11 +11,12 @@ using namespace std;
 class ShaderCore
 {
 public:
+  ShaderCore();
   ~ShaderCore();
 
   void Initialize(ID3D11Device* device, HWND window);
   void Shutdown();
-  bool Render(ID3D11DeviceContext* context, int indexCount, XMMATRIX  worldMatrix, XMMATRIX  viewMatrix, XMMATRIX  projectionMatrix);
+  bool Render(ID3D11DeviceContext* context, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
 
 private:
   struct MatrixBufferType
@@ -28,13 +29,14 @@ private:
   void InitializeShader(ID3D11Device* device, HWND window, WCHAR* vertexShader, WCHAR* pixelShader);
   void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename);
 
-  void SetShaderParameters(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
+  void SetShaderParameters(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
   void RenderShader(ID3D11DeviceContext* context, int indexCount);
 
   ID3D11VertexShader* m_vertexShader;
   ID3D11PixelShader* m_pixelShader;
   ID3D11InputLayout* m_layout;
   ID3D11Buffer* m_matrixBuffer;
+  ID3D11SamplerState* m_sampleState;
 };
 
 #endif

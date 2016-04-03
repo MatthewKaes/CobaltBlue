@@ -3,7 +3,7 @@
 
 #include "CobaltBlueCore.h"
 
-enum class Inputs{
+enum class Inputs {
   Shift = VK_SHIFT,
   Ctrl = VK_CONTROL,
   Alt = VK_MENU,

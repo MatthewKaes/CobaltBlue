@@ -51,6 +51,9 @@
     <ClInclude Include="Headers\Model3d.h">
       <Filter>DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\DirectTexture.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -74,18 +77,15 @@
     <ClCompile Include="DirectX\Model3d.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX\DirectTexture.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Color.ps">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Color.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\Texture.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\Texture.ps">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

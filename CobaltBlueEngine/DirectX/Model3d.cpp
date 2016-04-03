@@ -3,10 +3,11 @@
 
 unsigned Model3D::ModelID = 0;
 
-Model3D::Model3D()
+Model3D::Model3D(LPWSTR textureFile, TextureType textureType)
 {
   m_id = Model3D::ModelID++;
   CobaltEngine::Graphics.m_modelListings.insert(std::make_pair(m_id, this));
+  InitializeTexture(CobaltEngine::Graphics.m_DirectX.GetDevice(), CobaltEngine::Graphics.m_DirectX.GetDeviceContext(), textureFile, textureType);
   InitializeBuffers(CobaltEngine::Graphics.m_DirectX.GetDevice());
 }
 
@@ -31,7 +32,16 @@ void Model3D::Release()
   {
     m_vertexBuffer->Release();
     m_vertexBuffer = 0;
+  }	
+  
+  // Release the texture object.
+  if (m_Texture)
+  {
+    m_Texture->Shutdown();
+    delete m_Texture;
+    m_Texture = 0;
   }
+
 }
 
 void Model3D::Render(ID3D11DeviceContext* context)
@@ -58,6 +68,19 @@ int Model3D::GetIndexCount()
   return m_indexCount;
 }
 
+ID3D11ShaderResourceView* Model3D::GetTexture()
+{
+  return m_Texture->GetTexture();
+}
+
+bool Model3D::InitializeTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, LPWSTR filename, TextureType textureType)
+{
+  // Create the texture object.
+  m_Texture = new DirectTexture;
+
+  return  m_Texture->Initialize(device, deviceContext, filename, textureType);
+}
+
 bool Model3D::InitializeBuffers(ID3D11Device* device)
 {
   VertexType* vertices;
@@ -81,12 +104,15 @@ bool Model3D::InitializeBuffers(ID3D11Device* device)
   // Load the vertex array with data.
   vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
   vertices[0].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+  vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
 
   vertices[1].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
-  vertices[1].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+  vertices[1].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+  vertices[1].texture = XMFLOAT2(0.5f, 0.0f);
 
   vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-  vertices[2].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+  vertices[2].color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+  vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
 
   // Load the index array with data.
   indices[0] = 0;  // Bottom left.

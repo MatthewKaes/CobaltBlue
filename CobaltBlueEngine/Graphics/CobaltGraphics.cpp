@@ -50,7 +50,7 @@ bool CobaltGraphics::Render()
   {
     model.second->Render(m_DirectX.GetDeviceContext());
 
-    m_Shader.Render(m_DirectX.GetDeviceContext(), model.second->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+    m_Shader.Render(m_DirectX.GetDeviceContext(), model.second->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, model.second->GetTexture());
   }
 
   m_DirectX.EndScene();

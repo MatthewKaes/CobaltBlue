@@ -1,5 +1,14 @@
 #include "ShaderCore.h"
 
+ShaderCore::ShaderCore()
+{
+  m_vertexShader = 0;
+  m_pixelShader = 0;
+  m_layout = 0;
+  m_matrixBuffer = 0;
+  m_sampleState = 0;
+}
+
 ShaderCore::~ShaderCore()
 {
   Shutdown();
@@ -39,13 +48,20 @@ void ShaderCore::Shutdown()
     m_vertexShader->Release();
     m_vertexShader = 0;
   }
+
+  // Release the sampler state.
+  if (m_sampleState)
+  {
+    m_sampleState->Release();
+    m_sampleState = 0;
+  }
 }
 
-bool ShaderCore::Render(ID3D11DeviceContext* context, int indexCount, XMMATRIX  worldMatrix, XMMATRIX  viewMatrix, XMMATRIX  projectionMatrix)
+bool ShaderCore::Render(ID3D11DeviceContext* context, int indexCount, XMMATRIX  worldMatrix, XMMATRIX  viewMatrix, XMMATRIX  projectionMatrix, ID3D11ShaderResourceView* texture)
 {
 
 	// Set the shader parameters that it will use for rendering.
-	SetShaderParameters(context, worldMatrix, viewMatrix, projectionMatrix);
+	SetShaderParameters(context, worldMatrix, viewMatrix, projectionMatrix, texture);
 
 	// Now render the prepared buffers with the shader.
 	RenderShader(context, indexCount);
@@ -59,9 +75,10 @@ void ShaderCore::InitializeShader(ID3D11Device* device, HWND window, WCHAR* vert
   ID3D10Blob* errorMessage;
   ID3D10Blob* vertexShaderBuffer;
   ID3D10Blob* pixelShaderBuffer;
-  D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
+  D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
   unsigned int numElements;
   D3D11_BUFFER_DESC matrixBufferDesc;
+  D3D11_SAMPLER_DESC samplerDesc;
 
   // Initialize the pointers this function will use to null.
   errorMessage = 0;
@@ -128,6 +145,14 @@ void ShaderCore::InitializeShader(ID3D11Device* device, HWND window, WCHAR* vert
   polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
   polygonLayout[1].InstanceDataStepRate = 0;
 
+  polygonLayout[2].SemanticName = "TEXCOORD";
+  polygonLayout[2].SemanticIndex = 0;
+  polygonLayout[2].Format = DXGI_FORMAT_R32G32_FLOAT;
+  polygonLayout[2].InputSlot = 0;
+  polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+  polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+  polygonLayout[2].InstanceDataStepRate = 0;
+
   // Get a count of the elements in the layout.
   numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
@@ -151,6 +176,24 @@ void ShaderCore::InitializeShader(ID3D11Device* device, HWND window, WCHAR* vert
 
   // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
   device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+
+  // Create a texture sampler state description.
+  samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+  samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+  samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+  samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+  samplerDesc.MipLODBias = 0.0f;
+  samplerDesc.MaxAnisotropy = 4;
+  samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+  samplerDesc.BorderColor[0] = 0;
+  samplerDesc.BorderColor[1] = 0;
+  samplerDesc.BorderColor[2] = 0;
+  samplerDesc.BorderColor[3] = 0;
+  samplerDesc.MinLOD = 0;
+  samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+  // Create the texture sampler state.
+  device->CreateSamplerState(&samplerDesc, &m_sampleState);
 }
 
 void ShaderCore::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
@@ -186,7 +229,7 @@ void ShaderCore::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
   MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 }
 
-void ShaderCore::SetShaderParameters(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
+void ShaderCore::SetShaderParameters(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
 {
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   MatrixBufferType* dataPtr;
@@ -216,6 +259,9 @@ void ShaderCore::SetShaderParameters(ID3D11DeviceContext* context, XMMATRIX worl
 
   // Finanly set the constant buffer in the vertex shader with the updated values.
   context->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+  // Set shader texture resource in the pixel shader.
+  context->PSSetShaderResources(0, 1, &texture);
 }
 
 void ShaderCore::RenderShader(ID3D11DeviceContext* context, int indexCount)
@@ -226,6 +272,9 @@ void ShaderCore::RenderShader(ID3D11DeviceContext* context, int indexCount)
 	// Set the vertex and pixel shaders that will be used to render this triangle.
 	context->VSSetShader(m_vertexShader, NULL, 0);
 	context->PSSetShader(m_pixelShader, NULL, 0);
+
+  // Set the sampler state in the pixel shader.
+  context->PSSetSamplers(0, 1, &m_sampleState);
 
 	// Render the triangle.
 	context->DrawIndexed(indexCount, 0, 0);
