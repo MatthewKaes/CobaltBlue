@@ -57,6 +57,9 @@
     <ClInclude Include="Headers\CobaltScene.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltSynchronizer.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -82,6 +85,9 @@
     </ClCompile>
     <ClCompile Include="DirectX\DirectTexture.cpp">
       <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="System\CobaltSynchronizer.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

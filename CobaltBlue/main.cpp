@@ -22,16 +22,16 @@ public:
     }
 
     if (engine->Input.Pressed(Inputs::Left))
-      engine->Graphics.Camera.Move(-0.1f, 0, 0);
+      engine->Graphics.Camera.Move(-1.0f, 0, 0, 0.2f);
 
     if (engine->Input.Pressed(Inputs::Right))
-      engine->Graphics.Camera.Move(0.1f, 0, 0);
+      engine->Graphics.Camera.Move(1.0f, 0, 0, 0.2f);
 
     if (engine->Input.Pressed(Inputs::Down))
-      engine->Graphics.Camera.Move(0, -0.1f, 0);
+      engine->Graphics.Camera.Move(0, -1.0f, 0, 0.2f);
 
     if (engine->Input.Pressed(Inputs::Up))
-      engine->Graphics.Camera.Move(0, 0.1f, 0);
+      engine->Graphics.Camera.Move(0, 1.0f, 0, 0.2f);
   }
 
   void Terminate(CobaltEngine* engine)
@@ -44,7 +44,8 @@ private:
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
-  CobaltEngine engine(1366, 768, L"Test App", false, 60, AntiAlias::MSAA8x);
+  CobaltEngine engine(1366, 768, L"Test App", false, AntiAlias::MSAA8x);
+  engine.SetFPS(60);
 
   engine.Run(new AppScene());
 

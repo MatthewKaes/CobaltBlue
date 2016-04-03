@@ -29,7 +29,7 @@ class Direct3D
 public:
   Direct3D();
 
-  bool Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear, unsigned fps, AntiAlias antiAlias);
+  bool Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear, AntiAlias antiAlias);
   void Shutdown();
 
   void BeginScene(float red, float green, float blue, float alpha);

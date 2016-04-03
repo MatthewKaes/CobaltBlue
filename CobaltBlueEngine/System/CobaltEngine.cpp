@@ -4,7 +4,7 @@ static CobaltEngine* EngineHandle = 0;
 CobaltInput CobaltEngine::Input;
 CobaltGraphics CobaltEngine::Graphics;
 
-CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, unsigned fps, AntiAlias antiAlias)
+CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, AntiAlias antiAlias)
 {
   WNDCLASSEX wc;
   DEVMODE dmScreenSettings;
@@ -95,7 +95,8 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     ShowCursor(false);
   }
 
-  Graphics.Initialize(screenWidth, screenHeight, fullScreen, fps, m_hwnd, antiAlias);
+  m_sync.SetFPS(DEFAULTFPS);
+  Graphics.Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
 
   return;
 }
@@ -122,6 +123,11 @@ CobaltEngine::~CobaltEngine()
   return;
 }
 
+void CobaltEngine::SetFPS(unsigned fps)
+{
+  m_sync.SetFPS(fps);
+}
+
 void CobaltEngine::Run(CobaltScene* entryScene)
 {
   MSG msg;
@@ -136,6 +142,9 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
   while (!m_exit)
   {
+    // Start Frame Time
+    m_sync.Start();
+
     bool still_messages = true;
     while (still_messages)
     {
@@ -151,10 +160,16 @@ void CobaltEngine::Run(CobaltScene* entryScene)
       }
 
       // If windows signals to end the application then exit out.
-      if (msg.message == WM_QUIT || !Frame())
+      if (msg.message == WM_QUIT)
       {
         m_exit = true;
       }
+    }
+
+    // Process the frame.
+    if (!Frame(m_sync.FrameTime()))
+    {
+      m_exit = true;
     }
 
     // Scene transitions.
@@ -165,16 +180,19 @@ void CobaltEngine::Run(CobaltScene* entryScene)
       m_currentScene = m_nextScene;
       m_currentScene->Start(this);
     }
+
+    // Sync Frame
+    m_sync.Sync();
   }
 
   return;
 }
 
-bool CobaltEngine::Frame()
+bool CobaltEngine::Frame(float frameTime)
 {
   m_currentScene->Update(this);
    
-  return Graphics.Frame();
+  return Graphics.Frame(frameTime);
 }
 
 void CobaltEngine::Exit()

@@ -17,19 +17,21 @@ public:
 
   void SetPosition(float x, float y, float z);
   void SetRotation(float degX, float degY, float degZ);
-  void Move(float x, float y, float z);
-  void Rotate(float degX, float degY, float degZ);
+  void Move(float x, float y, float z, float seconds);
+  void Rotate(float degX, float degY, float degZ, float seconds);
 
-  void Update();
+  void Update(float frameTime);
   void GetView(XMMATRIX& viewMatrix);
 
 private:
-  float m_posX;
-  float m_posY;
-  float m_posZ;
-  float m_rotX;
-  float m_rotY;
-  float m_rotZ;
+  float m_moveDur;
+  float m_rotDur;
+  XMVECTOR m_positionTran;
+  XMVECTOR m_rotationTran;
+
+  XMVECTOR m_position;
+  XMVECTOR m_rotation;
+
   XMMATRIX m_viewMatrix;
 };
 #endif

@@ -15,9 +15,9 @@ class CobaltGraphics
 public:
   friend class Model3D;
 
-  bool Initialize(unsigned width, unsigned height, bool fullScreen, unsigned fps, HWND window, AntiAlias antiAlias);
+  bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
   void Shutdown();
-  bool Frame();
+  bool Frame(float frameTime);
 
   CobaltCamera Camera;
 
@@ -26,7 +26,7 @@ protected:
   Direct3D m_DirectX;
 
 private:
-  bool Render();
+  bool Render(float frameTime);
   unsigned m_width;
   unsigned m_height;
   bool m_full;

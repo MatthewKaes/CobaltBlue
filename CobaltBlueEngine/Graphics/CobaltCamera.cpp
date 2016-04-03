@@ -6,54 +6,58 @@
 
 CobaltCamera::CobaltCamera()
 {
-  m_posX = 0;
-  m_posY = 0;
-  m_posZ = 0;
-  m_rotX = 0;
-  m_rotY = 0;
-  m_rotZ = 0;
+  m_position = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+  m_rotation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void CobaltCamera::SetPosition(float x, float y, float z)
 {
-  m_posX = x;
-  m_posY = y;
-  m_posZ = z;
+  m_position = XMVectorSet(x, y, z, 0.0f);
 }
 
 void CobaltCamera::SetRotation(float degX, float degY, float degZ)
 {
-  m_rotX = degX;
-  m_rotY = degY;
-  m_rotZ = degZ;
+  m_rotation = XMVectorSet(degX, degY, degZ, 0.0f);
 }
 
-void CobaltCamera::Move(float x, float y, float z)
+void CobaltCamera::Move(float x, float y, float z, float seconds)
 {
-  m_posX += x;
-  m_posY += y;
-  m_posZ += z;
+  m_positionTran = XMVectorSet(x, y, z, 0.0f);
+  m_moveDur = seconds;
 }
 
-void CobaltCamera::Rotate(float degX, float degY, float degZ)
+void CobaltCamera::Rotate(float degX, float degY, float degZ, float seconds)
 {
-  m_rotX += degX;
-  m_rotY += degY;
-  m_rotZ += degZ;
+  m_rotationTran = XMVectorSet(degX, degY, degZ, 0.0f);
+  m_rotDur = seconds;
 }
 
-void CobaltCamera::Update()
+void CobaltCamera::Update(float frameTime)
 {
+  if (m_moveDur > 0.0f)
+  {
+    double durationTime = frameTime > m_moveDur ? m_moveDur : frameTime;
+    m_position += m_positionTran * (durationTime / m_moveDur);
+    m_positionTran -= m_positionTran * (durationTime / m_moveDur);
+    m_moveDur -= frameTime;
+  }
+
+  if (m_rotDur > 0.0f)
+  {
+    double durationTime = frameTime > m_rotDur ? m_rotDur : frameTime;
+    m_rotation += m_rotationTran * frameTime;
+    m_rotDur -= frameTime;
+  }
+
   XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-  XMVECTOR position = XMVectorSet(m_posX, m_posY, m_posZ, 0.0f);
   XMVECTOR lookAt = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
   float yaw, pitch, roll;
   XMMATRIX rotationMatrix;
 
   // Set the yaw (Y axis), pitch (X axis), and roll (Z axis) rotations in radians.
-  pitch = m_rotX * 0.0174532925f;
-  yaw = m_rotY * 0.0174532925f;
-  roll = m_rotZ * 0.0174532925f;
+  pitch = m_rotation.m128_f32[0] * 0.0174532925f;
+  yaw = m_rotation.m128_f32[1] * 0.0174532925f;
+  roll = m_rotation.m128_f32[2] * 0.0174532925f;
 
   // Create the rotation matrix from the yaw, pitch, and roll values.
   rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
@@ -63,10 +67,10 @@ void CobaltCamera::Update()
   up = XMVector3TransformCoord(up, rotationMatrix);
 
   // Translate the rotated camera position to the location of the viewer.
-  lookAt = position + lookAt;
+  lookAt = m_position + lookAt;
 
   // Finally create the view matrix from the three updated vectors.
-  m_viewMatrix = XMMatrixLookAtLH(position, lookAt, up);
+  m_viewMatrix = XMMatrixLookAtLH(m_position, lookAt, up);
 }
 
 void CobaltCamera::GetView(XMMATRIX& viewMatrix)

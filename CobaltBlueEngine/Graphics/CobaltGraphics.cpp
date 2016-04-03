@@ -1,6 +1,6 @@
 #include "CobaltGraphics.h"
 
-bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, unsigned fps, HWND window, AntiAlias antiAlias)
+bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias)
 {
   m_width = width;
   m_height = height;
@@ -10,7 +10,7 @@ bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen
   // Set the initial position of the camera.
   Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
-  bool result = m_DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, fps, antiAlias);
+  bool result = m_DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, antiAlias);
   if (!result)
   {
 	  return false;
@@ -26,19 +26,19 @@ void CobaltGraphics::Shutdown()
   m_DirectX.Shutdown();
 }
 
-bool CobaltGraphics::Frame()
+bool CobaltGraphics::Frame(float frameTime)
 {
-  return Render();
+  return Render(frameTime);
 }
 
-bool CobaltGraphics::Render()
+bool CobaltGraphics::Render(float frameTime)
 {
   XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 
   m_DirectX.BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
   // Generate the view matrix based on the camera's position.
-  Camera.Update();
+  Camera.Update(frameTime);
 
   m_DirectX.GetWorldMatrix(worldMatrix);
   Camera.GetView(viewMatrix);

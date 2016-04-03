@@ -5,14 +5,18 @@
 #include "CobaltInput.h"
 #include "CobaltGraphics.h"
 #include "CobaltScene.h"
+#include "CobaltSynchronizer.h"
+
+#define DEFAULTFPS 60
 
 class CobaltEngine {
 public:
   // Core Functions
-  CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, unsigned fps, AntiAlias antiAlias);
+  CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, AntiAlias antiAlias);
   ~CobaltEngine();
+  void SetFPS(unsigned fps);
   void Run(CobaltScene* entryScene);
-  bool Frame();
+  bool Frame(float frameTime);
   void Exit();
   void GotoScene(CobaltScene* nextScene);
 
@@ -24,6 +28,7 @@ public:
 private:
   CobaltScene* m_currentScene;
   CobaltScene* m_nextScene;
+  CobaltSynchronizer m_sync;
 
   LPCWSTR m_appName;
   HINSTANCE m_hinstance;

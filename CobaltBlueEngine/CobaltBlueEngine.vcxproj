@@ -27,6 +27,7 @@
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
     <ClCompile Include="Input\CobaltInput.cpp" />
     <ClCompile Include="System\CobaltEngine.cpp" />
+    <ClCompile Include="System\CobaltSynchronizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Headers\CobaltEngine.h" />
     <ClInclude Include="Headers\CobaltInput.h" />
     <ClInclude Include="Headers\CobaltScene.h" />
+    <ClInclude Include="Headers\CobaltSynchronizer.h" />
     <ClInclude Include="Headers\Direct3d.h" />
     <ClInclude Include="Headers\DirectTexture.h" />
     <ClInclude Include="Headers\InputTable.h" />
