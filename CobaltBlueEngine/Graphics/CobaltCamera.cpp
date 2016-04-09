@@ -36,7 +36,7 @@ void CobaltCamera::Update(float frameTime)
 {
   if (m_moveDur > 0.0f)
   {
-    double durationTime = frameTime > m_moveDur ? m_moveDur : frameTime;
+    float durationTime = frameTime > m_moveDur ? m_moveDur : frameTime;
     m_position += m_positionTran * (durationTime / m_moveDur);
     m_positionTran -= m_positionTran * (durationTime / m_moveDur);
     m_moveDur -= frameTime;
@@ -44,7 +44,7 @@ void CobaltCamera::Update(float frameTime)
 
   if (m_rotDur > 0.0f)
   {
-    double durationTime = frameTime > m_rotDur ? m_rotDur : frameTime;
+    float durationTime = frameTime > m_rotDur ? m_rotDur : frameTime;
     m_rotation += m_rotationTran * (durationTime / m_rotDur);
     m_rotationTran -= m_rotationTran * (durationTime / m_rotDur);
     m_rotDur -= frameTime;
