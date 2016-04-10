@@ -196,6 +196,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
       delete m_currentScene;
       m_currentScene = m_nextScene;
       m_currentScene->Start(this);
+      m_nextScene = nullptr;
     }
 
     // Sync Frame

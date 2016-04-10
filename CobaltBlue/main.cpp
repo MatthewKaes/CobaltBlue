@@ -11,7 +11,6 @@ public:
   void Start(CobaltEngine* engine)
   {
     triangle.Create(L"Textures\\stone.png", TextureType::Dynamic);
-    engine->Audio->Play(L"** Audio File **");
   }
 
   void Update(CobaltEngine* engine)
@@ -24,10 +23,7 @@ public:
 
     if (engine->Input->Pressed(Inputs::Space))
     {
-      if (engine->Audio->Status() == AudioState::Paused)
-        engine->Audio->Play();
-      else
-        engine->Audio->Pause();
+      engine->GotoScene(new AppScene);
     }
 
     if (engine->Input->Pressed(Inputs::Left))
