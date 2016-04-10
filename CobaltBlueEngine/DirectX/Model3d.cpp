@@ -2,6 +2,7 @@
 #include "CobaltEngine.h"
 
 unsigned Model3D::ModelID = 0;
+extern CobaltEngine* EngineHandle;
 
 Model3D::Model3D()
 {
@@ -16,16 +17,16 @@ void Model3D::Create(LPWSTR textureFile, TextureType textureType)
 {
   // Add to the rendering queue.
   m_id = Model3D::ModelID++;
-  CobaltEngine::Graphics.m_modelListings.insert(std::make_pair(m_id, this));
+  EngineHandle->Graphics->m_modelListings.insert(std::make_pair(m_id, this));
 
   // Setup the object.
-  InitializeTexture(CobaltEngine::Graphics.m_DirectX.GetDevice(), CobaltEngine::Graphics.m_DirectX.GetDeviceContext(), textureFile, textureType);
-  InitializeBuffers(CobaltEngine::Graphics.m_DirectX.GetDevice());
+  InitializeTexture(EngineHandle->Graphics->m_DirectX.GetDevice(), EngineHandle->Graphics->m_DirectX.GetDeviceContext(), textureFile, textureType);
+  InitializeBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
 }
 
 void Model3D::Release()
 {
-  CobaltEngine::Graphics.m_modelListings.erase(m_id);
+  EngineHandle->Graphics->m_modelListings.erase(m_id);
 
   // Release the index buffer.
   if (m_indexBuffer)

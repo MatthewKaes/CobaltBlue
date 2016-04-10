@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\CobaltAudio.cpp" />
     <ClCompile Include="DirectX\Direct3d.cpp" />
     <ClCompile Include="DirectX\DirectTexture.cpp" />
     <ClCompile Include="DirectX\Model3d.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="System\CobaltSynchronizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\CobaltAudio.h" />
     <ClInclude Include="Headers\CobaltBlue.h" />
     <ClInclude Include="Headers\CobaltBlueCore.h" />
     <ClInclude Include="Headers\CobaltCamera.h" />

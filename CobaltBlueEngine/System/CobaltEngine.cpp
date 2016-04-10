@@ -1,8 +1,7 @@
 #include "CobaltEngine.h"
 
-static CobaltEngine* EngineHandle = 0;
-CobaltInput CobaltEngine::Input;
-CobaltGraphics CobaltEngine::Graphics;
+// Library Global
+CobaltEngine* EngineHandle = 0;
 
 CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, AntiAlias antiAlias)
 {
@@ -95,8 +94,16 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     ShowCursor(false);
   }
 
+  // Set Engine Handle
+  EngineHandle = this;
+
+  // Setup all the engine objects
+  Audio = new CobaltAudio(m_hwnd);
+  Input = new CobaltInput();
+  Graphics = new CobaltGraphics();
+
   m_sync.SetFPS(DEFAULTFPS);
-  Graphics.Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
+  Graphics->Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
 
   return;
 }
@@ -108,17 +115,27 @@ CobaltEngine::~CobaltEngine()
   // Fix the display settings if leaving full screen mode.
   if (m_fullScreenMode)
   {
-    ChangeDisplaySettings(NULL, 0);
+    ChangeDisplaySettings(nullptr, 0);
   }
 
   DestroyWindow(m_hwnd);
-  m_hwnd = NULL;
+  m_hwnd = nullptr;
 
   UnregisterClass(m_appName, m_hinstance);
-  m_hinstance = NULL;
+  m_hinstance = nullptr;
 
   // Release the pointer to this class.
-  EngineHandle = NULL;
+  EngineHandle = nullptr;
+
+  // Release Engine Objects
+  if (Audio)
+    delete Audio;
+
+  if (Graphics)
+    delete Graphics;
+
+  if (Input)
+    delete Input;
 
   return;
 }
@@ -192,7 +209,7 @@ bool CobaltEngine::Frame(float frameTime)
 {
   m_currentScene->Update(this);
    
-  return Graphics.Frame(frameTime);
+  return Graphics->Frame(frameTime);
 }
 
 void CobaltEngine::Exit()
@@ -211,12 +228,17 @@ LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wpara
   {
     case WM_KEYDOWN:
     {
-      Input.KeyDown((unsigned int)wparam);
+      Input->KeyDown((unsigned int)wparam);
       return 0;
     }
     case WM_KEYUP:
     {
-      Input.KeyUp((unsigned int)wparam);
+      Input->KeyUp((unsigned int)wparam);
+      return 0;
+    }
+    case COBALT_AUDIO:
+    {
+      Audio->EventHandler();
       return 0;
     }
     default:

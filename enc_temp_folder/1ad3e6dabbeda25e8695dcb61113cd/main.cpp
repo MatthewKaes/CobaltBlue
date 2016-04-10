@@ -11,7 +11,9 @@ public:
   void Start(CobaltEngine* engine)
   {
     triangle.Create(L"Textures\\stone.png", TextureType::Dynamic);
-    engine->Audio->Play(L"** Audio File **");
+    engine->Audio->Play(L"C:\\Users\\Eclipse System\\Desktop\\Work Music\\3OH!3 - I'm Not The One [AUDIO].mp3");
+    engine->Audio->SetPosition(220.0f);
+    float pos = engine->Audio->Position();
   }
 
   void Update(CobaltEngine* engine)

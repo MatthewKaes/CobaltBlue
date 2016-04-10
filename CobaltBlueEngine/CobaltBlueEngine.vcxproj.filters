@@ -19,6 +19,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{11a6585f-46e2-407c-b96c-6a08a90aa2d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{cbdb381b-cdde-4080-81b6-daf8bb93ee68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="Headers\CobaltSynchronizer.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltAudio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\CobaltGraphics.cpp">
@@ -88,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="System\CobaltSynchronizer.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\CobaltAudio.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

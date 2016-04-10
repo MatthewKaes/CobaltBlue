@@ -6,6 +6,7 @@
 #include "CobaltGraphics.h"
 #include "CobaltScene.h"
 #include "CobaltSynchronizer.h"
+#include "CobaltAudio.h"
 
 #define DEFAULTFPS 60
 
@@ -23,8 +24,9 @@ public:
   LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
   // API Exposed Objects
-  static CobaltInput Input;
-  static CobaltGraphics Graphics;
+  CobaltInput* Input;
+  CobaltGraphics* Graphics;
+  CobaltAudio* Audio;
 private:
   CobaltScene* m_currentScene;
   CobaltScene* m_nextScene;
