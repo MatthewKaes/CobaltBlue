@@ -101,6 +101,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   Audio = new CobaltAudio(m_hwnd);
   Input = new CobaltInput();
   Graphics = new CobaltGraphics();
+  Cache = new CobaltCache();
 
   m_sync.SetFPS(DEFAULTFPS);
   Graphics->Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
@@ -136,6 +137,9 @@ CobaltEngine::~CobaltEngine()
 
   if (Input)
     delete Input;
+
+  if (Cache)
+    delete Cache;
 
   return;
 }

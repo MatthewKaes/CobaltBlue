@@ -27,6 +27,7 @@
     <ClCompile Include="Graphics\CobaltCamera.cpp" />
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
     <ClCompile Include="Input\CobaltInput.cpp" />
+    <ClCompile Include="System\CobaltCache.cpp" />
     <ClCompile Include="System\CobaltEngine.cpp" />
     <ClCompile Include="System\CobaltSynchronizer.cpp" />
   </ItemGroup>
@@ -34,6 +35,7 @@
     <ClInclude Include="Headers\CobaltAudio.h" />
     <ClInclude Include="Headers\CobaltBlue.h" />
     <ClInclude Include="Headers\CobaltBlueCore.h" />
+    <ClInclude Include="Headers\CobaltCache.h" />
     <ClInclude Include="Headers\CobaltCamera.h" />
     <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltEngine.h" />

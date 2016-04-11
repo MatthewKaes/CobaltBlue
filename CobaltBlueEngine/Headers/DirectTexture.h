@@ -21,11 +21,9 @@ public:
   bool Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename, TextureType usage);
   void Shutdown();
   void Update(ID3D11DeviceContext* context);
-
   ID3D11ShaderResourceView* GetTexture();
 
 private:
-  bool LoadTGA(LPCWSTR filename);
   bool LoadTexture(LPCWSTR filename);
 
   unsigned char* m_textureData;

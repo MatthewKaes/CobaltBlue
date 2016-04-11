@@ -7,6 +7,7 @@
 #include "CobaltScene.h"
 #include "CobaltSynchronizer.h"
 #include "CobaltAudio.h"
+#include "CobaltCache.h"
 
 #define DEFAULTFPS 60
 
@@ -27,6 +28,7 @@ public:
   CobaltInput* Input;
   CobaltGraphics* Graphics;
   CobaltAudio* Audio;
+  CobaltCache* Cache;
 private:
   CobaltScene* m_currentScene;
   CobaltScene* m_nextScene;

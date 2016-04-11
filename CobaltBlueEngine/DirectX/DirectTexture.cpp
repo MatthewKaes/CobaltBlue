@@ -1,8 +1,7 @@
 #include "DirectTexture.h"
-#include <stdio.h>
-#include <wincodec.h>
+#include "CobaltEngine.h"
 
-#pragma comment(lib, "windowscodecs.lib")
+extern CobaltEngine* EngineHandle;
 
 struct TargaHeader
 {
@@ -144,155 +143,17 @@ ID3D11ShaderResourceView* DirectTexture::GetTexture()
   return 0;
 }
 
-bool DirectTexture::LoadTGA(LPCWSTR filename) 
+bool DirectTexture::LoadTexture(LPCWSTR filename)
 {
-  int bpp;
-  int imageSize;
-  FILE* filePtr;
-  unsigned int count;
-  TargaHeader targaFileHeader;
-  unsigned char* targaImage;
-
-  if (_wfopen_s(&filePtr, filename, L"rb"))
-  {
-    return false;
-  }
-
-  // Read in the file header.
-  count = (unsigned int)fread(&targaFileHeader, sizeof(TargaHeader), 1, filePtr);
-  if (count != 1)
-  {
-    return false;
-  }
-
-  // Get the important information from the header.
-  m_height = (int)targaFileHeader.height;
-  m_width = (int)targaFileHeader.width;
-  bpp = (int)targaFileHeader.bpp;
-
-  // Check that it is 32 bit and not 24 bit.
-  if (bpp != 32)
-  {
-    return false;
-  }
-
-  // Calculate the size of the 32 bit image data.
-  imageSize = m_width * m_height * 4;
-
-  // Allocate memory for the targa image data.
-  targaImage = new unsigned char[imageSize];
-  if (!targaImage)
-  {
-    return false;
-  }
-
-  // Read in the targa image data.
-  count = (unsigned int)fread(targaImage, 1, imageSize, filePtr);
-  if (count != imageSize)
-  {
-    return false;
-  }
-
-  // Close the file.
-  if (fclose(filePtr))
-  {
-    return false;
-  }
-
-  // Allocate memory for the texture.
-  m_textureData = new unsigned char[imageSize];
+  const CachedImage* image = EngineHandle->Cache->GetImage(filename);
+  m_textureData = image->GetImage();
   if (!m_textureData)
   {
     return false;
   }
 
-  // Initialize the index into the targa destination data array.
-  int index = 0;
-
-  // Initialize the index into the targa image data.
-  int k = (m_width * m_height * 4) - (m_width * 4);
-
-  // Now copy the targa image data into the targa destination array in the correct order since the targa format is stored upside down.
-  for (unsigned j = 0; j < m_height; j++)
-  {
-    for (unsigned i = 0; i< m_width; i++)
-    {
-      m_textureData[index + 0] = targaImage[k + 2];  // Red.
-      m_textureData[index + 1] = targaImage[k + 1];  // Green.
-      m_textureData[index + 2] = targaImage[k + 0];  // Blue
-      m_textureData[index + 3] = targaImage[k + 3];  // Alpha
-
-      k += 4;
-      index += 4;
-    }
-
-    // Set the targa image data index back to the preceding row at the beginning of the column since its reading it in upside down.
-    k -= (m_width * 8);
-  }
-
-  // Release the targa image data now that it was copied into the destination array.
-  delete[] targaImage;
-  targaImage = 0;
-
-  return true;
-}
-
-bool DirectTexture::LoadTexture(LPCWSTR filename)
-{
-  if (!lstrcmpiW(filename + lstrlenW(filename) - lstrlenW(L".TGA"), L".TGA"))
-  {
-    return LoadTGA(filename);
-  }
-
-  CoInitialize(NULL);
-  
-  IWICBitmapDecoder* pDecoder = NULL;
-  IWICImagingFactory* pFactory = NULL;
-  IWICBitmapFrameDecode* bitmapSource = NULL;
-  IWICFormatConverter* converter = NULL;
-
-  HRESULT hr = CoCreateInstance(
-    CLSID_WICImagingFactory,
-    NULL,
-    CLSCTX_INPROC_SERVER,
-    IID_PPV_ARGS(&pFactory)
-    );
-
-  hr = pFactory->CreateDecoderFromFilename(filename, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &pDecoder);
-  if (FAILED(hr))
-  {
-    pFactory->Release();
-    return false;
-  }
-
-  hr = pDecoder->GetFrame(0, &bitmapSource);
-  if (FAILED(hr))
-  {
-    pFactory->Release();
-    pDecoder->Release();
-    return false;
-  }
-
-  pFactory->CreateFormatConverter(&converter);
-  converter->Initialize(bitmapSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeMedianCut);
-
-  bitmapSource->GetSize(&m_width, &m_height);
-
-  // Calculate the size of the 32 bit image data.
-  unsigned imageSize = m_width * m_height * 4;
-  m_textureData = new unsigned char[imageSize];
-
-  WICRect sourceRect;
-  sourceRect.X = 0;
-  sourceRect.Y = 0;
-  sourceRect.Width = m_width;
-  sourceRect.Height = m_height;
-  converter->CopyPixels(&sourceRect, m_width * 4, imageSize, m_textureData);
-
-  bitmapSource->Release();
-  pDecoder->Release();
-  pFactory->Release();
-  converter->Release();
+  m_width = image->Width();
+  m_height = image->Height();
 
   return true;
 }
