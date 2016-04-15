@@ -54,9 +54,6 @@
     <ClInclude Include="Headers\ShaderCore.h">
       <Filter>DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\DirectTexture.h">
-      <Filter>DirectX</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\CobaltScene.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -75,6 +72,18 @@
     <ClInclude Include="Headers\Model3d.h">
       <Filter>Graphics 3D</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Model2d.h">
+      <Filter>Graphics 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\CobaltSprite.h">
+      <Filter>Graphics 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\CobaltBitmap.h">
+      <Filter>Graphics 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\CobaltTexture.h">
+      <Filter>Graphics 3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System\CobaltEngine.cpp">
@@ -87,9 +96,6 @@
       <Filter>DirectX</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\ShaderCore.cpp">
-      <Filter>DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX\DirectTexture.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
     <ClCompile Include="System\CobaltSynchronizer.cpp">
@@ -108,6 +114,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics3D\Model3d.cpp">
+      <Filter>Graphics 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics2D\CobaltSprite.cpp">
+      <Filter>Graphics 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics3D\CobaltTexture.cpp">
       <Filter>Graphics 3D</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,9 +4,9 @@
 class CobaltScene {
 public:
   virtual ~CobaltScene() { };
-  virtual void Start(CobaltEngine* engine) { return; };
-  virtual void Update(CobaltEngine* engine) { return; };
-  virtual void Terminate(CobaltEngine* engine) { return; };
+  virtual void Start(CobaltEngine* engine) = 0;
+  virtual void Update(CobaltEngine* engine) = 0;
+  virtual void Terminate(CobaltEngine* engine) = 0;
 };
 
 #endif

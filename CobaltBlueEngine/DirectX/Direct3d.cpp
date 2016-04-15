@@ -1,5 +1,21 @@
 #include "Direct3d.h"
 
+Color::Color(BYTE red, BYTE green, BYTE blue)
+{
+  Red = red;
+  Green = green;
+  Blue = blue;
+  Alpha = 255;
+}
+
+Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha)
+{
+  Red = red;
+  Green = green;
+  Blue = blue;
+  Alpha = alpha;
+}
+
 Direct3D::Direct3D()
 {
   m_swapChain = 0;

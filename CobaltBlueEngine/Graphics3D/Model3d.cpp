@@ -84,7 +84,7 @@ ID3D11ShaderResourceView* Model3D::GetTexture()
 bool Model3D::InitializeTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, LPWSTR filename, TextureType textureType)
 {
   // Create the texture object.
-  m_Texture = new DirectTexture;
+  m_Texture = new CobaltTexture;
 
   return  m_Texture->Initialize(device, deviceContext, filename, textureType);
 }

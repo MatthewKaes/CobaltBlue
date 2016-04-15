@@ -22,8 +22,17 @@ enum class AntiAlias {
   MSAA8x = 8,
 };
 
-using namespace DirectX;
+class Color {
+public:
+  Color(BYTE Red, BYTE Green, BYTE Blue);
+  Color(BYTE Red, BYTE Green, BYTE Blue, BYTE Alpha);
+  BYTE Red;
+  BYTE Green;
+  BYTE Blue;
+  BYTE Alpha;
+};
 
+using namespace DirectX;
 class Direct3D
 {
 public:

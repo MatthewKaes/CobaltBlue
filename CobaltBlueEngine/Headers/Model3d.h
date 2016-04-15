@@ -3,7 +3,7 @@
 
 #include <d3d11.h>
 #include <directxmath.h>
-#include "DirectTexture.h"
+#include "CobaltTexture.h"
 using namespace DirectX;
 
 class Model3D {
@@ -28,7 +28,7 @@ private:
   bool InitializeTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, LPWSTR filename, TextureType textureType);
   bool InitializeBuffers(ID3D11Device* device);
 
-  DirectTexture* m_Texture;
+  CobaltTexture* m_Texture;
   ID3D11Buffer* m_vertexBuffer;
   ID3D11Buffer* m_indexBuffer;
   int m_vertexCount;

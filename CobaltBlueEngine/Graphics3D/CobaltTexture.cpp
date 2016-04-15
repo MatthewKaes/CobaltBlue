@@ -1,28 +1,19 @@
-#include "DirectTexture.h"
+#include "CobaltTexture.h"
 #include "CobaltEngine.h"
 
 extern CobaltEngine* EngineHandle;
 
-struct TargaHeader
-{
-  unsigned char data1[12];
-  unsigned short width;
-  unsigned short height;
-  unsigned char bpp;
-  unsigned char data2;
-};
-
-DirectTexture::DirectTexture()
+CobaltTexture::CobaltTexture()
 {
   m_textureView = 0;
 }
 
-DirectTexture::~DirectTexture()
+CobaltTexture::~CobaltTexture()
 {
   Shutdown();
 }
 
-bool DirectTexture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename, TextureType usage)
+bool CobaltTexture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename, TextureType usage)
 {
   bool result;
   D3D11_TEXTURE2D_DESC textureDesc;
@@ -100,7 +91,7 @@ bool DirectTexture::Initialize(ID3D11Device* device, ID3D11DeviceContext* contex
   return true;
 }
 
-void DirectTexture::Shutdown()
+void CobaltTexture::Shutdown()
 {
   // Release the texture resource.
   if (m_textureView)
@@ -112,7 +103,7 @@ void DirectTexture::Shutdown()
   return;
 }
 
-void DirectTexture::Update(ID3D11DeviceContext* context)
+void CobaltTexture::Update(ID3D11DeviceContext* context)
 {
   if (m_type != TextureType::Dynamic)
   {
@@ -134,7 +125,7 @@ void DirectTexture::Update(ID3D11DeviceContext* context)
   context->Unmap(m_texture, 0);
 }
 
-ID3D11ShaderResourceView* DirectTexture::GetTexture()
+ID3D11ShaderResourceView* CobaltTexture::GetTexture()
 {
   if (m_textureView)
   {
@@ -143,7 +134,7 @@ ID3D11ShaderResourceView* DirectTexture::GetTexture()
   return 0;
 }
 
-bool DirectTexture::LoadTexture(LPCWSTR filename)
+bool CobaltTexture::LoadTexture(LPCWSTR filename)
 {
   const CachedImage* image = EngineHandle->Cache->GetImage(filename);
   m_textureData = image->GetImage();

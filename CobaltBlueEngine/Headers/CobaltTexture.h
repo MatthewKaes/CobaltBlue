@@ -1,8 +1,5 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: textureclass.h
-////////////////////////////////////////////////////////////////////////////////
-#ifndef _TEXTURECLASS_H_
-#define _TEXTURECLASS_H_
+#ifndef COBALTTEXTURE
+#define COBALTTEXTURE
 
 #include "Direct3d.h"
 
@@ -12,11 +9,11 @@ enum class TextureType {
   StaticMipMap
 };
 
-class DirectTexture
+class CobaltTexture
 {
 public:
-  DirectTexture();
-  ~DirectTexture();
+  CobaltTexture();
+  ~CobaltTexture();
 
   bool Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename, TextureType usage);
   void Shutdown();

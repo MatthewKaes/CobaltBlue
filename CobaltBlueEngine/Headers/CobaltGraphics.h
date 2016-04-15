@@ -13,6 +13,7 @@
 class CobaltGraphics
 {
 public:
+  friend class Model2D;
   friend class Model3D;
 
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
@@ -23,6 +24,7 @@ public:
 
 protected:
   unordered_map<int, Model3D*> m_modelListings;
+  unordered_map<int, Model2D*> m_bitmapListings;
   Direct3D m_DirectX;
 
 private:
