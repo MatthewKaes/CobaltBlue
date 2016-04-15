@@ -4,9 +4,6 @@
     <Filter Include="Core">
       <UniqueIdentifier>{10edeae0-b581-4057-9902-66e9b6220689}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{3ecf048c-3ae4-4da7-88d5-03c6d49ce50d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{8c551ad7-8605-4f83-a39a-8179a34b4c37}</UniqueIdentifier>
     </Filter>
@@ -22,13 +19,19 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{cbdb381b-cdde-4080-81b6-daf8bb93ee68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics 3D">
+      <UniqueIdentifier>{3ecf048c-3ae4-4da7-88d5-03c6d49ce50d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics 2D">
+      <UniqueIdentifier>{252474c6-593c-443e-acbb-1be032987bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{e5a5a781-e59b-4a8f-8f8c-d00c15cc09d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\CobaltBlue.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\CobaltGraphics.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Headers\CobaltBlueCore.h">
       <Filter>Core</Filter>
@@ -46,12 +49,9 @@
       <Filter>DirectX</Filter>
     </ClInclude>
     <ClInclude Include="Headers\CobaltCamera.h">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics 3D</Filter>
     </ClInclude>
     <ClInclude Include="Headers\ShaderCore.h">
-      <Filter>DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Model3d.h">
       <Filter>DirectX</Filter>
     </ClInclude>
     <ClInclude Include="Headers\DirectTexture.h">
@@ -69,11 +69,14 @@
     <ClInclude Include="Headers\CobaltCache.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltGraphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Model3d.h">
+      <Filter>Graphics 3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graphics\CobaltGraphics.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="System\CobaltEngine.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -83,13 +86,7 @@
     <ClCompile Include="DirectX\Direct3d.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\CobaltCamera.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX\ShaderCore.cpp">
-      <Filter>DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX\Model3d.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\DirectTexture.cpp">
@@ -103,6 +100,15 @@
     </ClCompile>
     <ClCompile Include="System\CobaltCache.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics3D\CobaltCamera.cpp">
+      <Filter>Graphics 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\CobaltGraphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics3D\Model3d.cpp">
+      <Filter>Graphics 3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

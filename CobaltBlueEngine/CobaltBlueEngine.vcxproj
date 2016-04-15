@@ -22,9 +22,9 @@
     <ClCompile Include="Audio\CobaltAudio.cpp" />
     <ClCompile Include="DirectX\Direct3d.cpp" />
     <ClCompile Include="DirectX\DirectTexture.cpp" />
-    <ClCompile Include="DirectX\Model3d.cpp" />
     <ClCompile Include="DirectX\ShaderCore.cpp" />
-    <ClCompile Include="Graphics\CobaltCamera.cpp" />
+    <ClCompile Include="Graphics3D\CobaltCamera.cpp" />
+    <ClCompile Include="Graphics3D\Model3d.cpp" />
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
     <ClCompile Include="Input\CobaltInput.cpp" />
     <ClCompile Include="System\CobaltCache.cpp" />
@@ -37,8 +37,8 @@
     <ClInclude Include="Headers\CobaltBlueCore.h" />
     <ClInclude Include="Headers\CobaltCache.h" />
     <ClInclude Include="Headers\CobaltCamera.h" />
-    <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltEngine.h" />
+    <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltInput.h" />
     <ClInclude Include="Headers\CobaltScene.h" />
     <ClInclude Include="Headers\CobaltSynchronizer.h" />
