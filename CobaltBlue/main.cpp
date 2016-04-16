@@ -10,7 +10,8 @@ class AppScene : public CobaltScene {
 public:
   void Start(CobaltEngine* engine)
   {
-    triangle.Create(L"Textures\\stone.png", TextureType::Dynamic);
+    square.Create(L"Textures\\stone.png", TextureType::Dynamic);
+    spr.Create(L"Textures\\stone.png");
   }
 
   void Update(CobaltEngine* engine)
@@ -44,7 +45,8 @@ public:
   }
 
 private:
-  Model3D triangle;
+  Sprite spr;
+  Model3D square;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)

@@ -125,6 +125,16 @@ void CobaltTexture::Update(ID3D11DeviceContext* context)
   context->Unmap(m_texture, 0);
 }
 
+unsigned CobaltTexture::Width()
+{
+  return m_width;
+}
+
+unsigned CobaltTexture::Height()
+{
+  return m_height;
+}
+
 ID3D11ShaderResourceView* CobaltTexture::GetTexture()
 {
   if (m_textureView)

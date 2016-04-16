@@ -52,6 +52,7 @@ public:
   void GetOrthoMatrix(XMMATRIX& orthoMatrix);
 
   void GetVideoCardInfo(char*, int&);
+  void SetZBuffer(bool enable);
 
 private:
   bool m_vsync_enabled;
@@ -64,6 +65,7 @@ private:
   ID3D11Texture2D* m_depthStencilBuffer;
   ID3D11DepthStencilState* m_depthStencilState;
   ID3D11DepthStencilView* m_depthStencilView;
+  ID3D11DepthStencilState* m_depthDisabledStencilState;
   ID3D11RasterizerState* m_rasterState;
   XMMATRIX m_projectionMatrix;
   XMMATRIX m_worldMatrix;

@@ -1,5 +1,5 @@
 #include "CobaltGraphics.h"
-
+#include <algorithm>
 bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias)
 {
   m_width = width;
@@ -33,7 +33,7 @@ bool CobaltGraphics::Frame(float frameTime)
 
 bool CobaltGraphics::Render(float frameTime)
 {
-  XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+  XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 
   m_DirectX.BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -43,6 +43,7 @@ bool CobaltGraphics::Render(float frameTime)
   m_DirectX.GetWorldMatrix(worldMatrix);
   Camera.GetView(viewMatrix);
   m_DirectX.GetProjectionMatrix(projectionMatrix);
+  m_DirectX.GetOrthoMatrix(orthoMatrix);
 
 
   // Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
@@ -52,6 +53,21 @@ bool CobaltGraphics::Render(float frameTime)
 
     m_Shader.Render(m_DirectX.GetDeviceContext(), model.second->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, model.second->GetTexture());
   }
+
+  
+  m_DirectX.SetZBuffer(false);
+  worldMatrix = XMMatrixIdentity();
+  viewMatrix = XMMatrixIdentity();
+  viewMatrix.r[3].m128_f32[2] = 10.0f;
+
+  std::sort(m_bitmapListings.begin(), m_bitmapListings.end(), [](Model2D* a, Model2D* b) { return a->GetZ() < b->GetZ(); });
+  for (auto bitmap : m_bitmapListings)
+  {
+    bitmap->Render(m_DirectX.GetDeviceContext());
+
+    m_Shader.Render(m_DirectX.GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, bitmap->GetTexture());
+  }
+  m_DirectX.SetZBuffer(true);
 
   m_DirectX.EndScene();
   return true;

@@ -122,6 +122,9 @@
     <ClCompile Include="Graphics3D\CobaltTexture.cpp">
       <Filter>Graphics 3D</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics2D\CobaltBitmap.cpp">
+      <Filter>Graphics 2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Color.ps">

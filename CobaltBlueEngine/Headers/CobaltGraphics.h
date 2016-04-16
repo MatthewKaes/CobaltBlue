@@ -7,13 +7,14 @@
 #include "Direct3d.h"
 #include "ShaderCore.h"
 #include "Model3d.h"
+#include "CobaltSprite.h"
 
 #include <unordered_map>
 
 class CobaltGraphics
 {
 public:
-  friend class Model2D;
+  friend class Sprite;
   friend class Model3D;
 
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
@@ -24,7 +25,7 @@ public:
 
 protected:
   unordered_map<int, Model3D*> m_modelListings;
-  unordered_map<int, Model2D*> m_bitmapListings;
+  std::vector<Model2D*> m_bitmapListings;
   Direct3D m_DirectX;
 
 private:
