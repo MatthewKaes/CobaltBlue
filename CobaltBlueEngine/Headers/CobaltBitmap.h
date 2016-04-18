@@ -3,6 +3,7 @@
 
 #include "Direct3d.h"
 #include "CobaltTexture.h"
+#include "Model2d.h"
 
 class CobaltBitmap
 {
@@ -12,9 +13,11 @@ public:
 
   void Create(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename);
   void Create(ID3D11Device* device, ID3D11DeviceContext* context, unsigned width, unsigned height);
-  void Release();
-
   void Update(ID3D11DeviceContext* context);
+  void Release();
+  
+  Color GetPixel(unsigned x, unsigned y);
+  void SetPixel(unsigned x, unsigned y, Color color);
 
   ID3D11ShaderResourceView* GetTexture();
   unsigned Width();

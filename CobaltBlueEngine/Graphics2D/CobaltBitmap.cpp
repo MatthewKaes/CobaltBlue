@@ -44,6 +44,29 @@ void CobaltBitmap::Release()
   }
 }
 
+Color CobaltBitmap::GetPixel(unsigned x, unsigned y)
+{
+  if (x > Width() || y > Height())
+    return Color();
+
+  BYTE* colorIdx = m_textureData + x * 4 + y * 4 * Width();
+  return Color(colorIdx[0], colorIdx[1], colorIdx[2], colorIdx[3]);
+}
+
+void CobaltBitmap::SetPixel(unsigned x, unsigned y, Color color)
+{
+  if (x > Width() || y > Height())
+    return;
+
+  m_dirty = true;
+
+  BYTE* colorIdx = m_textureData + x * 4 + y * 4 * Width();
+  colorIdx[0] = color.Red;
+  colorIdx[1] = color.Blue;
+  colorIdx[2] = color.Green;
+  colorIdx[3] = color.Alpha;
+}
+
 void CobaltBitmap::Update(ID3D11DeviceContext* context)
 {
   if (!m_dirty)
