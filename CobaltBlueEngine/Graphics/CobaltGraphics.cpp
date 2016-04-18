@@ -74,6 +74,8 @@ bool CobaltGraphics::Render(float frameTime)
   viewMatrix = XMMatrixIdentity();
   viewMatrix.r[3].m128_f32[2] = (SCREEN_DEPTH) / 2.0f;
 
+  m_DirectX.SetZBuffer(false);
+  std::sort(m_bitmapListings.begin(), m_bitmapListings.end(), [](Model2D* a, Model2D* b) { return a->Z < b->Z; });
   for (auto model : m_bitmapListings)
   {
     model->Update(m_DirectX.GetDeviceContext());
@@ -89,6 +91,7 @@ bool CobaltGraphics::Render(float frameTime)
       XMVectorSet(model->Tint.Red / 255.0f, model->Tint.Blue / 255.0f, model->Tint.Green / 255.0f, model->Tint.Alpha / 255.0f),
       model->GetTexture());
   }
+  m_DirectX.SetZBuffer(true);
 
   m_DirectX.EndScene();
   return true;

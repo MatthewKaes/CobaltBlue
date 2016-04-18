@@ -13,7 +13,8 @@ public:
     spr.Create(L"Textures\\stone.png");
     spr2.Create(L"Textures\\stone.png");
     spr2.Z = 1000.0f;
-    spr.Tint = Color(255, 0, 155, 120);
+    spr.Z = 0.1f;
+    //spr.Tint = Color(255, 0, 155, 120);
   }
 
   void Update(CobaltEngine* engine)
@@ -24,9 +25,11 @@ public:
       return;
     }
 
-    spr2.Tint.Red -= 1;
+    spr2.Tint.Alpha = spr2.Tint.Red -= 1;
     if (spr2.Tint.Red == 0)
-      spr.Tint.Red = 255;
+      spr2.Tint.Red = 255;
+
+    spr.Tint = spr2.Tint;
 
     if (engine->Input->Pressed(Inputs::Space))
       engine->GotoScene(new AppScene);

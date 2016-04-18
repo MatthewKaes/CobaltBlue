@@ -29,6 +29,7 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
   D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
   D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+  D3D11_BLEND_DESC blendStateDescription;
   D3D11_RASTERIZER_DESC rasterDesc;
   D3D11_VIEWPORT viewport;
   float fieldOfView, screenAspect;
@@ -179,6 +180,37 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
     return false;
   }
 
+  // Clear the blend state description.
+  ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+
+  // Create an alpha enabled blend state description.
+  blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+  blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+  blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+  blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+  blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+  blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+  // Create the blend state using the description.
+  result = m_device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
+  if (FAILED(result))
+  {
+    return false;
+  }
+
+  float blendFactor[4];
+
+  // Setup the blend factor.
+  blendFactor[0] = 0.0f;
+  blendFactor[1] = 0.0f;
+  blendFactor[2] = 0.0f;
+  blendFactor[3] = 0.0f;
+
+  // Turn on the alpha blending.
+  m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
+
   // Initialize the description of the 2d stencil state.
   ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
@@ -310,6 +342,12 @@ void Direct3D::Shutdown()
   {
     m_depthStencilBuffer->Release();
     m_depthStencilBuffer = 0;
+  }
+
+  if (m_alphaEnableBlendingState)
+  {
+    m_alphaEnableBlendingState->Release();
+    m_alphaEnableBlendingState = 0;
   }
 
   if (m_renderTargetView)
