@@ -23,3 +23,11 @@ Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha)
   Blue = blue;
   Alpha = alpha;
 }
+
+Rect::Rect(int x, int y, unsigned width, unsigned height)
+{
+  X = x;
+  Y = y;
+  Width = width;
+  Height = height;
+}

@@ -11,10 +11,8 @@ public:
   void Start(CobaltEngine* engine)
   {
     spr.Create(L"Textures\\stone.png");
-    for (int i = 0; i < 1000; i++)
-    {
-      spr.Bitmap()->SetPixel(rand() % spr.Width(), rand() % spr.Height(), Color(255, 0, 0));
-    }
+    spr.Bitmap()->Fill(Rect(100, 100, 100, 100), Color(255, 255, 255, 120));
+    spr.Bitmap()->Fill(Rect(125, 125, 50, 50), Color(255, 0, 0));
   }
 
   void Update(CobaltEngine* engine)
@@ -23,11 +21,6 @@ public:
     {
       engine->Exit();
       return;
-    }
-
-    for (int i = 0; i < 1000; i++)
-    {
-      spr.Bitmap()->SetPixel(rand() % spr.Width(), rand() % spr.Height(), Color(255, 0, 0));
     }
 
     if (engine->Input->Pressed(Inputs::Space))

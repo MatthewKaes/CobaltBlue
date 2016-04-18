@@ -14,6 +14,16 @@ public:
   BYTE Alpha;
 };
 
+class Rect {
+public:
+  Rect(int x, int y, unsigned width, unsigned height);
+  int X;
+  int Y;
+  unsigned Width;
+  unsigned Height;
+};
+
+
 class Model2D {
 public:
   virtual ~Model2D() { };
