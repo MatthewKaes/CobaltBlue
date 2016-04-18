@@ -3,13 +3,29 @@
 
 #include <d3d11.h>
 
+class Color {
+public:
+  Color();
+  Color(BYTE Red, BYTE Green, BYTE Blue);
+  Color(BYTE Red, BYTE Green, BYTE Blue, BYTE Alpha);
+  BYTE Red;
+  BYTE Green;
+  BYTE Blue;
+  BYTE Alpha;
+};
+
 class Model2D {
 public:
   virtual ~Model2D() { };
+  virtual void Update(ID3D11DeviceContext* context) = 0;
   virtual void Render(ID3D11DeviceContext* context) = 0;
   virtual int GetIndexCount() = 0;
   virtual ID3D11ShaderResourceView* GetTexture() = 0;
-  virtual int GetZ() = 0;
+
+  float Z;
+  int X;
+  int Y;
+  Color Tint;
 };
 
 #endif

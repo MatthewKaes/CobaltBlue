@@ -11,7 +11,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-const float SCREEN_DEPTH = 1000.0f;
+const float SCREEN_DEPTH = 1002.0f;
 const float SCREEN_NEAR = 0.1f;
 
 #define MULTISAMPLE_QUALITY 0
@@ -20,16 +20,6 @@ enum class AntiAlias {
   MSAA2x = 2,
   MSAA4x = 4,
   MSAA8x = 8,
-};
-
-class Color {
-public:
-  Color(BYTE Red, BYTE Green, BYTE Blue);
-  Color(BYTE Red, BYTE Green, BYTE Blue, BYTE Alpha);
-  BYTE Red;
-  BYTE Green;
-  BYTE Blue;
-  BYTE Alpha;
 };
 
 using namespace DirectX;

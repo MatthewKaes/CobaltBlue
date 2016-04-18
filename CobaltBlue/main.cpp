@@ -10,8 +10,10 @@ class AppScene : public CobaltScene {
 public:
   void Start(CobaltEngine* engine)
   {
-    square.Create(L"Textures\\stone.png", TextureType::Dynamic);
     spr.Create(L"Textures\\stone.png");
+    spr2.Create(L"Textures\\stone.png");
+    spr2.Z = 1000.0f;
+    spr.Tint = Color(255, 0, 155, 120);
   }
 
   void Update(CobaltEngine* engine)
@@ -22,22 +24,27 @@ public:
       return;
     }
 
+    spr2.Tint.Red -= 1;
+    if (spr2.Tint.Red == 0)
+      spr.Tint.Red = 255;
+
     if (engine->Input->Pressed(Inputs::Space))
-    {
       engine->GotoScene(new AppScene);
-    }
+
+    if (engine->Input->Pressed(Inputs::K))
+      spr2.Z *= -1;
 
     if (engine->Input->Pressed(Inputs::Left))
-      engine->Graphics->Camera.Move(-1.0f, 0, 0, 0.2f);
+      spr.X -= 2;
 
     if (engine->Input->Pressed(Inputs::Right))
-      engine->Graphics->Camera.Move(1.0f, 0, 0, 0.2f);
+      spr.X += 2;
 
     if (engine->Input->Pressed(Inputs::Down))
-      engine->Graphics->Camera.Move(0, -1.0f, 0, 0.2f);
+      spr.Y += 2;
 
     if (engine->Input->Pressed(Inputs::Up))
-      engine->Graphics->Camera.Move(0, 1.0f, 0, 0.2f);
+      spr.Y -= 2;
   }
 
   void Terminate(CobaltEngine* engine)
@@ -46,13 +53,13 @@ public:
 
 private:
   Sprite spr;
-  Model3D square;
+  Sprite spr2;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
   CobaltEngine engine(1366, 768, L"Test App", false, AntiAlias::MSAA8x);
-  engine.SetFPS(60);
+  engine.SetFPS(120);
 
   engine.Run(new AppScene());
 

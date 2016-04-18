@@ -15,15 +15,33 @@ public:
 
   void Create(LPWSTR textureFile);
   void Create(unsigned width, unsigned height);
+  unsigned Width();
+  unsigned Height();
+  void Update(ID3D11DeviceContext* context);
   void Render(ID3D11DeviceContext* context);
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
-  int GetZ();
+  CobaltBitmap* Bitmap();
 
 private:
-  void Release();
+  static const int VertexCount = 4;
+  static const int IndexCount = 4;
 
-  CobaltBitmap* m_Bitmap;
+  struct VertexType
+  {
+    XMFLOAT3 position;
+    XMFLOAT4 color;
+    XMFLOAT2 texture;
+  };
+
+  void Release();
+  void CreateBuffers(ID3D11Device* device);
+
+  CobaltBitmap* m_bitmap;
+  ID3D11Buffer* m_vertexBuffer;
+  ID3D11Buffer* m_indexBuffer;
+  int m_lastX;
+  int m_lastY;
   int m_z;
 };
 

@@ -29,6 +29,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Graphics2D\Model2dcpp.cpp" />
     <ClCompile Include="Graphics3D\CobaltCamera.cpp" />
     <ClCompile Include="Graphics3D\CobaltTexture.cpp" />
     <ClCompile Include="Graphics3D\Model3d.cpp" />
@@ -74,8 +75,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Color.ps" />
-    <None Include="Shaders\Color.vs" />
+    <None Include="Shaders\Render2D.ps" />
+    <None Include="Shaders\Render2D.vs" />
+    <None Include="Shaders\Render3D.ps" />
+    <None Include="Shaders\Render3D.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{534B8C56-A7C7-49DB-BECB-1FF49CCFCE95}</ProjectGuid>

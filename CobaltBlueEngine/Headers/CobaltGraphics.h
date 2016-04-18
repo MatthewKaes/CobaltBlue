@@ -20,6 +20,8 @@ public:
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
   void Shutdown();
   bool Frame(float frameTime);
+  unsigned Width();
+  unsigned Height();
 
   CobaltCamera Camera;
 

@@ -5,6 +5,7 @@ extern CobaltEngine* EngineHandle;
 
 CobaltTexture::CobaltTexture()
 {
+  m_texture = 0;
   m_textureView = 0;
 }
 

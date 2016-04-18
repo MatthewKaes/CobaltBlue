@@ -1,21 +1,5 @@
 #include "Direct3d.h"
 
-Color::Color(BYTE red, BYTE green, BYTE blue)
-{
-  Red = red;
-  Green = green;
-  Blue = blue;
-  Alpha = 255;
-}
-
-Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha)
-{
-  Red = red;
-  Green = green;
-  Blue = blue;
-  Alpha = alpha;
-}
-
 Direct3D::Direct3D()
 {
   m_swapChain = 0;
@@ -104,8 +88,8 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   swapChainDesc.BufferDesc.Width = width;
   swapChainDesc.BufferDesc.Height = height;
   swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-  swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
-  swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+  swapChainDesc.BufferDesc.RefreshRate.Numerator = 1000;
+  swapChainDesc.BufferDesc.RefreshRate.Denominator = 60000;
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   swapChainDesc.OutputWindow = window;
   swapChainDesc.SampleDesc.Count = (UINT)antiAlias;

@@ -125,12 +125,21 @@
     <ClCompile Include="Graphics2D\CobaltBitmap.cpp">
       <Filter>Graphics 2D</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics2D\Model2dcpp.cpp">
+      <Filter>Graphics 2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Color.ps">
+    <None Include="Shaders\Render3D.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\Color.vs">
+    <None Include="Shaders\Render3D.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Render2D.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Render2D.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

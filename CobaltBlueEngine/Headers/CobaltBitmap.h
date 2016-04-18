@@ -7,16 +7,13 @@
 class CobaltBitmap
 {
 public:
-  static const int VertexCount = 4;
-  static const int IndexCount = 4;
-
   CobaltBitmap();
   ~CobaltBitmap();
 
-  bool Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename);
+  void Create(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename);
+  void Create(ID3D11Device* device, ID3D11DeviceContext* context, unsigned width, unsigned height);
   void Release();
 
-  void Render(ID3D11DeviceContext* context);
   void Update(ID3D11DeviceContext* context);
 
   ID3D11ShaderResourceView* GetTexture();
@@ -24,18 +21,15 @@ public:
   unsigned Height();
 
 private:
-  struct VertexType
-  {
-    XMFLOAT3 position;
-    XMFLOAT4 color;
-    XMFLOAT2 texture;
-  };
+  void InitializeResource(ID3D11Device* device, ID3D11DeviceContext* context);
+  void LoadTexture(LPCWSTR filename);
 
-  bool InitializeBuffers(ID3D11Device* device);
-
-  CobaltTexture* m_texture;
-  ID3D11Buffer* m_vertexBuffer;
-  ID3D11Buffer* m_indexBuffer;
+  bool m_dirty;
+  unsigned m_width;
+  unsigned m_height;
+  BYTE* m_textureData;
+  ID3D11Texture2D* m_texture;
+  ID3D11ShaderResourceView* m_textureView;
 };
 
 #endif
