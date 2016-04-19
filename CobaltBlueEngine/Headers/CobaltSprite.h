@@ -40,9 +40,6 @@ private:
   CobaltBitmap* m_bitmap;
   ID3D11Buffer* m_vertexBuffer;
   ID3D11Buffer* m_indexBuffer;
-  int m_lastX;
-  int m_lastY;
-  int m_z;
 };
 
 #endif

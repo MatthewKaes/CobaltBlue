@@ -22,6 +22,10 @@ public:
   void Exit();
   void GotoScene(CobaltScene* nextScene);
 
+  unsigned FPS();
+  unsigned FrameCount();
+  float FrameTime();
+
   LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
   // API Exposed Objects

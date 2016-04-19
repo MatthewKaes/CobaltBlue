@@ -9,8 +9,9 @@ Sprite::Sprite()
   m_bitmap = 0;
   m_indexBuffer = 0;
   m_vertexBuffer = 0;
-  m_lastX = X = 0;
-  m_lastY = Y = 0;
+  X = 0;
+  Y = 0;
+  Z = 0.0f;
 }
 
 Sprite::~Sprite()
@@ -20,7 +21,6 @@ Sprite::~Sprite()
 
 void Sprite::Create(LPWSTR textureFile)
 {
-  m_z = 0;
   EngineHandle->Graphics->m_bitmapListings.push_back(this);
 
   // Create a bitmap to use for 2D graphics
@@ -35,7 +35,6 @@ void Sprite::Create(LPWSTR textureFile)
 
 void Sprite::Create(unsigned width, unsigned height)
 {
-  m_z = 0;
   EngineHandle->Graphics->m_bitmapListings.push_back(this);
 
   // Create a bitmap to use for 2D graphics

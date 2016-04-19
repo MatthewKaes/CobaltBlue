@@ -69,6 +69,9 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
   }
 
+  RECT clientSize = { 0, 0, screenWidth, screenHeight };    // set the size, but not the position
+  AdjustWindowRect(&clientSize, WS_OVERLAPPEDWINDOW, FALSE);    // adjust the size
+  
   // Create the window with the screen settings and get the handle to it.
   m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, 
     m_appName, 
@@ -76,8 +79,8 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
     (WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP),
     posX, 
     posY, 
-    screenWidth, 
-    screenHeight, 
+    clientSize.right - clientSize.left,
+    clientSize.bottom - clientSize.top,
     NULL, 
     NULL, 
     m_hinstance, 
@@ -204,7 +207,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
     }
 
     // Sync Frame
-    m_sync.Sync();
+    m_sync.Sync(!Graphics->VSync());
   }
 
   return;
@@ -225,6 +228,21 @@ void CobaltEngine::Exit()
 void CobaltEngine::GotoScene(CobaltScene* nextScene)
 {
   m_nextScene = nextScene;
+}
+
+unsigned CobaltEngine::FPS()
+{
+  return m_sync.FPS();
+}
+
+unsigned CobaltEngine::FrameCount()
+{
+  return m_sync.FrameCount();
+}
+
+float CobaltEngine::FrameTime()
+{
+  return m_sync.FrameTime();
 }
 
 LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)

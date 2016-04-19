@@ -439,6 +439,11 @@ void Direct3D::GetOrthoMatrix(XMMATRIX& orthoMatrix)
   orthoMatrix = m_orthoMatrix;
 }
 
+bool Direct3D::VSync()
+{
+  return m_vsync_enabled;
+}
+
 void Direct3D::GetVideoCardInfo(char* cardName, int& memory)
 {
   strcpy_s(cardName, 128, m_videoCardDescription);
@@ -456,4 +461,9 @@ void Direct3D::SetZBuffer(bool enable)
   {
     m_deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
   }
+}
+
+void Direct3D::SetVSync(bool vsync)
+{
+  m_vsync_enabled = vsync;
 }

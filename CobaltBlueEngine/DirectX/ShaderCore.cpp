@@ -57,8 +57,8 @@ void ShaderCore::Shutdown()
   // Release the vertex shader.
   if (m_2DvertexShader)
   {
-    m_2DpixelShader->Release();
-    m_2DpixelShader = 0;
+    m_2DvertexShader->Release();
+    m_2DvertexShader = 0;
   }
 
   // Release the pixel shader.
@@ -71,8 +71,8 @@ void ShaderCore::Shutdown()
   // Release the vertex shader.
   if (m_3DvertexShader)
   {
-    m_3DpixelShader->Release();
-    m_3DpixelShader = 0;
+    m_3DvertexShader->Release();
+    m_3DvertexShader = 0;
   }
 
   // Release the sampler state.

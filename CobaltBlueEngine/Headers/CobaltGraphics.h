@@ -22,6 +22,8 @@ public:
   bool Frame(float frameTime);
   unsigned Width();
   unsigned Height();
+  bool VSync();
+  void SetVSync(bool vsync);
 
   CobaltCamera Camera;
 

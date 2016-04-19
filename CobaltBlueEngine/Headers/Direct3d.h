@@ -14,6 +14,8 @@
 const float SCREEN_DEPTH = 1002.0f;
 const float SCREEN_NEAR = 0.1f;
 
+#define WINDOW_WIDTH_OFFSET = 6;
+#define WINDOW_HEIGHT_OFFSET = 33;
 #define MULTISAMPLE_QUALITY 0
 enum class AntiAlias {
   None = 1,
@@ -40,9 +42,11 @@ public:
   void GetProjectionMatrix(XMMATRIX& projMatrix);
   void GetWorldMatrix(XMMATRIX& worldMatrix);
   void GetOrthoMatrix(XMMATRIX& orthoMatrix);
-
   void GetVideoCardInfo(char*, int&);
+  bool VSync();
+
   void SetZBuffer(bool enable);
+  void SetVSync(bool vsync);
 
 private:
   bool m_vsync_enabled;

@@ -42,6 +42,16 @@ unsigned CobaltGraphics::Height()
   return m_height;
 }
 
+bool CobaltGraphics::VSync()
+{
+  return m_DirectX.VSync();
+}
+
+void CobaltGraphics::SetVSync(bool vsync)
+{
+  m_DirectX.SetVSync(vsync);
+}
+
 bool CobaltGraphics::Render(float frameTime)
 {
   XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;

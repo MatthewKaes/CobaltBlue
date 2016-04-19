@@ -26,20 +26,17 @@ public:
     if (engine->Input->Pressed(Inputs::Space))
       engine->GotoScene(new AppScene);
 
-    if (engine->Input->Pressed(Inputs::K))
-      spr2.Z *= -1;
-
     if (engine->Input->Pressed(Inputs::Left))
-      spr.X -= 2;
+      spr.X -= 4;
 
     if (engine->Input->Pressed(Inputs::Right))
-      spr.X += 2;
+      spr.X += 4;
 
     if (engine->Input->Pressed(Inputs::Down))
-      spr.Y += 2;
+      spr.Y += 4;
 
     if (engine->Input->Pressed(Inputs::Up))
-      spr.Y -= 2;
+      spr.Y -= 4;
   }
 
   void Terminate(CobaltEngine* engine)
@@ -48,13 +45,13 @@ public:
 
 private:
   Sprite spr;
-  Sprite spr2;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
   CobaltEngine engine(1366, 768, L"Test App", false, AntiAlias::MSAA8x);
-  engine.SetFPS(120);
+  engine.SetFPS(60);
+  engine.Graphics->SetVSync(true);
 
   engine.Run(new AppScene());
 
