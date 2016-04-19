@@ -23,6 +23,7 @@ void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, LP
 void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, unsigned width, unsigned height)
 {
   m_textureData = new BYTE[width * height * 4];
+  memset(m_textureData, 0, sizeof(BYTE) * width * height * 4);
   m_width = width;
   m_height = height;
 

@@ -208,6 +208,9 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
     // Sync Frame
     m_sync.Sync(!Graphics->VSync());
+
+    // Update Inputs from the last frame
+    Input->Frame();
   }
 
   return;

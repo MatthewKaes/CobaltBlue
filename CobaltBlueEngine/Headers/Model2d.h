@@ -16,6 +16,7 @@ public:
 
 class Rect {
 public:
+  Rect();
   Rect(int x, int y, unsigned width, unsigned height);
   int X;
   int Y;

@@ -13,6 +13,10 @@ public:
     spr.Create(L"Textures\\stone.png");
     spr.Bitmap()->Fill(Rect(100, 100, 100, 100), Color(255, 255, 255, 120));
     spr.Bitmap()->Fill(Rect(125, 125, 50, 50), Color(255, 0, 0));
+
+    spr2.Z = 1;
+    spr2.Create(200,200);
+    spr2.Bitmap()->Fill(Rect(0, 0, 200, 200), Color(0, 255, 255));
   }
 
   void Update(CobaltEngine* engine)
@@ -21,6 +25,15 @@ public:
     {
       engine->Exit();
       return;
+    }
+
+    if (engine->Input->Triggered(Inputs::K))
+    {
+      spr2.Z *= -1;
+    }
+    else if (engine->Input->Released(Inputs::K))
+    {
+      spr2.Z *= -1;
     }
 
     if (engine->Input->Pressed(Inputs::Space))
@@ -45,6 +58,7 @@ public:
 
 private:
   Sprite spr;
+  Sprite spr2;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)

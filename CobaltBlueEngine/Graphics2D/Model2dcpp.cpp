@@ -24,6 +24,14 @@ Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha)
   Alpha = alpha;
 }
 
+Rect::Rect()
+{
+  X = 0;
+  Y = 0;
+  Width = 0;
+  Height = 0;
+}
+
 Rect::Rect(int x, int y, unsigned width, unsigned height)
 {
   X = x;
