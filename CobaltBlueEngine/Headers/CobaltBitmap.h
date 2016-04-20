@@ -18,6 +18,7 @@ public:
   
   Color GetPixel(unsigned x, unsigned y);
   void SetPixel(unsigned x, unsigned y, Color color);
+  void Fill(Color color);
   void Fill(Rect area, Color color);
 
   ID3D11ShaderResourceView* GetTexture();

@@ -68,6 +68,11 @@ void CobaltBitmap::SetPixel(unsigned x, unsigned y, Color color)
   colorIdx[3] = color.Alpha;
 }
 
+void CobaltBitmap::Fill(Color color)
+{
+  Fill(Rect(0, 0, Width(), Height()), color);
+}
+
 void CobaltBitmap::Fill(Rect area, Color color)
 {
   if (area.X < 0)
@@ -94,6 +99,72 @@ void CobaltBitmap::Fill(Rect area, Color color)
       pixelIdx[2] = color.Green;
       pixelIdx[3] = color.Alpha;
       pixelIdx += 4;
+    }
+  }
+}
+
+{
+}
+
+{
+  if (area.X < 0)
+    area.X = 0;
+
+  if (area.Y < 0)
+    area.Y = 0;
+
+  if (area.Width + area.X > Width())
+    area.Width = Width() - area.X;
+
+  if (area.Height + area.Y > Height())
+    area.Height = Height() - area.Y;
+
+  m_dirty = true;
+
+  if (!horz)
+  {
+    double end = (double)area.Y + area.Height;
+    for (unsigned line = 0; line < area.Height; line++)
+    {
+      BYTE* pixelIdx = m_textureData + area.X * 4 + (area.Y + line) * 4 * Width();
+      Color grad;
+      double fract1 = (area.Height - line) / (float)area.Height;
+      double fract2 = line / (float)area.Height;
+      grad.Red = (UCHAR)(color1.Red * fract1 + color2.Red * fract2);
+      grad.Green = (UCHAR)(color1.Green * fract1 + color2.Green * fract2);
+      grad.Blue = (UCHAR)(color1.Blue * fract1 + color2.Blue * fract2);
+      grad.Alpha = (UCHAR)(color1.Alpha * fract1 + color2.Alpha * fract2);
+      for (unsigned pixel = 0; pixel < area.Width; pixel++)
+      {
+        pixelIdx[0] = grad.Red;
+        pixelIdx[1] = grad.Green;
+        pixelIdx[2] = grad.Blue;
+        pixelIdx[3] = grad.Alpha;
+        pixelIdx += 4;
+      }
+    }
+  }
+  else
+  {
+    double end = (double)area.X + area.Width;
+    for (unsigned line = 0; line < area.Width; line++)
+    {
+      BYTE* pixelIdx = m_textureData + (area.X + line) * 4 + area.Y * 4 * Width();
+      Color grad;
+      double fract1 = (area.Width - line) / (float)area.Width;
+      double fract2 = (line) / (float)area.Width;
+      grad.Red = (UCHAR)(color1.Red * fract1 + color2.Red * fract2);
+      grad.Green = (UCHAR)(color1.Green * fract1 + color2.Green * fract2);
+      grad.Blue = (UCHAR)(color1.Blue * fract1 + color2.Blue * fract2);
+      grad.Alpha = (UCHAR)(color1.Alpha * fract1 + color2.Alpha * fract2);
+      for (unsigned pixel = 0; pixel < area.Height; pixel++)
+      {
+        pixelIdx[0] = grad.Red;
+        pixelIdx[1] = grad.Green;
+        pixelIdx[2] = grad.Blue;
+        pixelIdx[3] = grad.Alpha;
+        pixelIdx += Width() * 4;
+      }
     }
   }
 }

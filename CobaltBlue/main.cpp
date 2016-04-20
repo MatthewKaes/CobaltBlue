@@ -15,8 +15,7 @@ public:
     spr.Bitmap()->Fill(Rect(125, 125, 50, 50), Color(255, 0, 0));
 
     spr2.Z = 1;
-    spr2.Create(200,200);
-    spr2.Bitmap()->Fill(Rect(0, 0, 200, 200), Color(0, 255, 255));
+    spr2.Create(400,200);
   }
 
   void Update(CobaltEngine* engine)
