@@ -16,6 +16,8 @@ public:
 
     spr2.Z = 1;
     spr2.Create(400,200);
+    spr2.Bitmap()->Gradient(Rect(0, 0, 100, 200), Color(0, 255, 0), Color(0, 0, 255));
+    spr2.Bitmap()->Gradient(Rect(100, 0, 200, 100), Color(0, 255, 0), Color(0, 0, 255), true);
   }
 
   void Update(CobaltEngine* engine)

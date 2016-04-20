@@ -103,9 +103,12 @@ void CobaltBitmap::Fill(Rect area, Color color)
   }
 }
 
+void CobaltBitmap::Gradient(Rect area, Color color1, Color color2)
 {
+  Gradient(area, color1, color2, false);
 }
 
+void CobaltBitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
 {
   if (area.X < 0)
     area.X = 0;

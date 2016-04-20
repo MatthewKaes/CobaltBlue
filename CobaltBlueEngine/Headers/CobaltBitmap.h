@@ -20,6 +20,8 @@ public:
   void SetPixel(unsigned x, unsigned y, Color color);
   void Fill(Color color);
   void Fill(Rect area, Color color);
+  void Gradient(Rect area, Color color1, Color color2);
+  void Gradient(Rect area, Color color1, Color color2, bool horz);
 
   ID3D11ShaderResourceView* GetTexture();
   unsigned Width();
