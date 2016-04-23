@@ -5,6 +5,8 @@
 #include "CobaltTexture.h"
 #include "Model2d.h"
 
+#undef DrawText
+
 class CobaltBitmap
 {
 public:
@@ -22,6 +24,9 @@ public:
   void Fill(Rect area, Color color);
   void Gradient(Rect area, Color color1, Color color2);
   void Gradient(Rect area, Color color1, Color color2, bool horz);
+  void DrawText(LPWSTR text, unsigned size, Rect area, Color textColor);
+  void DrawText(LPWSTR text, unsigned size, Rect area, Color textColor, LPWSTR fontname);
+  void DrawText(LPWSTR text, unsigned size, Rect area, Color textColor, LPWSTR fontname, bool bold, bool italic);
 
   ID3D11ShaderResourceView* GetTexture();
   unsigned Width();

@@ -1,5 +1,5 @@
-#include "CobaltBitmap.h"
 #include "CobaltEngine.h"
+#include "CobaltBitmap.h"
 
 extern CobaltEngine* EngineHandle;
 
@@ -170,6 +170,87 @@ void CobaltBitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
       }
     }
   }
+}
+
+void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textColor)
+{
+  DrawText(text, size, area, textColor, L"Arial");
+}
+
+void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textColor, LPWSTR fontname)
+{
+  DrawText(text, size, area, textColor, fontname, false, false);
+}
+
+void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textColor, LPWSTR fontname, bool bold, bool italic)
+{
+  if (area.X < 0)
+    area.X = 0;
+
+  if (area.Y < 0)
+    area.Y = 0;
+
+  if (area.Width + area.X > Width())
+    area.Width = Width() - area.X;
+
+  if (area.Height + area.Y > Height())
+    area.Height = Height() - area.Y;
+
+  m_dirty = true;
+
+  HDC hdc = GetDC(NULL);
+  HDC mdc = CreateCompatibleDC(hdc);
+  HBITMAP bm = CreateCompatibleBitmap(hdc, area.Width, area.Height);
+
+  HFONT hf = CreateFont(size, 0, 0, 0, bold ? FW_BOLD : FW_NORMAL, italic, FALSE, FALSE,
+    ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+    ANTIALIASED_QUALITY, DEFAULT_PITCH, fontname);
+
+  RECT r = { 0, 0, (int)area.Width, (int)area.Height };
+
+  BITMAPINFO bmi;
+  bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+  bmi.bmiHeader.biWidth = area.Width;
+  bmi.bmiHeader.biHeight = area.Height;
+  bmi.bmiHeader.biPlanes = 1;
+  bmi.bmiHeader.biBitCount = 32;
+  bmi.bmiHeader.biCompression = BI_RGB;
+
+  SelectObject(mdc, bm);
+  FillRect(mdc, &r, (HBRUSH)GetStockObject(NULL_BRUSH));
+
+  SelectObject(mdc, hf);
+  SetBkMode(mdc, TRANSPARENT);
+  SetTextColor(mdc, RGB(textColor.Red, textColor.Green, textColor.Blue));
+  DrawTextW(mdc, text, lstrlenW(text), &r, DT_LEFT | DT_EXTERNALLEADING | DT_WORDBREAK);
+
+  BYTE* scanlines = new BYTE[area.Height * area.Width * 4];
+  GetDIBits(mdc, bm, 0, area.Height, scanlines, &bmi, DIB_RGB_COLORS);
+  
+  float pixelSrcColor = ((float)textColor.Red + textColor.Blue + textColor.Green) * 255.0f;
+
+  for (unsigned line = 0; line < area.Height; line++)
+  {
+    BYTE* pixelIdx = m_textureData + area.X * 4 + (area.Y + line) * 4 * Width();
+    for (unsigned pixel = 0; pixel < area.Width; pixel++)
+    {
+      BYTE* pixelSrc = scanlines + 4 * (area.Height - line - 1) * area.Width + pixel * 4;
+      if (pixelSrc[0] != 0 || pixelSrc[1] != 0 || pixelSrc[2] != 0)
+      {
+        float pixelAlpha = textColor.Alpha * ((float)pixelSrc[0] + pixelSrc[1] + pixelSrc[2]) / pixelSrcColor;
+        pixelIdx[0] = (BYTE)(textColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
+        pixelIdx[1] = (BYTE)(textColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
+        pixelIdx[2] = (BYTE)(textColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);
+        pixelIdx[3] = (BYTE)(min(255 * pixelAlpha + (1 - pixelAlpha) * pixelIdx[3], 255));
+      }
+
+      pixelIdx += 4;
+    }
+  }
+
+  delete[] scanlines;
+  DeleteObject(hf);
+  DeleteObject(bm);
 }
 
 void CobaltBitmap::Update(ID3D11DeviceContext* context)
