@@ -8,7 +8,7 @@ extern CobaltEngine* EngineHandle;
 const Color DefaultColor = Color(255, 255, 255);
 const Color DefaultOutline = Color(0, 0, 0, 150);
 
-CobaltBitmap::CobaltBitmap()
+Bitmap::Bitmap()
 {
   m_texture = 0;
   m_textureView = 0;
@@ -16,20 +16,22 @@ CobaltBitmap::CobaltBitmap()
   m_outlineColor = DefaultOutline;
 }
 
-CobaltBitmap::~CobaltBitmap()
+Bitmap::~Bitmap()
 {
   Release();
 }
 
-void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename)
+void Bitmap::Create(LPCWSTR filename)
 {
   m_fontname = EngineHandle->Font;
 
   LoadTexture(filename);
-  InitializeResource(device, context);
+  InitializeResource(
+    EngineHandle->Graphics->m_DirectX.GetDevice(),
+    EngineHandle->Graphics->m_DirectX.GetDeviceContext());
 }
 
-void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, unsigned width, unsigned height)
+void Bitmap::Create(unsigned width, unsigned height)
 {
   m_fontname = EngineHandle->Font;
 
@@ -38,10 +40,12 @@ void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, un
   m_width = width;
   m_height = height;
 
-  InitializeResource(device, context);
+  InitializeResource(
+    EngineHandle->Graphics->m_DirectX.GetDevice(),
+    EngineHandle->Graphics->m_DirectX.GetDeviceContext());
 }
 
-void CobaltBitmap::Release()
+void Bitmap::Release()
 {
   if (m_texture)
   {
@@ -56,22 +60,22 @@ void CobaltBitmap::Release()
   }
 }
 
-void CobaltBitmap::SetTextColor(Color textColor)
+void Bitmap::SetTextColor(Color textColor)
 {
   m_textColor = textColor;
 }
 
-void CobaltBitmap::SetOutlineColor(Color outlineColor)
+void Bitmap::SetOutlineColor(Color outlineColor)
 {
   m_outlineColor = outlineColor;
 }
 
-void CobaltBitmap::SetFont(LPWSTR fontname)
+void Bitmap::SetFont(LPWSTR fontname)
 {
   m_fontname = fontname;
 }
 
-Color CobaltBitmap::Pixel(unsigned x, unsigned y)
+Color Bitmap::Pixel(unsigned x, unsigned y)
 {
   if (x > Width() || y > Height())
     return Color();
@@ -80,7 +84,7 @@ Color CobaltBitmap::Pixel(unsigned x, unsigned y)
   return Color(colorIdx[0], colorIdx[1], colorIdx[2], colorIdx[3]);
 }
 
-void CobaltBitmap::SetPixel(unsigned x, unsigned y, Color color)
+void Bitmap::SetPixel(unsigned x, unsigned y, Color color)
 {
   if (x > Width() || y > Height())
     return;
@@ -94,12 +98,12 @@ void CobaltBitmap::SetPixel(unsigned x, unsigned y, Color color)
   colorIdx[3] = color.Alpha;
 }
 
-void CobaltBitmap::Fill(Color color)
+void Bitmap::Fill(Color color)
 {
   Fill(Rect(0, 0, Width(), Height()), color);
 }
 
-void CobaltBitmap::Fill(Rect area, Color color)
+void Bitmap::Fill(Rect area, Color color)
 {
   if (area.X < 0)
     area.X = 0;
@@ -129,12 +133,12 @@ void CobaltBitmap::Fill(Rect area, Color color)
   }
 }
 
-void CobaltBitmap::Gradient(Rect area, Color color1, Color color2)
+void Bitmap::Gradient(Rect area, Color color1, Color color2)
 {
   Gradient(area, color1, color2, false);
 }
 
-void CobaltBitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
+void Bitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
 {
   if (area.X < 0)
     area.X = 0;
@@ -198,12 +202,12 @@ void CobaltBitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
   }
 }
 
-void CobaltBitmap::DrawText(LPCWSTR text, unsigned size, Rect area)
+void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area)
 {
   DrawText(text, size, area, false, false);
 }
 
-void CobaltBitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic)
+void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic)
 {
   if (area.X < 0)
     area.X = 0;
@@ -318,7 +322,53 @@ void CobaltBitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, b
   DeleteObject(bm);
 }
 
-void CobaltBitmap::Update(ID3D11DeviceContext* context)
+void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
+{
+  if (!bitmap)
+    return;
+
+  if (area.X < 0)
+    area.X = 0;
+
+  if (area.Y < 0)
+    area.Y = 0;
+
+  if (area.Width + area.X > bitmap->Width())
+    area.Width = bitmap->Width() - area.X;
+
+  if (area.Height + area.Y > bitmap->Height())
+    area.Height = bitmap->Height() - area.Y;
+
+  if (area.Width + target.X > Width())
+    area.Width = Width() - target.X;
+
+  if (area.Height + target.Y > Height())
+    area.Height = Height() - target.Y;
+
+  m_dirty = true;
+
+  for (unsigned line = 0; line < area.Height; line++)
+  {
+    BYTE* pixelIdx = m_textureData + target.X * 4 + (target.Y + line) * 4 * Width();
+    BYTE* pixelSrc = bitmap->m_textureData + area.X * 4 + (area.Y + line) * 4 * bitmap->Width();
+    for (unsigned pixel = 0; pixel < area.Width; pixel++)
+    {
+      float pixelAlpha = pixelSrc[3] / 255.0f;
+      if (pixelAlpha != 0.0f)
+      {
+        pixelIdx[0] = (BYTE)(pixelSrc[0] * pixelAlpha + (1.0f - pixelAlpha) * pixelIdx[0]);
+        pixelIdx[1] = (BYTE)(pixelSrc[1] * pixelAlpha + (1.0f - pixelAlpha) * pixelIdx[1]);
+        pixelIdx[2] = (BYTE)(pixelSrc[2] * pixelAlpha + (1.0f - pixelAlpha) * pixelIdx[2]);
+        pixelIdx[3] = (BYTE)(min(255 * pixelAlpha + (1 - pixelAlpha) * pixelIdx[3], 255));
+      }
+
+      pixelIdx += 4;
+      pixelSrc += 4;
+    }
+  }
+}
+
+void Bitmap::Update(ID3D11DeviceContext* context)
 {
   if (!m_dirty)
   {
@@ -342,22 +392,22 @@ void CobaltBitmap::Update(ID3D11DeviceContext* context)
   context->Unmap(m_texture, 0);
 }
 
-ID3D11ShaderResourceView* CobaltBitmap::GetTexture()
+ID3D11ShaderResourceView* Bitmap::GetTexture()
 {
   return m_textureView;
 }
 
-unsigned CobaltBitmap::Width()
+unsigned Bitmap::Width()
 {
   return m_width;
 }
 
-unsigned CobaltBitmap::Height()
+unsigned Bitmap::Height()
 {
   return m_height;
 }
 
-void CobaltBitmap::InitializeResource(ID3D11Device* device, ID3D11DeviceContext* context)
+void Bitmap::InitializeResource(ID3D11Device* device, ID3D11DeviceContext* context)
 {
   D3D11_TEXTURE2D_DESC textureDesc;
   HRESULT hResult;
@@ -405,7 +455,7 @@ void CobaltBitmap::InitializeResource(ID3D11Device* device, ID3D11DeviceContext*
   }
 }
 
-void CobaltBitmap::LoadTexture(LPCWSTR filename)
+void Bitmap::LoadTexture(LPCWSTR filename)
 {
   const CachedImage* image = EngineHandle->Cache->GetImage(filename);
   m_textureData = image->GetImage();

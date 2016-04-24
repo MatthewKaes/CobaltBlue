@@ -7,14 +7,14 @@
 
 #undef DrawText
 
-class CobaltBitmap
+class Bitmap
 {
 public:
-  CobaltBitmap();
-  ~CobaltBitmap();
+  Bitmap();
+  ~Bitmap();
 
-  void Create(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename);
-  void Create(ID3D11Device* device, ID3D11DeviceContext* context, unsigned width, unsigned height);
+  void Create(LPCWSTR filename);
+  void Create(unsigned width, unsigned height);
   void Update(ID3D11DeviceContext* context);
   void Release();
   
@@ -29,6 +29,7 @@ public:
   void Gradient(Rect area, Color color1, Color color2, bool horz);
   void DrawText(LPCWSTR text, unsigned size, Rect area);
   void DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic);
+  void Blend(Bitmap* bitmap, Rect area, Point target);
 
 
   ID3D11ShaderResourceView* GetTexture();

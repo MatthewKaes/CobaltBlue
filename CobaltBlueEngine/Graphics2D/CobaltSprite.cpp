@@ -24,11 +24,8 @@ void Sprite::Create(LPWSTR textureFile)
   EngineHandle->Graphics->m_bitmapListings.push_back(this);
 
   // Create a bitmap to use for 2D graphics
-  m_bitmap = new CobaltBitmap();
-  m_bitmap->Create(
-    EngineHandle->Graphics->m_DirectX.GetDevice(),
-    EngineHandle->Graphics->m_DirectX.GetDeviceContext(),
-    textureFile);
+  m_bitmap = new ::Bitmap();
+  m_bitmap->Create(textureFile);
 
   CreateBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
 }
@@ -38,10 +35,8 @@ void Sprite::Create(unsigned width, unsigned height)
   EngineHandle->Graphics->m_bitmapListings.push_back(this);
 
   // Create a bitmap to use for 2D graphics
-  m_bitmap = new CobaltBitmap();
+  m_bitmap = new ::Bitmap();
   m_bitmap->Create(
-    EngineHandle->Graphics->m_DirectX.GetDevice(),
-    EngineHandle->Graphics->m_DirectX.GetDeviceContext(),
     width,
     height);
 
@@ -199,7 +194,7 @@ ID3D11ShaderResourceView* Sprite::GetTexture()
   return m_bitmap->GetTexture();
 }
 
-CobaltBitmap* Sprite::Bitmap()
+Bitmap* Sprite::Bitmap()
 {
   return m_bitmap;
 }

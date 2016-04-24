@@ -24,6 +24,18 @@ Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha)
   Alpha = alpha;
 }
 
+Point::Point()
+{
+  X = 0;
+  Y = 0;
+}
+
+Point::Point(int x, int y)
+{
+  X = x;
+  Y = y;
+}
+
 Rect::Rect()
 {
   X = 0;

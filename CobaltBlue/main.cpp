@@ -10,23 +10,14 @@ class AppScene : public CobaltScene {
 public:
   void Start(CobaltEngine* engine)
   {
+    blur.Create(L"Textures\\green.png");
     spr.Create(L"Textures\\stone.png");
-    spr.Bitmap()->DrawText(L"Text with wordwrap enabled.", 20, Rect(100, 100, 150, 100));
-    spr.Bitmap()->SetFont(L"Steinem");
-    spr.Bitmap()->DrawText(L"Text with wordwrap enabled.", 20, Rect(100, 200, 300, 100));
 
-    Rect textArea = Rect(100, 300, 300, 100);
-    spr.Bitmap()->Fill(textArea, Color(255, 255, 255, 100));
-    textArea.X += 30;
-    textArea.Y += 30;
-    spr.Bitmap()->SetTextColor(Color(155, 0, 155));
-    spr.Bitmap()->SetOutlineColor(Color(255, 255, 255, 120));
-    spr.Bitmap()->DrawText(L"Over Transparent", 32, textArea);
-
-    spr2.Z = 1;
-    spr2.Create(400,200);
-    spr2.Bitmap()->Gradient(Rect(0, 0, 100, 200), Color(0, 255, 0), Color(0, 0, 255));
-    spr2.Bitmap()->Gradient(Rect(100, 0, 200, 100), Color(0, 255, 0), Color(0, 0, 255), true);
+    // Preform a bunch of blends.
+    spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(100, 100));
+    spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(200, 150));
+    spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(450, 190));
+    spr.Bitmap()->Blend(&blur, Rect(50, 50, blur.Width(), blur.Height()), Point(0, 0));
   }
 
   void Update(CobaltEngine* engine)
@@ -37,17 +28,11 @@ public:
       return;
     }
 
-    if (engine->Input->Triggered(Inputs::K))
-    {
-      spr2.Z *= -1;
-    }
-    else if (engine->Input->Released(Inputs::K))
-    {
-      spr2.Z *= -1;
-    }
-
     if (engine->Input->Pressed(Inputs::Space))
       engine->GotoScene(new AppScene);
+
+    if (engine->Input->Pressed(Inputs::A))
+      spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(rand() % spr.Width(), rand() % spr.Height()));
 
     if (engine->Input->Pressed(Inputs::Left))
       spr.X -= 4;
@@ -68,7 +53,7 @@ public:
 
 private:
   Sprite spr;
-  Sprite spr2;
+  Bitmap blur;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)

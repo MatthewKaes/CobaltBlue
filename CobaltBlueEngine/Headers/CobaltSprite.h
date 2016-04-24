@@ -21,7 +21,7 @@ public:
   void Render(ID3D11DeviceContext* context);
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
-  CobaltBitmap* Bitmap();
+  Bitmap* Bitmap();
 
 private:
   static const int VertexCount = 4;
@@ -37,7 +37,7 @@ private:
   void Release();
   void CreateBuffers(ID3D11Device* device);
 
-  CobaltBitmap* m_bitmap;
+  ::Bitmap* m_bitmap;
   ID3D11Buffer* m_vertexBuffer;
   ID3D11Buffer* m_indexBuffer;
 };

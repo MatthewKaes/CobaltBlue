@@ -15,6 +15,7 @@ class CobaltGraphics
 {
 public:
   friend class Sprite;
+  friend class Bitmap;
   friend class Model3D;
 
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
