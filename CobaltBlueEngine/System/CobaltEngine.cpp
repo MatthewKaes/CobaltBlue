@@ -105,8 +105,9 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   Input = new CobaltInput();
   Graphics = new CobaltGraphics();
   Cache = new CobaltCache();
+  Font = DefaultFont;
 
-  m_sync.SetFPS(DEFAULTFPS);
+  m_sync.SetFPS(DefaultFPS);
   Graphics->Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
 
   return;

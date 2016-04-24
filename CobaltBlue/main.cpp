@@ -11,14 +11,17 @@ public:
   void Start(CobaltEngine* engine)
   {
     spr.Create(L"Textures\\stone.png");
-    spr.Bitmap()->DrawText(L"Text with a wordwrap enabled.", 22, Rect(100, 100, 300, 100), Color(55, 55, 55), L"Steinem", true, true);
-    spr.Bitmap()->DrawText(L"Text with a wordwrap enabled.", 22, Rect(100, 150, 300, 100), Color(255, 255, 255), L"Steinem");
+    spr.Bitmap()->DrawText(L"Text with wordwrap enabled.", 20, Rect(100, 100, 150, 100));
+    spr.Bitmap()->SetFont(L"Steinem");
+    spr.Bitmap()->DrawText(L"Text with wordwrap enabled.", 20, Rect(100, 200, 300, 100));
 
     Rect textArea = Rect(100, 300, 300, 100);
     spr.Bitmap()->Fill(textArea, Color(255, 255, 255, 100));
     textArea.X += 30;
     textArea.Y += 30;
-    spr.Bitmap()->DrawText(L"Over Transparent", 32, textArea, Color(155, 0, 155, 150));
+    spr.Bitmap()->SetTextColor(Color(155, 0, 155));
+    spr.Bitmap()->SetOutlineColor(Color(255, 255, 255, 120));
+    spr.Bitmap()->DrawText(L"Over Transparent", 32, textArea);
 
     spr2.Z = 1;
     spr2.Create(400,200);

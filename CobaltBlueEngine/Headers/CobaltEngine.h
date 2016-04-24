@@ -9,8 +9,6 @@
 #include "CobaltAudio.h"
 #include "CobaltCache.h"
 
-#define DEFAULTFPS 60
-
 class CobaltEngine {
 public:
   // Core Functions
@@ -33,6 +31,10 @@ public:
   CobaltGraphics* Graphics;
   CobaltAudio* Audio;
   CobaltCache* Cache;
+  LPCWSTR Font;
+
+  const unsigned DefaultFPS = 60;
+  const LPCWSTR DefaultFont = L"Arial";
 private:
   CobaltScene* m_currentScene;
   CobaltScene* m_nextScene;
@@ -43,6 +45,7 @@ private:
   HWND m_hwnd;
   bool m_fullScreenMode;
   bool m_exit;
+
 };
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);

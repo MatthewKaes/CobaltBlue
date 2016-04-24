@@ -3,10 +3,17 @@
 
 extern CobaltEngine* EngineHandle;
 
+#define KERNELSIZE 4
+
+const Color DefaultColor = Color(255, 255, 255);
+const Color DefaultOutline = Color(0, 0, 0, 150);
+
 CobaltBitmap::CobaltBitmap()
 {
   m_texture = 0;
   m_textureView = 0;
+  m_textColor = DefaultColor;
+  m_outlineColor = DefaultOutline;
 }
 
 CobaltBitmap::~CobaltBitmap()
@@ -16,12 +23,16 @@ CobaltBitmap::~CobaltBitmap()
 
 void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename)
 {
+  m_fontname = EngineHandle->Font;
+
   LoadTexture(filename);
   InitializeResource(device, context);
 }
 
 void CobaltBitmap::Create(ID3D11Device* device, ID3D11DeviceContext* context, unsigned width, unsigned height)
 {
+  m_fontname = EngineHandle->Font;
+
   m_textureData = new BYTE[width * height * 4];
   memset(m_textureData, 0, sizeof(BYTE) * width * height * 4);
   m_width = width;
@@ -45,7 +56,22 @@ void CobaltBitmap::Release()
   }
 }
 
-Color CobaltBitmap::GetPixel(unsigned x, unsigned y)
+void CobaltBitmap::SetTextColor(Color textColor)
+{
+  m_textColor = textColor;
+}
+
+void CobaltBitmap::SetOutlineColor(Color outlineColor)
+{
+  m_outlineColor = outlineColor;
+}
+
+void CobaltBitmap::SetFont(LPWSTR fontname)
+{
+  m_fontname = fontname;
+}
+
+Color CobaltBitmap::Pixel(unsigned x, unsigned y)
 {
   if (x > Width() || y > Height())
     return Color();
@@ -172,17 +198,12 @@ void CobaltBitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
   }
 }
 
-void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textColor)
+void CobaltBitmap::DrawText(LPCWSTR text, unsigned size, Rect area)
 {
-  DrawText(text, size, area, textColor, L"Arial");
+  DrawText(text, size, area, false, false);
 }
 
-void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textColor, LPWSTR fontname)
-{
-  DrawText(text, size, area, textColor, fontname, false, false);
-}
-
-void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textColor, LPWSTR fontname, bool bold, bool italic)
+void CobaltBitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic)
 {
   if (area.X < 0)
     area.X = 0;
@@ -203,8 +224,8 @@ void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textCol
   HBITMAP bm = CreateCompatibleBitmap(hdc, area.Width, area.Height);
 
   HFONT hf = CreateFont(size, 0, 0, 0, bold ? FW_BOLD : FW_NORMAL, italic, FALSE, FALSE,
-    ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-    ANTIALIASED_QUALITY, DEFAULT_PITCH, fontname);
+    ANSI_CHARSET, OUT_STROKE_PRECIS, CLIP_DEFAULT_PRECIS,
+    ANTIALIASED_QUALITY, DEFAULT_PITCH, m_fontname);
 
   RECT r = { 0, 0, (int)area.Width, (int)area.Height };
 
@@ -221,13 +242,13 @@ void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textCol
 
   SelectObject(mdc, hf);
   SetBkMode(mdc, TRANSPARENT);
-  SetTextColor(mdc, RGB(textColor.Red, textColor.Green, textColor.Blue));
-  DrawTextW(mdc, text, lstrlenW(text), &r, DT_LEFT | DT_EXTERNALLEADING | DT_WORDBREAK);
+  ::SetTextColor(mdc, RGB(255, 255, 255));
+  ::DrawTextW(mdc, text, lstrlenW(text), &r, DT_LEFT | DT_EXTERNALLEADING | DT_WORDBREAK);
 
-  BYTE* scanlines = new BYTE[area.Height * area.Width * 4];
+  BYTE* scanlines = new BYTE[area.Height * area.Width * 4 + 2 * KERNELSIZE];
+  int* scanlinesBlocks = reinterpret_cast<int*>(scanlines);
   GetDIBits(mdc, bm, 0, area.Height, scanlines, &bmi, DIB_RGB_COLORS);
-  
-  float pixelSrcColor = ((float)textColor.Red + textColor.Blue + textColor.Green) * 255.0f;
+  memmove(scanlines + 2 * KERNELSIZE, scanlines, area.Height * area.Width * 4);
 
   for (unsigned line = 0; line < area.Height; line++)
   {
@@ -235,12 +256,56 @@ void CobaltBitmap::DrawText(LPWSTR text, unsigned size, Rect area, Color textCol
     for (unsigned pixel = 0; pixel < area.Width; pixel++)
     {
       BYTE* pixelSrc = scanlines + 4 * (area.Height - line - 1) * area.Width + pixel * 4;
-      if (pixelSrc[0] != 0 || pixelSrc[1] != 0 || pixelSrc[2] != 0)
+      int* rawQuad = scanlinesBlocks + (area.Height - line - 1) * area.Width + pixel;
+
+      int xLeft = max(min(pixel, KERNELSIZE), 0);
+      int xRight = min(area.Width - pixel, KERNELSIZE);
+      int xBottom = min(line, KERNELSIZE);
+      int xTop = min(area.Height - line - 1, KERNELSIZE);
+      bool shaded = false;
+      int distSqr = (KERNELSIZE + 1) * (KERNELSIZE + 1);
+
+      int ydiff = -xBottom;
+      for (int y = line - xBottom; y <= (int)line + xTop; y++)
       {
-        float pixelAlpha = textColor.Alpha * ((float)pixelSrc[0] + pixelSrc[1] + pixelSrc[2]) / pixelSrcColor;
-        pixelIdx[0] = (BYTE)(textColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
-        pixelIdx[1] = (BYTE)(textColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
-        pixelIdx[2] = (BYTE)(textColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);
+        int xdiff = -xLeft;
+        for (int x = pixel - xLeft; x <= (int)pixel + xRight; x++)
+        {
+          if (scanlinesBlocks[(area.Height - y - 1) * area.Width + x])
+          {
+            int dist = xdiff * xdiff + ydiff * ydiff;
+            if (dist < distSqr)
+              distSqr = dist;
+
+            shaded = true;
+          }
+          xdiff++;
+        }
+        ydiff++;
+      }
+
+      if (shaded)
+      {
+        float mod = 1.0f;
+        for(int i = 2; i < distSqr; i += 2)
+          mod *= 1.45f;
+
+        float pixelAlpha = m_outlineColor.Alpha / (255.0f * mod);
+        pixelIdx[0] = (BYTE)(m_outlineColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
+        pixelIdx[1] = (BYTE)(m_outlineColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
+        pixelIdx[2] = (BYTE)(m_outlineColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);
+        pixelIdx[3] = (BYTE)(min(255 * pixelAlpha + (1 - pixelAlpha) * pixelIdx[3], 255));
+      }
+
+      if (*rawQuad)
+      {
+        float pixelAlpha = (float)m_textColor.Alpha * pixelSrc[0] * pixelSrc[1] * pixelSrc[2] / 4228250625.0f;
+
+        // Text is blury as a result of AA. Add a factor to sharpen text.
+        pixelAlpha = min(pixelAlpha * 1.15f, 1.0f);
+        pixelIdx[0] = (BYTE)(m_textColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
+        pixelIdx[1] = (BYTE)(m_textColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
+        pixelIdx[2] = (BYTE)(m_textColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);
         pixelIdx[3] = (BYTE)(min(255 * pixelAlpha + (1 - pixelAlpha) * pixelIdx[3], 255));
       }
 
