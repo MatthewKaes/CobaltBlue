@@ -35,7 +35,7 @@ CachedImage::CachedImage(LPCWSTR filename)
   }
 
   pFactory->CreateFormatConverter(&converter);
-  converter->Initialize(bitmapSource, GUID_WICPixelFormat32bppBGRA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeMedianCut);
+  converter->Initialize(bitmapSource, GUID_WICPixelFormat32bppRGBA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeMedianCut);
 
   bitmapSource->GetSize(&m_width, &m_height);
 
