@@ -368,6 +368,173 @@ void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
   }
 }
 
+void Bitmap::Blur(unsigned size)
+{
+  if (!size)
+    return;
+
+  m_dirty = true;
+
+  BlurH(size);
+  BlurH(size);
+  BlurV(size);
+  BlurV(size);
+}
+
+void Bitmap::BlurH(unsigned size)
+{    
+  int* rArray = new int[size * 2 + 1];
+  int* gArray = new int[size * 2 + 1];
+  int* bArray = new int[size * 2 + 1];
+  int* aArray = new int[size * 2 + 1];
+    float items = (float)size * 2 + 1;
+  for (unsigned line = 0; line < Height(); line++)
+  {
+    BYTE* pixelReader = m_textureData + line * 4 * Width();
+    int index = 0;
+
+    int rAcum = 0;
+    int bAcum = 0;
+    int gAcum = 0;
+    int aAcum = 0;
+
+    for (unsigned i = 0; i < size; i++)
+    {
+      rArray[i] = pixelReader[0] * pixelReader[0];
+      gArray[i] = pixelReader[1] * pixelReader[1];
+      bArray[i] = pixelReader[2] * pixelReader[2];
+      aArray[i] = pixelReader[3] * pixelReader[3];
+      rAcum += pixelReader[0] * pixelReader[0];
+      gAcum += pixelReader[1] * pixelReader[1];
+      bAcum += pixelReader[2] * pixelReader[2];
+      aAcum += pixelReader[3] * pixelReader[3];
+    }
+
+    for (unsigned i = size; i < size * 2 + 1; i++)
+    {
+      rArray[i] = pixelReader[0] * pixelReader[0];
+      gArray[i] = pixelReader[1] * pixelReader[1];
+      bArray[i] = pixelReader[2] * pixelReader[2];
+      aArray[i] = pixelReader[3] * pixelReader[3];
+      rAcum += pixelReader[0] * pixelReader[0];
+      gAcum += pixelReader[1] * pixelReader[1];
+      bAcum += pixelReader[2] * pixelReader[2];
+      aAcum += pixelReader[3] * pixelReader[3];
+      pixelReader += 4;
+    }
+
+    BYTE* pixelIdx = m_textureData + line * 4 * Width();
+    for (unsigned pixel = 0; pixel < Width(); pixel++)
+    {
+      index = pixel % (size * 2 + 1);
+      pixelIdx[0] = (BYTE)(round(sqrt(rAcum / items)));
+      rAcum -= rArray[index];
+      rArray[index] = pixelReader[0] * pixelReader[0];
+      rAcum += rArray[index];
+
+      pixelIdx[1] = (BYTE)(round(sqrt(gAcum / items)));
+      gAcum -= gArray[index];
+      gArray[index] = pixelReader[1] * pixelReader[1];
+      gAcum += gArray[index];
+
+      pixelIdx[2] = (BYTE)(round(sqrt(bAcum / items)));
+      bAcum -= bArray[index];
+      bArray[index] = pixelReader[2] * pixelReader[2];
+      bAcum += bArray[index];
+
+      pixelIdx[3] = (BYTE)(round(sqrt(aAcum / items)));
+      aAcum -= aArray[index];
+      aArray[index] = pixelReader[3] * pixelReader[3];
+      aAcum += aArray[index];
+      
+      pixelIdx += 4;
+      if (pixel < Width() - size - 2)
+        pixelReader += 4;
+    }
+  }
+  delete[] rArray;
+  delete[] gArray;
+  delete[] bArray;
+  delete[] aArray;
+}
+
+void Bitmap::BlurV(unsigned size)
+{
+  int* rArray = new int[size * 2 + 1];
+  int* gArray = new int[size * 2 + 1];
+  int* bArray = new int[size * 2 + 1];
+  int* aArray = new int[size * 2 + 1];
+  float items = (float)size * 2 + 1;
+  for (unsigned pixel = 0; pixel < Width(); pixel++)
+  {
+    BYTE* pixelReader = m_textureData + 4 * pixel;
+    int index = 0;
+
+    int rAcum = 0;
+    int bAcum = 0;
+    int gAcum = 0;
+    int aAcum = 0;
+
+    for (unsigned i = 0; i < size; i++)
+    {
+      rArray[i] = pixelReader[0] * pixelReader[0];
+      gArray[i] = pixelReader[1] * pixelReader[1];
+      bArray[i] = pixelReader[2] * pixelReader[2];
+      aArray[i] = pixelReader[3] * pixelReader[3];
+      rAcum += pixelReader[0] * pixelReader[0];
+      gAcum += pixelReader[1] * pixelReader[1];
+      bAcum += pixelReader[2] * pixelReader[2];
+      aAcum += pixelReader[3] * pixelReader[3];
+    }
+
+    for (unsigned i = size; i < size * 2 + 1; i++)
+    {
+      rArray[i] = pixelReader[0] * pixelReader[0];
+      gArray[i] = pixelReader[1] * pixelReader[1];
+      bArray[i] = pixelReader[2] * pixelReader[2];
+      aArray[i] = pixelReader[3] * pixelReader[3];
+      rAcum += pixelReader[0] * pixelReader[0];
+      gAcum += pixelReader[1] * pixelReader[1];
+      bAcum += pixelReader[2] * pixelReader[2];
+      aAcum += pixelReader[3] * pixelReader[3];
+      pixelReader += 4 * Width();
+    }
+
+    BYTE* pixelIdx = m_textureData + 4 * pixel;
+    for (unsigned line = 0; line < Height(); line++)
+    {
+      index = line % (size * 2 + 1);
+      pixelIdx[0] = (BYTE)(round(sqrt(rAcum / items)));
+      rAcum -= rArray[index];
+      rArray[index] = pixelReader[0] * pixelReader[0];
+      rAcum += rArray[index];
+
+      pixelIdx[1] = (BYTE)(round(sqrt(gAcum / items)));
+      gAcum -= gArray[index];
+      gArray[index] = pixelReader[1] * pixelReader[1];
+      gAcum += gArray[index];
+
+      pixelIdx[2] = (BYTE)(round(sqrt(bAcum / items)));
+      bAcum -= bArray[index];
+      bArray[index] = pixelReader[2] * pixelReader[2];
+      bAcum += bArray[index];
+
+      pixelIdx[3] = (BYTE)(round(sqrt(aAcum / items)));
+      aAcum -= aArray[index];
+      aArray[index] = pixelReader[3] * pixelReader[3];
+      aAcum += aArray[index];
+
+      pixelIdx += 4 * Width();
+      if (line < Height() - size - 2)
+        pixelReader += 4 * Width();
+    }
+  }
+  delete[] rArray;
+  delete[] gArray;
+  delete[] bArray;
+  delete[] aArray;
+}
+
 void Bitmap::Update(ID3D11DeviceContext* context)
 {
   if (!m_dirty)

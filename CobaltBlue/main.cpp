@@ -10,14 +10,15 @@ class AppScene : public CobaltScene {
 public:
   void Start(CobaltEngine* engine)
   {
-    blur.Create(L"Textures\\green.png");
     spr.Create(L"Textures\\stone.png");
 
-    // Preform a bunch of blends.
-    spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(100, 100));
-    spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(200, 150));
-    spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(450, 190));
-    spr.Bitmap()->Blend(&blur, Rect(50, 50, blur.Width(), blur.Height()), Point(0, 0));
+    baseline.Create(L"Textures\\blurTest.png");
+    baseline.X = 700;
+
+    // Make sure blur is fast and lossless.
+    for (int i = 0; i < 100; i++)
+      baseline.Bitmap()->Blur(1);
+
   }
 
   void Update(CobaltEngine* engine)
@@ -32,19 +33,7 @@ public:
       engine->GotoScene(new AppScene);
 
     if (engine->Input->Pressed(Inputs::A))
-      spr.Bitmap()->Blend(&blur, Rect(0, 0, blur.Width(), blur.Height()), Point(rand() % spr.Width(), rand() % spr.Height()));
-
-    if (engine->Input->Pressed(Inputs::Left))
-      spr.X -= 4;
-
-    if (engine->Input->Pressed(Inputs::Right))
-      spr.X += 4;
-
-    if (engine->Input->Pressed(Inputs::Down))
-      spr.Y += 4;
-
-    if (engine->Input->Pressed(Inputs::Up))
-      spr.Y -= 4;
+      spr.Bitmap()->Blur(7);
   }
 
   void Terminate(CobaltEngine* engine)
@@ -53,7 +42,7 @@ public:
 
 private:
   Sprite spr;
-  Bitmap blur;
+  Sprite baseline;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)

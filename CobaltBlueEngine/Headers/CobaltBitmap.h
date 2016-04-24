@@ -30,6 +30,7 @@ public:
   void DrawText(LPCWSTR text, unsigned size, Rect area);
   void DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic);
   void Blend(Bitmap* bitmap, Rect area, Point target);
+  void Blur(unsigned size);
 
 
   ID3D11ShaderResourceView* GetTexture();
@@ -38,6 +39,9 @@ public:
   Color Pixel(unsigned x, unsigned y);
 
 private:
+  void BlurH(unsigned size);
+  void BlurV(unsigned size);
+
   void InitializeResource(ID3D11Device* device, ID3D11DeviceContext* context);
   void LoadTexture(LPCWSTR filename);
 
