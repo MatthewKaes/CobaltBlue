@@ -11,7 +11,6 @@ public:
   void Start(CobaltEngine* engine)
   {
     spr.Create(L"Textures\\stone.png");
-    spr.Bitmap()->Greyscale();
 
     baseline.Create(L"Textures\\blurTest.png");
     baseline.X = 700;
@@ -20,6 +19,7 @@ public:
     for (int i = 0; i < 10; i++)
       baseline.Bitmap()->FastBlur(1);
 
+    baseline.Bitmap()->HueRotate(rotation);
   }
 
   void Update(CobaltEngine* engine)

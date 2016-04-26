@@ -408,6 +408,39 @@ void Bitmap::Greyscale()
   }
 }
 
+void Bitmap::HueRotate(float degrees)
+{
+
+  float Q1 = sin(-degrees * XM_PI / 180.0f) / sqrt(3);
+  float Q2 = (1 - cos(-degrees * XM_PI / 180.0f)) / 3;
+
+  m_dirty = true;
+
+  unsigned totalPixels = Width() * Height();
+  BYTE* pixelReader = m_textureData;
+  for (unsigned i = 0; i < totalPixels; i++)
+  {
+    float r = pixelReader[0];
+    float g = pixelReader[1];
+    float b = pixelReader[2];
+    float max = r>b ? g>r ? g : r : g>b ? g : b;
+    float rb = r - b;
+    float gr = g - r;
+    float bg = b - g;
+    float r1 = Q2*(gr - rb) - Q1*bg + r;
+    float Z = Q2*(bg - rb) + Q1*gr;
+    g += Z + (r - r1);
+    b -= Z;
+    r = r1;
+    float adjust = max / (r>b ? g>r ? g : r : g>b ? g : b);
+    pixelReader[0] = (BYTE)(max(min(r * adjust, 255), 0));
+    pixelReader[1] = (BYTE)(max(min(g * adjust, 255), 0));
+    pixelReader[2] = (BYTE)(max(min(b * adjust, 255), 0));
+
+    pixelReader += 4;
+  }
+}
+
 void Bitmap::BlurH(unsigned size)
 {    
   int* rArray = new int[size * 2 + 1];

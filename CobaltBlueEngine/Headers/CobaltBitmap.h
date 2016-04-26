@@ -33,6 +33,7 @@ public:
   void Blur(unsigned size);
   void FastBlur(unsigned size);
   void Greyscale();
+  void HueRotate(float degrees);
 
 
   ID3D11ShaderResourceView* GetTexture();
