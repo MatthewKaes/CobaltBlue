@@ -31,6 +31,7 @@ public:
   void DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic);
   void Blend(Bitmap* bitmap, Rect area, Point target);
   void Blur(unsigned size);
+  void FastBlur(unsigned size);
 
 
   ID3D11ShaderResourceView* GetTexture();

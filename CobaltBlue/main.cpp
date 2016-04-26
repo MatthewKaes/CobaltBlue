@@ -17,7 +17,7 @@ public:
 
     // Make sure blur is fast and lossless.
     for (int i = 0; i < 100; i++)
-      baseline.Bitmap()->Blur(1);
+      baseline.Bitmap()->FastBlur(1);
 
   }
 
@@ -34,6 +34,9 @@ public:
 
     if (engine->Input->Pressed(Inputs::A))
       spr.Bitmap()->Blur(7);
+
+    if (engine->Input->Pressed(Inputs::S))
+      spr.Bitmap()->FastBlur(7);
   }
 
   void Terminate(CobaltEngine* engine)

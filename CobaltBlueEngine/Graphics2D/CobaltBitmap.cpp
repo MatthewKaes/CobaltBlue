@@ -381,6 +381,17 @@ void Bitmap::Blur(unsigned size)
   BlurV(size);
 }
 
+void Bitmap::FastBlur(unsigned size)
+{
+  if (!size)
+    return;
+
+  m_dirty = true;
+
+  BlurH(size);
+  BlurV(size);
+}
+
 void Bitmap::BlurH(unsigned size)
 {    
   int* rArray = new int[size * 2 + 1];
