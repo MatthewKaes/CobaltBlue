@@ -19,7 +19,7 @@ public:
     for (int i = 0; i < 10; i++)
       baseline.Bitmap()->FastBlur(1);
 
-    baseline.Bitmap()->HueRotate(rotation);
+    baseline.Bitmap()->HueRotate(111);
   }
 
   void Update(CobaltEngine* engine)
