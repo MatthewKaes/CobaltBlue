@@ -11,12 +11,13 @@ public:
   void Start(CobaltEngine* engine)
   {
     spr.Create(L"Textures\\stone.png");
+    spr.Bitmap()->Greyscale();
 
     baseline.Create(L"Textures\\blurTest.png");
     baseline.X = 700;
 
     // Make sure blur is fast and lossless.
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 10; i++)
       baseline.Bitmap()->FastBlur(1);
 
   }

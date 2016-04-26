@@ -392,13 +392,29 @@ void Bitmap::FastBlur(unsigned size)
   BlurV(size);
 }
 
+void Bitmap::Greyscale()
+{
+  m_dirty = true;
+
+  unsigned totalPixels = Width() * Height();
+  BYTE* pixelReader = m_textureData;
+  for (unsigned i = 0; i < totalPixels; i++)
+  {
+    BYTE value = 0.299f * pixelReader[0] + 0.587f * pixelReader[1] + 0.114f * pixelReader[2];
+    pixelReader[0] = value;
+    pixelReader[1] = value;
+    pixelReader[2] = value;
+    pixelReader += 4;
+  }
+}
+
 void Bitmap::BlurH(unsigned size)
 {    
   int* rArray = new int[size * 2 + 1];
   int* gArray = new int[size * 2 + 1];
   int* bArray = new int[size * 2 + 1];
   int* aArray = new int[size * 2 + 1];
-    float items = (float)size * 2 + 1;
+  float items = (float)size * 2 + 1;
   for (unsigned line = 0; line < Height(); line++)
   {
     BYTE* pixelReader = m_textureData + line * 4 * Width();

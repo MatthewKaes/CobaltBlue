@@ -32,6 +32,7 @@ public:
   void Blend(Bitmap* bitmap, Rect area, Point target);
   void Blur(unsigned size);
   void FastBlur(unsigned size);
+  void Greyscale();
 
 
   ID3D11ShaderResourceView* GetTexture();
