@@ -30,6 +30,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Graphics2D\Model2dcpp.cpp" />
+    <ClCompile Include="Graphics2D\CobaltParallax.cpp" />
     <ClCompile Include="Graphics3D\CobaltCamera.cpp" />
     <ClCompile Include="Graphics3D\CobaltTexture.cpp" />
     <ClCompile Include="Graphics3D\Model3d.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="Headers\CobaltEngine.h" />
     <ClInclude Include="Headers\CobaltGraphics.h" />
     <ClInclude Include="Headers\CobaltInput.h" />
+    <ClInclude Include="Headers\CobaltParallax.h" />
     <ClInclude Include="Headers\CobaltScene.h" />
     <ClInclude Include="Headers\CobaltSynchronizer.h" />
     <ClInclude Include="Headers\Direct3d.h" />

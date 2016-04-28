@@ -10,20 +10,14 @@ class AppScene : public CobaltScene {
 public:
   void Start(CobaltEngine* engine)
   {
-    spr.Create(L"Textures\\stone.png");
-
-    baseline.Create(L"Textures\\blurTest.png");
-    baseline.X = 700;
-
-    // Make sure blur is fast and lossless.
-    for (int i = 0; i < 10; i++)
-      baseline.Bitmap()->FastBlur(1);
-
-    baseline.Bitmap()->HueRotate(111);
+    spr.Create(L"Textures\\stone.png", engine->Graphics->Width(), engine->Graphics->Height());
   }
 
   void Update(CobaltEngine* engine)
   {
+    spr.Ox += 2;
+    spr.Oy += 2;
+
     if (engine->Input->Pressed(Inputs::Esc))
     {
       engine->Exit();
@@ -45,8 +39,7 @@ public:
   }
 
 private:
-  Sprite spr;
-  Sprite baseline;
+  Parallax spr;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)

@@ -1,25 +1,32 @@
-#ifndef COBALTSPRITE
-#define COBALTSPRITE
+#ifndef COBALTPARALLAX
+#define COBALTPARALLAX
 
 #include <directxmath.h>
 #include "Model2d.h"
 #include "CobaltBitmap.h"
 using namespace DirectX;
 
-class Sprite : public Model2D {
+class Parallax : public Model2D {
 public:
-  Sprite();
-  ~Sprite();
+  friend class CobaltGraphics;
 
-  void Create(LPWSTR textureFile);
-  void Create(unsigned width, unsigned height);
-  unsigned Width();
-  unsigned Height();
+  Parallax();
+  ~Parallax();
+
+  void Create(LPWSTR textureFile, unsigned width, unsigned height);
+  void Create(unsigned width, unsigned height, unsigned imgWidth, unsigned imgHeight);
+  unsigned ImgWidth();
+  unsigned ImgHeight();
   void Update(ID3D11DeviceContext* context);
   void Render(ID3D11DeviceContext* context);
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
   Bitmap* Bitmap();
+
+  int Ox;
+  int Oy;
+  unsigned Width;
+  unsigned Height;
 
 private:
   static const int VertexCount = 4;
@@ -35,6 +42,8 @@ private:
   void Release();
   void CreateBuffers(ID3D11Device* device);
 
+  int m_prevOx;
+  int m_prevOy;
   ::Bitmap* m_bitmap;
   ID3D11Buffer* m_vertexBuffer;
   ID3D11Buffer* m_indexBuffer;

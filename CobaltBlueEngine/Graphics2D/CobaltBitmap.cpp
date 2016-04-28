@@ -400,7 +400,7 @@ void Bitmap::Greyscale()
   BYTE* pixelReader = m_textureData;
   for (unsigned i = 0; i < totalPixels; i++)
   {
-    BYTE value = 0.299f * pixelReader[0] + 0.587f * pixelReader[1] + 0.114f * pixelReader[2];
+    BYTE value = (BYTE)(0.299f * pixelReader[0] + 0.587f * pixelReader[1] + 0.114f * pixelReader[2]);
     pixelReader[0] = value;
     pixelReader[1] = value;
     pixelReader[2] = value;
@@ -411,7 +411,7 @@ void Bitmap::Greyscale()
 void Bitmap::HueRotate(float degrees)
 {
 
-  float Q1 = sin(-degrees * XM_PI / 180.0f) / sqrt(3);
+  float Q1 = sin(-degrees * XM_PI / 180.0f) / (float)sqrt(3);
   float Q2 = (1 - cos(-degrees * XM_PI / 180.0f)) / 3;
 
   m_dirty = true;

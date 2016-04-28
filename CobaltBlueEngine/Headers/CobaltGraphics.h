@@ -7,13 +7,14 @@
 #include "Direct3d.h"
 #include "ShaderCore.h"
 #include "Model3d.h"
-#include "CobaltSprite.h"
+#include "Model2d.h"
 
 #include <unordered_map>
 
 class CobaltGraphics
 {
 public:
+  friend class Parallax;
   friend class Sprite;
   friend class Bitmap;
   friend class Model3D;

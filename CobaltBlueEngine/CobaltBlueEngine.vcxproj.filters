@@ -84,6 +84,9 @@
     <ClInclude Include="Headers\CobaltTexture.h">
       <Filter>Graphics 3D</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltParallax.h">
+      <Filter>Graphics 2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System\CobaltEngine.cpp">
@@ -126,6 +129,9 @@
       <Filter>Graphics 2D</Filter>
     </ClCompile>
     <ClCompile Include="Graphics2D\Model2dcpp.cpp">
+      <Filter>Graphics 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics2D\CobaltParallax.cpp">
       <Filter>Graphics 2D</Filter>
     </ClCompile>
   </ItemGroup>
