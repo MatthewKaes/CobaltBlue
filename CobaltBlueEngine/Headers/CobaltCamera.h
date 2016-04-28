@@ -5,10 +5,8 @@
 
 #include <dxgi.h>
 #include <d3dcommon.h>
-#include <d3d11.h>
-#include <DirectXMath.h>
-
-using namespace DirectX;
+#include <D3DX11.h>
+#include <D3DX10math.h>
 
 class CobaltCamera 
 {
@@ -21,17 +19,17 @@ public:
   void Rotate(float degX, float degY, float degZ, float seconds);
 
   void Update(float frameTime);
-  void GetView(XMMATRIX& viewMatrix);
+  void GetView(D3DXMATRIX& viewMatrix);
 
 private:
   float m_moveDur;
   float m_rotDur;
-  XMVECTOR m_positionTran;
-  XMVECTOR m_rotationTran;
+  D3DXVECTOR3 m_positionTran;
+  D3DXVECTOR3 m_rotationTran;
 
-  XMVECTOR m_position;
-  XMVECTOR m_rotation;
+  D3DXVECTOR3 m_position;
+  D3DXVECTOR3 m_rotation;
 
-  XMMATRIX m_viewMatrix;
+  D3DXMATRIX m_viewMatrix;
 };
 #endif

@@ -136,16 +136,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Render3D.ps">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\Render3D.vs">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Shaders\Render2D.ps">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Render2D.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Render3D.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Render3D.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

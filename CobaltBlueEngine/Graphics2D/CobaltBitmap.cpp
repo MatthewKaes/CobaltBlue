@@ -411,8 +411,8 @@ void Bitmap::Greyscale()
 void Bitmap::HueRotate(float degrees)
 {
 
-  float Q1 = sin(-degrees * XM_PI / 180.0f) / (float)sqrt(3);
-  float Q2 = (1 - cos(-degrees * XM_PI / 180.0f)) / 3;
+  float Q1 = (float)(sin(-degrees * D3DX_PI / 180.0f) / sqrt(3));
+  float Q2 = (float)((1 - cos(-degrees * D3DX_PI / 180.0f)) / 3.0f);
 
   m_dirty = true;
 

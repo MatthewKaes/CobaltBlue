@@ -291,17 +291,17 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   m_deviceContext->RSSetViewports(1, &viewport);
 
   // Setup the projection matrix.
-  fieldOfView = (float)XM_PI / 4.0f;
+  fieldOfView = (float)D3DX_PI / 4.0f;
   screenAspect = (float)width / (float)height;
 
   // Create the projection matrix for 3D rendering.
-  m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+  D3DXMatrixPerspectiveFovLH(&m_projectionMatrix, fieldOfView, screenAspect, screenNear, screenDepth);
 
   // Initialize the world matrix to the identity matrix.
-  m_worldMatrix = XMMatrixIdentity();
+  D3DXMatrixIdentity(&m_worldMatrix);
 
   // Create an orthographic projection matrix for 2D rendering.
-  m_orthoMatrix = XMMatrixOrthographicLH((float)width, (float)height, screenNear, screenDepth);
+  D3DXMatrixOrthoLH(&m_orthoMatrix, (float)width, (float)height, screenNear, screenDepth);
 
   return true;
 }
@@ -424,17 +424,17 @@ ID3D11DeviceContext* Direct3D::GetDeviceContext()
   return m_deviceContext;
 }
 
-void Direct3D::GetProjectionMatrix(XMMATRIX& projMatrix)
+void Direct3D::GetProjectionMatrix(D3DXMATRIX& projMatrix)
 {
   projMatrix = m_projectionMatrix;
 }
 
-void Direct3D::GetWorldMatrix(XMMATRIX& worldMatrix)
+void Direct3D::GetWorldMatrix(D3DXMATRIX& worldMatrix)
 {
   worldMatrix = m_worldMatrix;
 }
 
-void Direct3D::GetOrthoMatrix(XMMATRIX& orthoMatrix)
+void Direct3D::GetOrthoMatrix(D3DXMATRIX& orthoMatrix)
 {
   orthoMatrix = m_orthoMatrix;
 }

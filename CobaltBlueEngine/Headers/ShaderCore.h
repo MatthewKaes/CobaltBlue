@@ -1,11 +1,10 @@
 #ifndef COBALTSHADERCORE
 #define COBALTSHADERCORE
 
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <directxmath.h>
+#include <D3DX11.h>
+#include <D3Dcompiler.h>
+#include <D3DX10math.h>
 #include <fstream>
-using namespace DirectX;
 using namespace std;
 
 class ShaderCore
@@ -16,32 +15,32 @@ public:
 
   void Initialize(ID3D11Device* device, HWND window);
   void Shutdown();
-  bool Render2D(ID3D11DeviceContext* context, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, XMVECTOR translate, XMVECTOR color, ID3D11ShaderResourceView* texture);
-  bool Render3D(ID3D11DeviceContext* context, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
+  bool Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, ID3D11ShaderResourceView* texture);
+  bool Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
 
 private:
   struct BufferType3D
   {
-    XMMATRIX world;
-    XMMATRIX view;
-    XMMATRIX projection;
+    D3DXMATRIX world;
+    D3DXMATRIX view;
+    D3DXMATRIX projection;
   };
 
   struct BufferType2D
   {
-    XMMATRIX world;
-    XMMATRIX view;
-    XMMATRIX projection;
-    XMVECTOR trans;
-    XMVECTOR color;
+    D3DXMATRIX world;
+    D3DXMATRIX view;
+    D3DXMATRIX projection;
+    D3DXVECTOR4 trans;
+    D3DXVECTOR4 color;
   };
 
   void InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* vertexShader, WCHAR* pixelShader);
   void InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* vertexShader, WCHAR* pixelShader);
   void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename);
 
-  void SetShaderParameters2D(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, XMVECTOR translate, XMVECTOR color, ID3D11ShaderResourceView* texture);
-  void SetShaderParameters3D(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
+  void SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, ID3D11ShaderResourceView* texture);
+  void SetShaderParameters3D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
   void RenderShader2D(ID3D11DeviceContext* context, int indexCount);
   void RenderShader3D(ID3D11DeviceContext* context, int indexCount);
 

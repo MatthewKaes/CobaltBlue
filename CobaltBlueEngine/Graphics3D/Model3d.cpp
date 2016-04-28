@@ -110,21 +110,21 @@ bool Model3D::InitializeBuffers(ID3D11Device* device)
   indices = new unsigned long[m_indexCount];
 
   // Load the vertex array with data.
-  vertices[0].position = XMFLOAT3(-2.0f, -2.0f, 0.0f);  // Bottom left.
-  vertices[0].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-  vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
+  vertices[0].position = D3DXVECTOR3(-2.0f, -2.0f, 0.0f);  // Bottom left.
+  vertices[0].color = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+  vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
 
-  vertices[1].position = XMFLOAT3(-2.0f, 2.0f, 0.0f);  // Top left.
-  vertices[1].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-  vertices[1].texture = XMFLOAT2(0.0f, 0.0f);
+  vertices[1].position = D3DXVECTOR3(-2.0f, 2.0f, 0.0f);  // Top left.
+  vertices[1].color = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+  vertices[1].texture = D3DXVECTOR2(0.0f, 0.0f);
 
-  vertices[2].position = XMFLOAT3(2.0f, 2.0f, 0.0f);  // Top right.
-  vertices[2].color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
-  vertices[2].texture = XMFLOAT2(1.0f, 0.0f);
+  vertices[2].position = D3DXVECTOR3(2.0f, 2.0f, 0.0f);  // Top right.
+  vertices[2].color = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
+  vertices[2].texture = D3DXVECTOR2(1.0f, 0.0f);
 
-  vertices[3].position = XMFLOAT3(2.0f, -2.0f, 0.0f);  // Bottom right.
-  vertices[3].color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
-  vertices[3].texture = XMFLOAT2(1.0f, 1.0f);
+  vertices[3].position = D3DXVECTOR3(2.0f, -2.0f, 0.0f);  // Bottom right.
+  vertices[3].color = D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f);
+  vertices[3].texture = D3DXVECTOR2(1.0f, 1.0f);
 
   // Load the index array with data.
   indices[0] = 1;  // Bottom left.

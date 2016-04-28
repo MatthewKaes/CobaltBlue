@@ -89,11 +89,11 @@ void ShaderCore::Shutdown()
   }
 }
 
-bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, XMMATRIX  worldMatrix, XMMATRIX  viewMatrix, XMMATRIX  projectionMatrix, XMVECTOR translation, XMVECTOR color, ID3D11ShaderResourceView* texture)
+bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, ID3D11ShaderResourceView* texture)
 {
 
   // Set the shader parameters that it will use for rendering.
-  SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translation, color, texture);
+  SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, texture);
 
   // Now render the prepared buffers with the shader.
   RenderShader2D(context, indexCount);
@@ -101,7 +101,7 @@ bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, XMMATRIX
   return true;
 }
 
-bool ShaderCore::Render3D(ID3D11DeviceContext* context, int indexCount, XMMATRIX  worldMatrix, XMMATRIX  viewMatrix, XMMATRIX  projectionMatrix, ID3D11ShaderResourceView* texture)
+bool ShaderCore::Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 {
 
 	// Set the shader parameters that it will use for rendering.
@@ -130,7 +130,7 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
   pixelShaderBuffer = 0;
 
   // Compile the vertex shader code.
-  result = D3DCompileFromFile(vertexShader, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+  result = D3DX11CompileFromFile(vertexShader, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &vertexShaderBuffer, &errorMessage, 0);
   if (FAILED(result))
   {
     // If the shader failed to compile it should have writen something to the error message.
@@ -148,7 +148,7 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
   }
 
   // Compile the pixel shader code.
-  result = D3DCompileFromFile(pixelShader, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+  result = D3DX11CompileFromFile(pixelShader, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &pixelShaderBuffer, &errorMessage, 0);
   if (FAILED(result))
   {
     // If the shader failed to compile it should have writen something to the error message.
@@ -257,7 +257,7 @@ void ShaderCore::InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* ve
   pixelShaderBuffer = 0;
 
   // Compile the vertex shader code.
-  result = D3DCompileFromFile(vertexShader, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+  result = D3DX11CompileFromFile(vertexShader, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &vertexShaderBuffer, &errorMessage, 0);
   if (FAILED(result))
   {
     // If the shader failed to compile it should have writen something to the error message.
@@ -275,7 +275,7 @@ void ShaderCore::InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* ve
   }
 
   // Compile the pixel shader code.
-  result = D3DCompileFromFile(pixelShader, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+  result = D3DX11CompileFromFile(pixelShader, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &pixelShaderBuffer, &errorMessage, 0);
   if (FAILED(result))
   {
     // If the shader failed to compile it should have writen something to the error message.
@@ -400,16 +400,16 @@ void ShaderCore::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
   MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 }
 
-void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, XMVECTOR translation, XMVECTOR color, ID3D11ShaderResourceView* texture)
+void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, ID3D11ShaderResourceView* texture)
 {
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   BufferType2D* dataPtr;
   unsigned int bufferNumber;
 
   // Transpose the matrices to prepare them for the shader.
-  worldMatrix = XMMatrixTranspose(worldMatrix);
-  viewMatrix = XMMatrixTranspose(viewMatrix);
-  projectionMatrix = XMMatrixTranspose(projectionMatrix);
+  D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
+  D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
+  D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
 
   // Lock the constant buffer so it can be written to.
   context->Map(m_2DmatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -421,7 +421,7 @@ void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, XMMATRIX wo
   dataPtr->world = worldMatrix;
   dataPtr->view = viewMatrix;
   dataPtr->projection = projectionMatrix;
-  dataPtr->trans = translation;
+  dataPtr->trans = translate;
   dataPtr->color = color;
 
   // Unlock the constant buffer.
@@ -437,16 +437,16 @@ void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, XMMATRIX wo
   context->PSSetShaderResources(0, 1, &texture);
 }
 
-void ShaderCore::SetShaderParameters3D(ID3D11DeviceContext* context, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
+void ShaderCore::SetShaderParameters3D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 {
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   BufferType3D* dataPtr;
   unsigned int bufferNumber;
 
   // Transpose the matrices to prepare them for the shader.
-  worldMatrix = XMMatrixTranspose(worldMatrix);
-  viewMatrix = XMMatrixTranspose(viewMatrix);
-  projectionMatrix = XMMatrixTranspose(projectionMatrix);
+  D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
+  D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
+  D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
 
   // Lock the constant buffer so it can be written to.
   context->Map(m_3DmatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);

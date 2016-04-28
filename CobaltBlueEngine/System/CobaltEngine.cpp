@@ -70,7 +70,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   }
 
   RECT clientSize = { 0, 0, screenWidth, screenHeight };    // set the size, but not the position
-  AdjustWindowRect(&clientSize, WS_OVERLAPPEDWINDOW, FALSE);    // adjust the size
+  AdjustWindowRect(&clientSize, (WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP), FALSE);    // adjust the size
   
   // Create the window with the screen settings and get the handle to it.
   m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, 

@@ -1,10 +1,9 @@
 #ifndef COBALTMODEL3D
 #define COBALTMODEL3D
 
-#include <d3d11.h>
-#include <directxmath.h>
+#include <D3DX11.h>
+#include <D3DX10math.h>
 #include "CobaltTexture.h"
-using namespace DirectX;
 
 class Model3D {
 public:
@@ -20,9 +19,9 @@ public:
 private:
   struct VertexType
   {
-    XMFLOAT3 position;
-    XMFLOAT4 color;
-    XMFLOAT2 texture;
+    D3DXVECTOR3 position;
+    D3DXVECTOR4 color;
+    D3DXVECTOR2 texture;
   };
 
   bool InitializeTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, LPWSTR filename, TextureType textureType);

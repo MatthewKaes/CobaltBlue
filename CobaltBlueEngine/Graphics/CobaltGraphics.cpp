@@ -54,7 +54,7 @@ void CobaltGraphics::SetVSync(bool vsync)
 
 bool CobaltGraphics::Render(float frameTime)
 {
-  XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+  D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 
   m_DirectX.BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -80,9 +80,9 @@ bool CobaltGraphics::Render(float frameTime)
       model.second->GetTexture());
   }
 
-  worldMatrix = XMMatrixIdentity();
-  viewMatrix = XMMatrixIdentity();
-  viewMatrix.r[3].m128_f32[2] = (SCREEN_DEPTH) / 2.0f;
+  D3DXMatrixIdentity(&worldMatrix);
+  D3DXMatrixIdentity(&viewMatrix);
+  viewMatrix._43 = (SCREEN_DEPTH) / 2.0f;
 
   m_DirectX.SetZBuffer(false);
   std::sort(m_bitmapListings.begin(), m_bitmapListings.end(), [](Model2D* a, Model2D* b) { return a->Z < b->Z; });
@@ -97,8 +97,8 @@ bool CobaltGraphics::Render(float frameTime)
       model->GetIndexCount(), 
       worldMatrix, viewMatrix, 
       orthoMatrix,
-      XMVectorSet((float)model->X, (float)model->Y, model->Z, 0.0f),
-      XMVectorSet(model->Tint.Red / 255.0f, model->Tint.Blue / 255.0f, model->Tint.Green / 255.0f, model->Tint.Alpha / 255.0f),
+      D3DXVECTOR4((float)model->X, (float)model->Y, model->Z, 0.0f),
+      D3DXVECTOR4(model->Tint.Red / 255.0f, model->Tint.Blue / 255.0f, model->Tint.Green / 255.0f, model->Tint.Alpha / 255.0f),
       model->GetTexture());
   }
   m_DirectX.SetZBuffer(true);

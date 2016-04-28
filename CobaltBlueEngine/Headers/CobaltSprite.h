@@ -1,10 +1,8 @@
 #ifndef COBALTSPRITE
 #define COBALTSPRITE
 
-#include <directxmath.h>
 #include "Model2d.h"
 #include "CobaltBitmap.h"
-using namespace DirectX;
 
 class Sprite : public Model2D {
 public:
@@ -27,9 +25,9 @@ private:
 
   struct VertexType
   {
-    XMFLOAT3 position;
-    XMFLOAT4 color;
-    XMFLOAT2 texture;
+    D3DXVECTOR3 position;
+    D3DXVECTOR4 color;
+    D3DXVECTOR2 texture;
   };
 
   void Release();

@@ -82,21 +82,21 @@ void Parallax::Update(ID3D11DeviceContext* context)
   float bottom = top - (float)Height;
 
   // Load the vertex array with data.
-  vertices[0].position = XMFLOAT3(left, bottom, 0.0f);  // Bottom left.
-  vertices[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[0].texture = XMFLOAT2(Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
+  vertices[0].position = D3DXVECTOR3(left, bottom, 0.0f);  // Bottom left.
+  vertices[0].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[0].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
 
-  vertices[1].position = XMFLOAT3(left, top, 0.0f);  // Top left.
-  vertices[1].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[1].texture = XMFLOAT2(Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
+  vertices[1].position = D3DXVECTOR3(left, top, 0.0f);  // Top left.
+  vertices[1].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[1].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
 
-  vertices[2].position = XMFLOAT3(right, top, 0.0f);  // Top right.
-  vertices[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[2].texture = XMFLOAT2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
+  vertices[2].position = D3DXVECTOR3(right, top, 0.0f);  // Top right.
+  vertices[2].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[2].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
 
-  vertices[3].position = XMFLOAT3(right, bottom, 0.0f);  // Bottom right.
-  vertices[3].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[3].texture = XMFLOAT2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
+  vertices[3].position = D3DXVECTOR3(right, bottom, 0.0f);  // Bottom right.
+  vertices[3].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[3].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
 
   context->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
@@ -155,21 +155,21 @@ void Parallax::CreateBuffers(ID3D11Device* device)
   float bottom = top - (float)Height;
 
   // Load the vertex array with data.
-  vertices[0].position = XMFLOAT3(left, bottom, 0.0f);  // Bottom left.
-  vertices[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[0].texture = XMFLOAT2(Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
+  vertices[0].position = D3DXVECTOR3(left, bottom, 0.0f);  // Bottom left.
+  vertices[0].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[0].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
 
-  vertices[1].position = XMFLOAT3(left, top, 0.0f);  // Top left.
-  vertices[1].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[1].texture = XMFLOAT2(Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
+  vertices[1].position = D3DXVECTOR3(left, top, 0.0f);  // Top left.
+  vertices[1].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[1].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
 
-  vertices[2].position = XMFLOAT3(right, top, 0.0f);  // Top right.
-  vertices[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[2].texture = XMFLOAT2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
+  vertices[2].position = D3DXVECTOR3(right, top, 0.0f);  // Top right.
+  vertices[2].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[2].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
 
-  vertices[3].position = XMFLOAT3(right, bottom, 0.0f);  // Bottom right.
-  vertices[3].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[3].texture = XMFLOAT2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
+  vertices[3].position = D3DXVECTOR3(right, bottom, 0.0f);  // Bottom right.
+  vertices[3].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+  vertices[3].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
 
   // Load the index array with data.
   indices[0] = 1;  // Bottom left.

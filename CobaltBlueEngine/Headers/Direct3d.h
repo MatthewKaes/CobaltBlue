@@ -2,14 +2,13 @@
 #define COBALTDIRECT3D
 
 #pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dx11.lib")
 #pragma comment(lib, "d3dx10.lib")
+#pragma comment(lib, "d3dx11.lib")
 
 #include <dxgi.h>
 #include <d3dcommon.h>
-#include <d3d11.h>
-#include <DirectXMath.h>
+#include <D3DX11.h>
+#include <D3DX10math.h>
 
 const float SCREEN_DEPTH = 1002.0f;
 const float SCREEN_NEAR = 0.1f;
@@ -24,7 +23,6 @@ enum class AntiAlias {
   MSAA8x = 8,
 };
 
-using namespace DirectX;
 class Direct3D
 {
 public:
@@ -39,9 +37,9 @@ public:
   ID3D11Device* GetDevice();
   ID3D11DeviceContext* GetDeviceContext();
 
-  void GetProjectionMatrix(XMMATRIX& projMatrix);
-  void GetWorldMatrix(XMMATRIX& worldMatrix);
-  void GetOrthoMatrix(XMMATRIX& orthoMatrix);
+  void GetProjectionMatrix(D3DXMATRIX& projMatrix);
+  void GetWorldMatrix(D3DXMATRIX& worldMatrix);
+  void GetOrthoMatrix(D3DXMATRIX& orthoMatrix);
   void GetVideoCardInfo(char*, int&);
   bool VSync();
 
@@ -62,9 +60,9 @@ private:
   ID3D11DepthStencilState* m_depthDisabledStencilState;
   ID3D11BlendState* m_alphaEnableBlendingState;
   ID3D11RasterizerState* m_rasterState;
-  XMMATRIX m_projectionMatrix;
-  XMMATRIX m_worldMatrix;
-  XMMATRIX m_orthoMatrix;
+  D3DXMATRIX m_projectionMatrix;
+  D3DXMATRIX m_worldMatrix;
+  D3DXMATRIX m_orthoMatrix;
 };
 
 #endif
