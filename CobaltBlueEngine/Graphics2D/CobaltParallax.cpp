@@ -94,19 +94,19 @@ void Parallax::Update()
   // Load the vertex array with data.
   vertices[0].position = D3DXVECTOR3(left, bottom, 0.0f);  // Bottom left.
   vertices[0].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[0].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
+  vertices[0].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), (float)Height / ImgHeight() - Oy / (float)ImgHeight());
 
   vertices[1].position = D3DXVECTOR3(left, top, 0.0f);  // Top left.
   vertices[1].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[1].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
+  vertices[1].texture = D3DXVECTOR2(Ox / (float)ImgWidth(), -Oy / (float)ImgHeight());
 
   vertices[2].position = D3DXVECTOR3(right, top, 0.0f);  // Top right.
   vertices[2].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[2].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), Oy / (float)ImgHeight());
+  vertices[2].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), -Oy / (float)ImgHeight());
 
   vertices[3].position = D3DXVECTOR3(right, bottom, 0.0f);  // Bottom right.
   vertices[3].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-  vertices[3].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
+  vertices[3].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() - Oy / (float)ImgHeight());
 
   ID3D11DeviceContext* context = EngineHandle->Graphics->DirectX.GetDeviceContext();
   context->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
