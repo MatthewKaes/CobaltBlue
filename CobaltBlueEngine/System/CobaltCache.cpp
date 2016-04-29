@@ -1,10 +1,24 @@
 #include "CobaltCache.h"
+#include "CobaltEngine.h"
 #include <wincodec.h>
 
 #pragma comment(lib, "windowscodecs.lib")
 
+#include <experimental/filesystem>
+
+extern CobaltEngine* EngineHandle;
+
 CachedImage::CachedImage(LPCWSTR filename)
 {
+  if(!std::experimental::filesystem::exists(filename))
+  {
+    std::wstring message(L"Failed to load image file: '");
+    message.append(filename);
+    message.append(L"'\nFile could not be found. Make sure file is on disk.");
+    MessageBox(EngineHandle->Graphics->Window(), message.c_str(), L"Image Missing", MB_OK);
+    ExitProcess(-1);
+  }
+
   m_imageData = nullptr;
 
   CoInitialize(NULL);

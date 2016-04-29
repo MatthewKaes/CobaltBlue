@@ -20,8 +20,8 @@ ShaderCore::~ShaderCore()
 
 void ShaderCore::Initialize(ID3D11Device* device, HWND window)
 {
-  InitializeShader2D(device, window, L"../CobaltBlueEngine/Shaders/Render2D.vs", L"../CobaltBlueEngine/Shaders/Render2D.ps");
-  InitializeShader3D(device, window, L"../CobaltBlueEngine/Shaders/Render3D.vs", L"../CobaltBlueEngine/Shaders/Render3D.ps");
+  InitializeShader2D(device, window, L"Shaders/Render2D.vs", L"Shaders/Render2D.ps");
+  InitializeShader3D(device, window, L"Shaders/Render3D.vs", L"Shaders/Render3D.ps");
 }
 
 void ShaderCore::Shutdown()
@@ -142,6 +142,7 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
     else
     {
       MessageBox(window, vertexShader, L"Missing Shader File", MB_OK);
+      ExitProcess(-1);
     }
 
     return;
@@ -160,6 +161,7 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
     else
     {
       MessageBox(window, pixelShader, L"Missing Shader File", MB_OK);
+      ExitProcess(-1);
     }
 
     return;

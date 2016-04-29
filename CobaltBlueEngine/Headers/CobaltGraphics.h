@@ -20,6 +20,7 @@ public:
   bool Frame(float frameTime);
   unsigned Width();
   unsigned Height();
+  HWND Window();
   bool VSync();
   void SetVSync(bool vsync);
 

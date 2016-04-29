@@ -1,3 +1,7 @@
+// Need to get around Microsoft #pragma deprecated nonsense
+// so this needs to be included first.
+#include <experimental/filesystem>
+
 #include "CobaltAudio.h"
 #include "Dshow.h"
 
@@ -22,6 +26,15 @@ CobaltAudio::~CobaltAudio()
 
 void CobaltAudio::Play(LPCWSTR filename)
 {
+  if (!std::experimental::filesystem::exists(filename))
+  {
+    std::wstring message(L"Failed to load audio file: '");
+    message.append(filename);
+    message.append(L"'\nFile could not be found. Make sure file is on disk.");
+    MessageBox(m_window, message.c_str(), L"Audio Missing", MB_OK);
+    ExitProcess(-1);
+  }
+
   Stop();
   if (SUCCEEDED(CoCreateInstance(CLSID_FilterGraph,
     NULL,

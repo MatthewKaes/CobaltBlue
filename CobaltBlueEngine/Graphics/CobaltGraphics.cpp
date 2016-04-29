@@ -46,6 +46,11 @@ unsigned CobaltGraphics::Height()
   return m_height;
 }
 
+HWND CobaltGraphics::Window()
+{
+  return m_window;
+}
+
 bool CobaltGraphics::VSync()
 {
   return DirectX.VSync();
