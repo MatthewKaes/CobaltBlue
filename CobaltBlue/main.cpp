@@ -10,14 +10,33 @@ class AppScene : public CobaltScene {
 public:
   void Start(CobaltEngine* engine)
   {
-    spr.Create(200, 200, 400, 200);
-    spr.Bitmap()->Gradient(Rect(0, 0, 200, 200), Color(255, 0, 0), Color(0, 255, 0, 100), true);
-    spr.Bitmap()->Gradient(Rect(200, 0, 200, 200), Color(0, 255, 0, 100), Color(255, 0, 0), true);
+    spr.Create(L"Textures\\stone.png", engine->Graphics->Width(), engine->Graphics->Height());
+    spr.Tint = Color(0, 255, 255);
   }
 
   void Update(CobaltEngine* engine)
   {
     spr.Ox += 2;
+    spr.Oy += 2;
+
+    if (fade)
+    {
+      spr.Tint.Red += 1;
+      spr.Tint.Blue -= 1;
+      if (spr.Tint.Blue == 0)
+      {
+        fade = false;
+      }
+    }
+    else
+    {
+      spr.Tint.Blue += 1;
+      spr.Tint.Red -= 1;
+      if (spr.Tint.Red == 0)
+      {
+        fade = true;
+      }
+    }
 
     if (engine->Input->Pressed(Inputs::Esc))
     {
@@ -27,6 +46,12 @@ public:
 
     if (engine->Input->Pressed(Inputs::Space))
       engine->GotoScene(new AppScene);
+
+    if (engine->Input->Pressed(Inputs::A))
+      spr.Bitmap()->Blur(7);
+
+    if (engine->Input->Pressed(Inputs::S))
+      spr.Bitmap()->FastBlur(7);
   }
 
   void Terminate(CobaltEngine* engine)
@@ -34,6 +59,7 @@ public:
   }
 
 private:
+  bool fade = true;
   Parallax spr;
 };
 
