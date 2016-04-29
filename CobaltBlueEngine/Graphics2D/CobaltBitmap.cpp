@@ -27,8 +27,8 @@ void Bitmap::Create(LPCWSTR filename)
 
   LoadTexture(filename);
   InitializeResource(
-    EngineHandle->Graphics->m_DirectX.GetDevice(),
-    EngineHandle->Graphics->m_DirectX.GetDeviceContext());
+    EngineHandle->Graphics->DirectX.GetDevice(),
+    EngineHandle->Graphics->DirectX.GetDeviceContext());
 }
 
 void Bitmap::Create(unsigned width, unsigned height)
@@ -41,8 +41,8 @@ void Bitmap::Create(unsigned width, unsigned height)
   m_height = height;
 
   InitializeResource(
-    EngineHandle->Graphics->m_DirectX.GetDevice(),
-    EngineHandle->Graphics->m_DirectX.GetDeviceContext());
+    EngineHandle->Graphics->DirectX.GetDevice(),
+    EngineHandle->Graphics->DirectX.GetDeviceContext());
 }
 
 void Bitmap::Release()

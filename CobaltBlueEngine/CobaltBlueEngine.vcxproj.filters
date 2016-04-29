@@ -87,6 +87,9 @@
     <ClInclude Include="Headers\CobaltParallax.h">
       <Filter>Graphics 2D</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltAnimation.h">
+      <Filter>Graphics 2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System\CobaltEngine.cpp">

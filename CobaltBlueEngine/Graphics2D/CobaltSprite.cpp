@@ -3,6 +3,8 @@
 #include "CobaltEngine.h"
 
 extern CobaltEngine* EngineHandle;
+extern std::vector<Model2D*> g_renderListings;
+extern std::unordered_set<Model2D*> g_updateListings;
 
 Sprite::Sprite()
 {
@@ -21,18 +23,20 @@ Sprite::~Sprite()
 
 void Sprite::Create(LPWSTR textureFile)
 {
-  EngineHandle->Graphics->m_bitmapListings.push_back(this);
+  g_renderListings.push_back(this);
+  g_updateListings.insert(this);
 
   // Create a bitmap to use for 2D graphics
   m_bitmap = new ::Bitmap();
   m_bitmap->Create(textureFile);
 
-  CreateBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
+  CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
 void Sprite::Create(unsigned width, unsigned height)
 {
-  EngineHandle->Graphics->m_bitmapListings.push_back(this);
+  g_renderListings.push_back(this);
+  g_updateListings.insert(this);
 
   // Create a bitmap to use for 2D graphics
   m_bitmap = new ::Bitmap();
@@ -40,7 +44,7 @@ void Sprite::Create(unsigned width, unsigned height)
     width,
     height);
 
-  CreateBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
+  CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
 void Sprite::Update(ID3D11DeviceContext* context)
@@ -70,7 +74,8 @@ unsigned Sprite::Height()
 void Sprite::Release()
 {
   // Remove form the bitmap listing.
-  EngineHandle->Graphics->m_bitmapListings.erase(std::find(EngineHandle->Graphics->m_bitmapListings.begin(), EngineHandle->Graphics->m_bitmapListings.end(), this));
+  g_renderListings.erase(std::find(g_renderListings.begin(), g_renderListings.end(), this));
+  g_updateListings.erase(this);
 
   // Release the texture object.
   if (m_bitmap)

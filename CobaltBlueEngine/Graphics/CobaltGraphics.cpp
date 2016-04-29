@@ -1,6 +1,10 @@
 #include "CobaltGraphics.h"
 #include <algorithm>
 
+unordered_map<int, Model3D*> g_modelListings;
+std::vector<Model2D*> g_renderListings;
+std::unordered_set<Model2D*> g_updateListings;
+
 bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias)
 {
   m_width = width;
@@ -11,20 +15,20 @@ bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen
   // Set the initial position of the camera.
   Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
-  bool result = m_DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, antiAlias);
+  bool result = DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, antiAlias);
   if (!result)
   {
 	  return false;
   }
 
-  m_Shader.Initialize(m_DirectX.GetDevice(), window);
+  m_Shader.Initialize(DirectX.GetDevice(), window);
 
   return true;
 }
 
 void CobaltGraphics::Shutdown()
 {
-  m_DirectX.Shutdown();
+  DirectX.Shutdown();
 }
 
 bool CobaltGraphics::Frame(float frameTime)
@@ -44,35 +48,35 @@ unsigned CobaltGraphics::Height()
 
 bool CobaltGraphics::VSync()
 {
-  return m_DirectX.VSync();
+  return DirectX.VSync();
 }
 
 void CobaltGraphics::SetVSync(bool vsync)
 {
-  m_DirectX.SetVSync(vsync);
+  DirectX.SetVSync(vsync);
 }
 
 bool CobaltGraphics::Render(float frameTime)
 {
   D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 
-  m_DirectX.BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+  DirectX.BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
   // Generate the view matrix based on the camera's position.
   Camera.Update(frameTime);
 
-  m_DirectX.GetWorldMatrix(worldMatrix);
+  DirectX.GetWorldMatrix(worldMatrix);
   Camera.GetView(viewMatrix);
-  m_DirectX.GetProjectionMatrix(projectionMatrix);
-  m_DirectX.GetOrthoMatrix(orthoMatrix);
+  DirectX.GetProjectionMatrix(projectionMatrix);
+  DirectX.GetOrthoMatrix(orthoMatrix);
 
   // Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-  for (auto model : m_modelListings)
+  for (auto model : g_modelListings)
   {
-    model.second->Render(m_DirectX.GetDeviceContext());
+    model.second->Render(DirectX.GetDeviceContext());
 
     m_Shader.Render3D(
-      m_DirectX.GetDeviceContext(), 
+      DirectX.GetDeviceContext(), 
       model.second->GetIndexCount(), 
       worldMatrix, 
       viewMatrix, 
@@ -84,16 +88,22 @@ bool CobaltGraphics::Render(float frameTime)
   D3DXMatrixIdentity(&viewMatrix);
   viewMatrix._43 = (SCREEN_DEPTH) / 2.0f;
 
-  m_DirectX.SetZBuffer(false);
-  std::sort(m_bitmapListings.begin(), m_bitmapListings.end(), [](Model2D* a, Model2D* b) { return a->Z < b->Z; });
-  for (auto model : m_bitmapListings)
-  {
-    model->Update(m_DirectX.GetDeviceContext());
+  DirectX.SetZBuffer(false);
 
-    model->Render(m_DirectX.GetDeviceContext());
+  for (auto model : g_updateListings)
+  {
+    model->Update(DirectX.GetDeviceContext());
+  }
+
+  std::sort(g_renderListings.begin(), g_renderListings.end(), [](Model2D* a, Model2D* b) { return a->Z < b->Z; });
+  for (auto model : g_renderListings)
+  {
+    model->Update(DirectX.GetDeviceContext());
+
+    model->Render(DirectX.GetDeviceContext());
 
     m_Shader.Render2D(
-      m_DirectX.GetDeviceContext(), 
+      DirectX.GetDeviceContext(), 
       model->GetIndexCount(), 
       worldMatrix, viewMatrix, 
       orthoMatrix,
@@ -101,8 +111,8 @@ bool CobaltGraphics::Render(float frameTime)
       D3DXVECTOR4(model->Tint.Red / 255.0f, model->Tint.Blue / 255.0f, model->Tint.Green / 255.0f, model->Tint.Alpha / 255.0f),
       model->GetTexture());
   }
-  m_DirectX.SetZBuffer(true);
+  DirectX.SetZBuffer(true);
 
-  m_DirectX.EndScene();
+  DirectX.EndScene();
   return true;
 }

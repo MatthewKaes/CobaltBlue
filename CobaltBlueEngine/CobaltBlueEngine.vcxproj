@@ -41,6 +41,7 @@
     <ClCompile Include="System\CobaltSynchronizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\CobaltAnimation.h" />
     <ClInclude Include="Headers\CobaltAudio.h" />
     <ClInclude Include="Headers\CobaltBitmap.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

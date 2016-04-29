@@ -3,6 +3,7 @@
 
 unsigned Model3D::ModelID = 0;
 extern CobaltEngine* EngineHandle;
+extern unordered_map<int, Model3D*> g_modelListings;
 
 Model3D::Model3D()
 {
@@ -17,16 +18,16 @@ void Model3D::Create(LPWSTR textureFile, TextureType textureType)
 {
   // Add to the rendering queue.
   m_id = Model3D::ModelID++;
-  EngineHandle->Graphics->m_modelListings.insert(std::make_pair(m_id, this));
+  g_modelListings.insert(std::make_pair(m_id, this));
 
   // Setup the object.
-  InitializeTexture(EngineHandle->Graphics->m_DirectX.GetDevice(), EngineHandle->Graphics->m_DirectX.GetDeviceContext(), textureFile, textureType);
-  InitializeBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
+  InitializeTexture(EngineHandle->Graphics->DirectX.GetDevice(), EngineHandle->Graphics->DirectX.GetDeviceContext(), textureFile, textureType);
+  InitializeBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
 void Model3D::Release()
 {
-  EngineHandle->Graphics->m_modelListings.erase(m_id);
+  g_modelListings.erase(m_id);
 
   // Release the index buffer.
   if (m_indexBuffer)

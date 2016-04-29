@@ -3,6 +3,8 @@
 #include "CobaltEngine.h"
 
 extern CobaltEngine* EngineHandle;
+extern std::vector<Model2D*> g_renderListings;
+extern std::unordered_set<Model2D*> g_updateListings;
 
 Parallax::Parallax()
 {
@@ -23,7 +25,9 @@ Parallax::~Parallax()
 
 void Parallax::Create(LPWSTR textureFile, unsigned width, unsigned height)
 {
-  EngineHandle->Graphics->m_bitmapListings.push_back(this);
+  g_renderListings.push_back(this);
+  g_updateListings.insert(this);
+
   Width = width;
   Height = height;
 
@@ -31,12 +35,13 @@ void Parallax::Create(LPWSTR textureFile, unsigned width, unsigned height)
   m_bitmap = new ::Bitmap();
   m_bitmap->Create(textureFile);
 
-  CreateBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
+  CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
 void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsigned imgHeight)
 {
-  EngineHandle->Graphics->m_bitmapListings.push_back(this);
+  g_renderListings.push_back(this);
+  g_updateListings.insert(this);
   Width = width;
   Height = height;
 
@@ -46,7 +51,7 @@ void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsign
     imgWidth,
     imgHeight);
 
-  CreateBuffers(EngineHandle->Graphics->m_DirectX.GetDevice());
+  CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
 void Parallax::Update(ID3D11DeviceContext* context)
@@ -123,7 +128,8 @@ unsigned Parallax::ImgHeight()
 void Parallax::Release()
 {
   // Remove form the bitmap listing.
-  EngineHandle->Graphics->m_bitmapListings.erase(std::find(EngineHandle->Graphics->m_bitmapListings.begin(), EngineHandle->Graphics->m_bitmapListings.end(), this));
+  g_renderListings.erase(std::find(g_renderListings.begin(), g_renderListings.end(), this));
+  g_updateListings.erase(this);
 
   // Release the texture object.
   if (m_bitmap)

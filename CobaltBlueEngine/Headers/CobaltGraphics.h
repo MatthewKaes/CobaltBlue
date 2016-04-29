@@ -10,15 +10,11 @@
 #include "Model2d.h"
 
 #include <unordered_map>
+#include <unordered_set>
 
 class CobaltGraphics
 {
 public:
-  friend class Parallax;
-  friend class Sprite;
-  friend class Bitmap;
-  friend class Model3D;
-
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
   void Shutdown();
   bool Frame(float frameTime);
@@ -28,11 +24,7 @@ public:
   void SetVSync(bool vsync);
 
   CobaltCamera Camera;
-
-protected:
-  unordered_map<int, Model3D*> m_modelListings;
-  std::vector<Model2D*> m_bitmapListings;
-  Direct3D m_DirectX;
+  Direct3D DirectX;
 
 private:
   bool Render(float frameTime);
