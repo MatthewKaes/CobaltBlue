@@ -595,7 +595,7 @@ void Bitmap::BlurV(unsigned size)
   delete[] aArray;
 }
 
-void Bitmap::Update(ID3D11DeviceContext* context)
+void Bitmap::Update()
 {
   if (!m_dirty)
   {
@@ -604,6 +604,7 @@ void Bitmap::Update(ID3D11DeviceContext* context)
 
   m_dirty = false;
 
+  ID3D11DeviceContext* context = EngineHandle->Graphics->DirectX.GetDeviceContext();
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   context->Map(m_texture, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
@@ -666,7 +667,7 @@ void Bitmap::InitializeResource(ID3D11Device* device, ID3D11DeviceContext* conte
   // Set the row pitch of the targa image data.
   rowPitch = (m_width * 4) * sizeof(unsigned char);
 
-  Update(context);
+  Update();
 
   // Setup the shader resource view description.
   srvDesc.Format = textureDesc.Format;

@@ -15,7 +15,7 @@ public:
 
   void Create(LPCWSTR filename);
   void Create(unsigned width, unsigned height);
-  void Update(ID3D11DeviceContext* context);
+  void Update();
   void Release();
   
   void SetTextColor(Color textColor);

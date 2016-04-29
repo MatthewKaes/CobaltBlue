@@ -42,8 +42,8 @@ void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsign
 {
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
-  Width = width;
-  Height = height;
+  m_prevWidth = Width = width;
+  m_prevHeight = Height = height;
 
   // Create a bitmap to use for 2D graphics
   m_bitmap = new ::Bitmap();
@@ -54,9 +54,9 @@ void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsign
   CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
-void Parallax::Update(ID3D11DeviceContext* context)
+void Parallax::Update()
 {
-  m_bitmap->Update(context);
+  m_bitmap->Update();
 
   if (Z > (SCREEN_DEPTH) / 2.0f - 1.0f)
   {
@@ -67,10 +67,15 @@ void Parallax::Update(ID3D11DeviceContext* context)
     Z = -(SCREEN_DEPTH) / 2.0f - 1.0f;
   }
 
-  if (m_prevOx == Ox && m_prevOy == Oy)
+  if (m_prevOx == Ox && m_prevOy == Oy &&
+      m_prevWidth == Width && m_prevHeight == Height)
   {
     return;
   }
+  m_prevOx = Ox;
+  m_prevOy = Oy;
+  m_prevWidth = Width;
+  m_prevHeight = Height;
 
   // Calculate the screen coordinates of the left side of the bitmap.
   VertexType vertices[VertexCount];
@@ -103,6 +108,7 @@ void Parallax::Update(ID3D11DeviceContext* context)
   vertices[3].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
   vertices[3].texture = D3DXVECTOR2((float)Width / ImgWidth() + Ox / (float)ImgWidth(), (float)Height / ImgHeight() + Oy / (float)ImgHeight());
 
+  ID3D11DeviceContext* context = EngineHandle->Graphics->DirectX.GetDeviceContext();
   context->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
   // Get a pointer to the data in the vertex buffer.
@@ -224,8 +230,9 @@ void Parallax::CreateBuffers(ID3D11Device* device)
   }
 }
 
-void Parallax::Render(ID3D11DeviceContext* context)
+void Parallax::Render()
 {
+  ID3D11DeviceContext* context = EngineHandle->Graphics->DirectX.GetDeviceContext();
   unsigned int stride;
   unsigned int offset;
 

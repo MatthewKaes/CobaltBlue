@@ -13,8 +13,8 @@ public:
   void Create(unsigned width, unsigned height);
   unsigned Width();
   unsigned Height();
-  void Update(ID3D11DeviceContext* context);
-  void Render(ID3D11DeviceContext* context);
+  void Update();
+  void Render();
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
   Bitmap* Bitmap();

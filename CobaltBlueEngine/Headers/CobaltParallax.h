@@ -6,8 +6,6 @@
 
 class Parallax : public Model2D {
 public:
-  friend class CobaltGraphics;
-
   Parallax();
   ~Parallax();
 
@@ -15,8 +13,8 @@ public:
   void Create(unsigned width, unsigned height, unsigned imgWidth, unsigned imgHeight);
   unsigned ImgWidth();
   unsigned ImgHeight();
-  void Update(ID3D11DeviceContext* context);
-  void Render(ID3D11DeviceContext* context);
+  void Update();
+  void Render();
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
   Bitmap* Bitmap();
@@ -42,6 +40,8 @@ private:
 
   int m_prevOx;
   int m_prevOy;
+  int m_prevWidth;
+  int m_prevHeight;
   ::Bitmap* m_bitmap;
   ID3D11Buffer* m_vertexBuffer;
   ID3D11Buffer* m_indexBuffer;

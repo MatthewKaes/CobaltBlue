@@ -22,6 +22,7 @@
     <ClCompile Include="Audio\CobaltAudio.cpp" />
     <ClCompile Include="DirectX\Direct3d.cpp" />
     <ClCompile Include="DirectX\ShaderCore.cpp" />
+    <ClCompile Include="Graphics2D\CobaltAnimation.cpp" />
     <ClCompile Include="Graphics2D\CobaltBitmap.cpp" />
     <ClCompile Include="Graphics2D\CobaltSprite.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -29,7 +30,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Graphics2D\Model2dcpp.cpp" />
+    <ClCompile Include="Graphics2D\Model2d.cpp" />
     <ClCompile Include="Graphics2D\CobaltParallax.cpp" />
     <ClCompile Include="Graphics3D\CobaltCamera.cpp" />
     <ClCompile Include="Graphics3D\CobaltTexture.cpp" />

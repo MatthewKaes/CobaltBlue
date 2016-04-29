@@ -92,15 +92,15 @@ bool CobaltGraphics::Render(float frameTime)
 
   for (auto model : g_updateListings)
   {
-    model->Update(DirectX.GetDeviceContext());
+    model->Update();
   }
 
   std::sort(g_renderListings.begin(), g_renderListings.end(), [](Model2D* a, Model2D* b) { return a->Z < b->Z; });
   for (auto model : g_renderListings)
   {
-    model->Update(DirectX.GetDeviceContext());
+    model->Update();
 
-    model->Render(DirectX.GetDeviceContext());
+    model->Render();
 
     m_Shader.Render2D(
       DirectX.GetDeviceContext(), 

@@ -3,3 +3,4 @@
 
 #include "CobaltSprite.h"
 #include "CobaltParallax.h"
+#include "CobaltAnimation.h"

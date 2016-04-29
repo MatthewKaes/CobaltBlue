@@ -47,9 +47,9 @@ void Sprite::Create(unsigned width, unsigned height)
   CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
-void Sprite::Update(ID3D11DeviceContext* context)
+void Sprite::Update()
 {
-  m_bitmap->Update(context);
+  m_bitmap->Update();
 
   if (Z > (SCREEN_DEPTH) / 2.0f - 1.0f)
   {
@@ -170,8 +170,9 @@ void Sprite::CreateBuffers(ID3D11Device* device)
   }
 }
 
-void Sprite::Render(ID3D11DeviceContext* context)
+void Sprite::Render()
 {
+  ID3D11DeviceContext* context = EngineHandle->Graphics->DirectX.GetDeviceContext();
   unsigned int stride;
   unsigned int offset;
 

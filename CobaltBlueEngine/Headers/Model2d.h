@@ -33,14 +33,13 @@ public:
   unsigned Height;
 };
 
-
 class Model2D {
 public:
   virtual ~Model2D() { };
-  virtual void Update(ID3D11DeviceContext* context) = 0;
-  virtual void Render(ID3D11DeviceContext* context) = 0;
-  virtual int GetIndexCount() = 0;
-  virtual ID3D11ShaderResourceView* GetTexture() = 0;
+  virtual void Update() = 0;
+  virtual void Render() { };
+  virtual int GetIndexCount() { return 0; };
+  virtual ID3D11ShaderResourceView* GetTexture() { return nullptr; };
 
   float Z;
   int X;

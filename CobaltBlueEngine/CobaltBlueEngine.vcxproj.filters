@@ -131,10 +131,13 @@
     <ClCompile Include="Graphics2D\CobaltBitmap.cpp">
       <Filter>Graphics 2D</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics2D\Model2dcpp.cpp">
+    <ClCompile Include="Graphics2D\CobaltParallax.cpp">
       <Filter>Graphics 2D</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics2D\CobaltParallax.cpp">
+    <ClCompile Include="Graphics2D\CobaltAnimation.cpp">
+      <Filter>Graphics 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics2D\Model2d.cpp">
       <Filter>Graphics 2D</Filter>
     </ClCompile>
   </ItemGroup>
