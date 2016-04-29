@@ -112,7 +112,7 @@ bool CobaltGraphics::Render(float frameTime)
       model->GetIndexCount(), 
       worldMatrix, viewMatrix, 
       orthoMatrix,
-      D3DXVECTOR4((float)model->X, (float)model->Y, model->Z, 0.0f),
+      D3DXVECTOR4((float)model->X, (float)-model->Y, 0.0f, 0.0f),
       D3DXVECTOR4(model->Tint.Red / 255.0f, model->Tint.Green / 255.0f, model->Tint.Blue / 255.0f, model->Tint.Alpha / 255.0f),
       model->GetTexture());
   }

@@ -8,6 +8,7 @@ public:
   void Create(LPWSTR textureFile, unsigned cellsX, unsigned cellsY);
   void Pause();
   void Play(unsigned frameTime);
+  void SelectCell(unsigned X, unsigned Y);
   unsigned Width();
   unsigned Height();
   void Update();
@@ -16,12 +17,12 @@ public:
   unsigned X;
   unsigned Y;
   bool YRoll;
+  int CellX;
+  int CellY;
 
 private:
   unsigned m_width;
   unsigned m_height;
-  unsigned m_cellX;
-  unsigned m_cellY;
   unsigned m_cellCountX;
   unsigned m_cellCountY;
   unsigned m_frameCount;

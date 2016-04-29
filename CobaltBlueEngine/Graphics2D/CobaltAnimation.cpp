@@ -48,21 +48,22 @@ void Animation::Update()
     if (m_frameCount % m_frameTime == 0)
     {
       m_frameCount = 0;
-      if (++m_cellX % m_cellCountX == 0)
+      if (++CellX % m_cellCountX == 0)
       {
-        m_cellX = 0;
+        CellX = 0;
         if (YRoll)
         {
-          if (++m_cellY % m_cellCountY == 0)
+          if (++CellY % m_cellCountY == 0)
           {
-            m_cellY = 0;
+            CellY = 0;
           }
         }
       }
-      m_parallax.Ox = m_width * m_cellX;
-      m_parallax.Oy = m_height * m_cellY;
     }
   }
+
+  m_parallax.Ox = m_width * CellX;
+  m_parallax.Oy = m_height * CellY;
 }
 
 Bitmap* Animation::Bitmap()
