@@ -224,7 +224,8 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 bool CobaltEngine::Frame(float frameTime)
 {
   m_currentScene->Update(Input, Graphics, Audio, Sound, Cache);
-   
+
+  Audio->Frame(frameTime);
   return Graphics->Frame(frameTime);
 }
 

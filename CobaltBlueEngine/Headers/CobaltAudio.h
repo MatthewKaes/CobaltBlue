@@ -29,6 +29,8 @@ public:
   void Play();
   void Pause();
   void Stop();
+  void Fade(float fadeTime);
+  void Frame(float duration);
 
   float Volume();
   float Duration();
@@ -51,6 +53,7 @@ private:
   IMediaSeeking* m_mediaSeeker;
   IMediaEventEx*  m_eventController;
   HWND m_window;
+  float m_fadeOut;
   float m_volume;
   float m_duration;
   bool m_loop;

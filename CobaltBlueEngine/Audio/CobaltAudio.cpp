@@ -124,6 +124,27 @@ void CobaltAudio::Stop()
   Cleanup();
 }
 
+void CobaltAudio::Fade(float fadeTime)
+{
+  m_fadeOut = m_volume / fadeTime;
+}
+
+void CobaltAudio::Frame(float duration)
+{
+  if (m_fadeOut > 0)
+  {
+    m_volume -= duration * m_fadeOut;
+
+    if (m_volume < 0)
+    {
+      m_volume = 0.0f;
+      m_fadeOut = 0.0f;
+    }
+
+    SetVolume(m_volume);
+  }
+}
+
 float CobaltAudio::Volume()
 {
   if (m_state == AudioState::Failed || m_state == AudioState::Standby)
