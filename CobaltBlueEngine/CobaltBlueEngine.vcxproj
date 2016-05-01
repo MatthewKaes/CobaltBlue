@@ -36,6 +36,7 @@
     <ClCompile Include="Graphics3D\CobaltTexture.cpp" />
     <ClCompile Include="Graphics3D\Model3d.cpp" />
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
+    <ClCompile Include="Headers\CobaltSound.cpp" />
     <ClCompile Include="Input\CobaltInput.cpp" />
     <ClCompile Include="System\CobaltCache.cpp" />
     <ClCompile Include="System\CobaltEngine.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Headers\CobaltInput.h" />
     <ClInclude Include="Headers\CobaltParallax.h" />
     <ClInclude Include="Headers\CobaltScene.h" />
+    <ClInclude Include="Headers\CobaltSound.h" />
     <ClInclude Include="Headers\CobaltSynchronizer.h" />
     <ClInclude Include="Headers\Direct3d.h" />
     <ClInclude Include="Headers\CobaltTexture.h" />

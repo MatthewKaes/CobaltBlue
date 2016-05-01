@@ -8,6 +8,7 @@
 #include "CobaltSynchronizer.h"
 #include "CobaltAudio.h"
 #include "CobaltCache.h"
+#include "CobaltSound.h"
 
 class CobaltEngine {
 public:
@@ -31,6 +32,7 @@ public:
   CobaltGraphics* Graphics;
   CobaltAudio* Audio;
   CobaltCache* Cache;
+  CobaltSound* Sound;
   LPCWSTR Font;
 
   const unsigned DefaultFPS = 60;

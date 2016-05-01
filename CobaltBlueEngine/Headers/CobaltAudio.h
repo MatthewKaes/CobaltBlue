@@ -48,8 +48,8 @@ private:
   IGraphBuilder*  m_graphBuilder;
   IMediaControl*  m_mediaController;
   IBasicAudio* m_audioController;
-  IMediaSeeking * m_mediaSeeker;
-  IMediaEventEx *  m_eventController;
+  IMediaSeeking* m_mediaSeeker;
+  IMediaEventEx*  m_eventController;
   HWND m_window;
   float m_volume;
   float m_duration;

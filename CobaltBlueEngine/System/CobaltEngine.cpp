@@ -102,6 +102,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
 
   // Setup all the engine objects
   Audio = new CobaltAudio(m_hwnd);
+  Sound = new CobaltSound(m_hwnd);
   Input = new CobaltInput();
   Graphics = new CobaltGraphics();
   Cache = new CobaltCache();
@@ -144,6 +145,9 @@ CobaltEngine::~CobaltEngine()
 
   if (Cache)
     delete Cache;
+
+  if (Sound)
+    delete Sound;
 
   return;
 }

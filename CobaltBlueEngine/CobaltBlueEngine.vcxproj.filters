@@ -90,6 +90,9 @@
     <ClInclude Include="Headers\CobaltAnimation.h">
       <Filter>Graphics 2D</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\CobaltSound.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System\CobaltEngine.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="Graphics2D\Model2d.cpp">
       <Filter>Graphics 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Headers\CobaltSound.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
