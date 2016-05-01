@@ -47,8 +47,9 @@ void Sprite::Create(unsigned width, unsigned height)
   CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
-void Sprite::Update()
+void Sprite::Update(float frameTime)
 {
+  Model2D::Frame(frameTime);
   m_bitmap->Update();
 
   if (Z > (SCREEN_DEPTH) / 2.0f - 1.0f)

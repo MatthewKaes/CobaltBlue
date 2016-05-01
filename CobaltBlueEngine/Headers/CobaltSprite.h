@@ -13,7 +13,7 @@ public:
   void Create(unsigned width, unsigned height);
   unsigned Width();
   unsigned Height();
-  void Update();
+  void Update(float frameTime);
   void Render();
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();

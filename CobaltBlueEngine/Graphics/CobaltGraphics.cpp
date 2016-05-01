@@ -97,13 +97,13 @@ bool CobaltGraphics::Render(float frameTime)
 
   for (auto model : g_updateListings)
   {
-    model->Update();
+    model->Update(frameTime);
   }
 
   std::sort(g_renderListings.begin(), g_renderListings.end(), [](Model2D* a, Model2D* b) { return a->Z < b->Z; });
   for (auto model : g_renderListings)
   {
-    model->Update();
+    model->Update(frameTime);
 
     model->Render();
 

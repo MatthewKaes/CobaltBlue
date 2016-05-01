@@ -54,8 +54,9 @@ void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsign
   CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
-void Parallax::Update()
+void Parallax::Update(float frameTime)
 {
+  Model2D::Frame(frameTime);
   m_bitmap->Update();
 
   if (Z > (SCREEN_DEPTH) / 2.0f - 1.0f)

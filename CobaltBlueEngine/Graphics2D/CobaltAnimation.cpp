@@ -27,6 +27,12 @@ void Animation::Play(unsigned frameTime)
   m_frameCount = 0;
 }
 
+void Animation::SelectCell(unsigned X, unsigned Y)
+{
+  CellX = (CellX + X) % m_cellCountX;
+  CellY = (CellY + Y) % m_cellCountY;
+}
+
 unsigned Animation::Width()
 {
   return m_width;
@@ -37,8 +43,10 @@ unsigned Animation::Height()
   return m_height;
 }
 
-void Animation::Update()
+void Animation::Update(float frameTime)
 {
+  Model2D::Frame(frameTime);
+
   m_parallax.X = X;
   m_parallax.Y = Y;
 

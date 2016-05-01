@@ -36,15 +36,25 @@ public:
 class Model2D {
 public:
   virtual ~Model2D() { };
-  virtual void Update() = 0;
+  virtual void Update(float frameTime) = 0;
   virtual void Render() { };
   virtual int GetIndexCount() { return 0; };
   virtual ID3D11ShaderResourceView* GetTexture() { return nullptr; };
 
+  void Flash(Color color, float duration);
   float Z;
   int X;
   int Y;
   Color Tint;
+
+protected:
+  void Frame(float frameTime);
+
+private:
+  float m_effectDur;
+  float m_totalDur;
+  Color m_colorSrc;
+  Color m_colorTgt;
 };
 
 #endif

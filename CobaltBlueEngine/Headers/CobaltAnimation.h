@@ -11,7 +11,7 @@ public:
   void SelectCell(unsigned X, unsigned Y);
   unsigned Width();
   unsigned Height();
-  void Update();
+  void Update(float frameTime);
   Bitmap* Bitmap();
 
   unsigned X;
