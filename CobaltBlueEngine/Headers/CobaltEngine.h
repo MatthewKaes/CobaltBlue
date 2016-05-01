@@ -4,11 +4,11 @@
 #include "CobaltBlueCore.h"
 #include "CobaltInput.h"
 #include "CobaltGraphics.h"
-#include "CobaltScene.h"
 #include "CobaltSynchronizer.h"
 #include "CobaltAudio.h"
 #include "CobaltCache.h"
 #include "CobaltSound.h"
+#include "CobaltScene.h"
 
 class CobaltEngine {
 public:
@@ -28,15 +28,16 @@ public:
   LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
   // API Exposed Objects
+  LPCWSTR Font;
   CobaltInput* Input;
   CobaltGraphics* Graphics;
   CobaltAudio* Audio;
   CobaltCache* Cache;
   CobaltSound* Sound;
-  LPCWSTR Font;
 
   const unsigned DefaultFPS = 60;
   const LPCWSTR DefaultFont = L"Arial";
+
 private:
   CobaltScene* m_currentScene;
   CobaltScene* m_nextScene;

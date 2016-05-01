@@ -1,12 +1,15 @@
 #ifndef COBALTBLUESCENE
 #define COBALTBLUESCENE
 
+#include "CobaltEngine.h"
+#define COBALTSCENE CobaltInput* Input, CobaltGraphics* Graphics, CobaltAudio* Audio, CobaltSound* Sound, CobaltCache* Cache
+
 class CobaltScene {
 public:
   virtual ~CobaltScene() { };
-  virtual void Start(CobaltEngine* engine) = 0;
-  virtual void Update(CobaltEngine* engine) = 0;
-  virtual void Terminate(CobaltEngine* engine) = 0;
+  virtual void Start(COBALTSCENE) = 0;
+  virtual void Update(COBALTSCENE) = 0;
+  virtual void Terminate(COBALTSCENE) = 0;
 };
 
 #endif

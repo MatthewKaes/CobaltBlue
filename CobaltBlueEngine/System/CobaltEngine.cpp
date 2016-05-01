@@ -166,7 +166,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
   // Setup the scene.
   m_exit = false;
   m_currentScene = entryScene;
-  m_currentScene->Start(this);
+  m_currentScene->Start(Input, Graphics, Audio, Sound, Cache);
   m_nextScene = nullptr;
 
   while (!m_exit)
@@ -204,10 +204,10 @@ void CobaltEngine::Run(CobaltScene* entryScene)
     // Scene transitions.
     if (m_nextScene != nullptr)
     {
-      m_currentScene->Terminate(this);
+      m_currentScene->Terminate(Input, Graphics, Audio, Sound, Cache);
       delete m_currentScene;
       m_currentScene = m_nextScene;
-      m_currentScene->Start(this);
+      m_currentScene->Start(Input, Graphics, Audio, Sound, Cache);
       m_nextScene = nullptr;
     }
 
@@ -223,7 +223,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
 bool CobaltEngine::Frame(float frameTime)
 {
-  m_currentScene->Update(this);
+  m_currentScene->Update(Input, Graphics, Audio, Sound, Cache);
    
   return Graphics->Frame(frameTime);
 }
