@@ -29,6 +29,7 @@ public:
   void Gradient(Rect area, Color color1, Color color2, bool horz);
   void DrawText(LPCWSTR text, unsigned size, Rect area);
   void DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic);
+  void DrawScreen(Rect area, Rect source);
   void Blend(Bitmap* bitmap, Rect area, Point target);
   void Blur(unsigned size);
   void FastBlur(unsigned size);

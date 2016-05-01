@@ -23,6 +23,7 @@ Bitmap::~Bitmap()
 
 void Bitmap::Create(LPCWSTR filename)
 {
+  Release();
   m_fontname = EngineHandle->Font;
 
   LoadTexture(filename);
@@ -33,6 +34,7 @@ void Bitmap::Create(LPCWSTR filename)
 
 void Bitmap::Create(unsigned width, unsigned height)
 {
+  Release();
   m_fontname = EngineHandle->Font;
 
   m_textureData = new BYTE[width * height * 4];
@@ -291,7 +293,7 @@ void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool it
       if (shaded)
       {
         float mod = 1.0f;
-        for(int i = 2; i < distSqr; i += 2)
+        for (int i = 2; i < distSqr; i += 2)
           mod *= 1.45f;
 
         float pixelAlpha = m_outlineColor.Alpha / (255.0f * mod);
@@ -320,6 +322,81 @@ void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool it
   delete[] scanlines;
   DeleteObject(hf);
   DeleteObject(bm);
+  DeleteDC(mdc);
+  ReleaseDC(NULL, hdc);
+}
+
+void Bitmap::DrawScreen(Rect area, Rect source)
+{
+  if (source.X < 0)
+    source.X = 0;
+
+  if (source.Y < 0)
+    source.Y = 0;
+
+  if (source.Width + source.X > EngineHandle->Graphics->Width())
+    source.Width = EngineHandle->Graphics->Width() - source.X;
+
+  if (source.Height + source.Y > EngineHandle->Graphics->Height())
+    source.Height = EngineHandle->Graphics->Height() - source.Y;
+
+  if (area.X < 0)
+    area.X = 0;
+
+  if (area.Y < 0)
+    area.Y = 0;
+
+  if (area.Width + area.X > Width())
+    area.Width = Width() - area.X;
+
+  if (area.Height + area.Y > Height())
+    area.Height = Height() - area.Y;
+
+  area.Width = source.Width = min(area.Width, source.Width);
+  area.Height = source.Height = min(area.Height, source.Height);
+
+  m_dirty = true;
+
+  HDC hdc = GetDC(EngineHandle->Graphics->Window());
+  HDC mdc = CreateCompatibleDC(hdc);
+  HBITMAP bm = CreateCompatibleBitmap(hdc, EngineHandle->Graphics->Width(), EngineHandle->Graphics->Height());
+
+  SelectObject(mdc, bm);
+  BitBlt(mdc, 0, 0, EngineHandle->Graphics->Width(), EngineHandle->Graphics->Height(), hdc, 0, 0, SRCCOPY);
+
+  RECT r = { 0, 0, (int)area.Width, (int)area.Height };
+
+  BITMAPINFO bmi;
+  bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+  bmi.bmiHeader.biWidth = EngineHandle->Graphics->Width();
+  bmi.bmiHeader.biHeight = EngineHandle->Graphics->Height();
+  bmi.bmiHeader.biPlanes = 1;
+  bmi.bmiHeader.biBitCount = 32;
+  bmi.bmiHeader.biCompression = BI_RGB;
+
+  BYTE* scanlines = new BYTE[EngineHandle->Graphics->Width() * EngineHandle->Graphics->Height() * 4];
+  GetDIBits(mdc, bm, 0, EngineHandle->Graphics->Height(), scanlines, &bmi, DIB_RGB_COLORS);
+
+  int sourceY = EngineHandle->Graphics->Height() - source.Y;
+  for (unsigned line = 0; line < area.Height; line++)
+  {
+    BYTE* pixelIdx = m_textureData + area.X * 4 + (area.Y + line) * 4 * Width();
+    BYTE* pixelSrc = scanlines + source.X * 4 + (sourceY - line - 1) * 4 * EngineHandle->Graphics->Width();
+    for (unsigned i = 0; i < area.Width; i++)
+    {
+      pixelIdx[0] = pixelSrc[2];
+      pixelIdx[1] = pixelSrc[1];
+      pixelIdx[2] = pixelSrc[0];
+      pixelIdx[3] = 255;
+      pixelIdx += 4;
+      pixelSrc += 4;
+    }
+  }
+
+  delete[] scanlines;
+  DeleteObject(bm);
+  DeleteDC(mdc);
+  ReleaseDC(NULL, hdc);
 }
 
 void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
