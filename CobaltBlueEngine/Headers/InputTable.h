@@ -63,7 +63,7 @@ enum class Inputs {
   W = 0x57,
   X = 0x58,
   Y = 0x59,
-  Z = 0x60,
+  Z = 0x5A,
 };
 
 #endif
