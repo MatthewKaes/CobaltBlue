@@ -27,12 +27,6 @@ void Animation::Play(unsigned frameTime)
   m_frameCount = 0;
 }
 
-void Animation::SelectCell(unsigned X, unsigned Y)
-{
-  CellX = (CellX + X) % m_cellCountX;
-  CellY = (CellY + Y) % m_cellCountY;
-}
-
 unsigned Animation::Width()
 {
   return m_width;
@@ -71,7 +65,7 @@ void Animation::Update(float frameTime)
   }
 
   m_parallax.Ox = m_width * CellX;
-  m_parallax.Oy = m_height * CellY;
+  m_parallax.Oy = m_height * -CellY;
 }
 
 Bitmap* Animation::Bitmap()

@@ -201,6 +201,11 @@ void CobaltEngine::Run(CobaltScene* entryScene)
       m_exit = true;
     }
 
+    if (Input->Triggered(Inputs::F12))
+    {
+      m_exit = true;
+    }
+
     // Scene transitions.
     if (m_nextScene != nullptr)
     {
@@ -216,6 +221,12 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
     // Update Inputs from the last frame
     Input->Frame();
+  }
+
+  if (m_nextScene != nullptr)
+  {
+    m_currentScene->Terminate(Input, Graphics, Audio, Sound, Cache);
+    delete m_currentScene;
   }
 
   return;
