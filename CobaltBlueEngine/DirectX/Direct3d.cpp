@@ -99,7 +99,7 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
   swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
   swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-  swapChainDesc.Flags = 0;
+  swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
   featureLevel = D3D_FEATURE_LEVEL_11_0;
 
   unsigned int creationFlags = 0;

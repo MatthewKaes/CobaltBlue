@@ -6,7 +6,6 @@ CobaltEngine* EngineHandle = 0;
 CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCWSTR appName, bool fullScreen, AntiAlias antiAlias)
 {
   WNDCLASSEX wc;
-  DEVMODE dmScreenSettings;
   int posX, posY;
 
   // Set the scene information
@@ -38,36 +37,12 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   RegisterClassEx(&wc);
 
   // Determine the resolution of the clients desktop screen.
-  int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-  int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+  int screenWidth = graphicsWidth;
+  int screenHeight = graphicsHeight;
 
-  // Setup the screen settings depending on whether it is running in full screen or in windowed mode.
-  m_fullScreenMode = fullScreen;
-  if (m_fullScreenMode)
-  {
-    // If full screen set the screen to maximum size of the users desktop and 32bit.
-    memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
-    dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-    dmScreenSettings.dmPelsWidth = (unsigned long)screenWidth;
-    dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight;
-    dmScreenSettings.dmBitsPerPel = 32;
-    dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
-    // Change the display settings to full screen.
-    ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
-
-    // Set the position of the window to the top left corner.
-    posX = posY = 0;
-  }
-  else
-  {
-    screenWidth = graphicsWidth;
-    screenHeight = graphicsHeight;
-
-    // Place the window in the middle of the screen.
-    posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-    posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
-  }
+  // Place the window in the middle of the screen.
+  posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
+  posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 
   RECT clientSize = { 0, 0, screenWidth, screenHeight };    // set the size, but not the position
   AdjustWindowRect(&clientSize, (WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP), FALSE);    // adjust the size
@@ -91,11 +66,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   SetForegroundWindow(m_hwnd);
   SetFocus(m_hwnd);
 
-  // Hide the mouse cursor.
-  if (fullScreen)
-  {
-    ShowCursor(false);
-  }
+  ShowCursor(false);
 
   // Set Engine Handle
   EngineHandle = this;
@@ -119,10 +90,7 @@ CobaltEngine::~CobaltEngine()
   ShowCursor(true);
 
   // Fix the display settings if leaving full screen mode.
-  if (m_fullScreenMode)
-  {
-    ChangeDisplaySettings(nullptr, 0);
-  }
+  ChangeDisplaySettings(nullptr, 0);
 
   DestroyWindow(m_hwnd);
   m_hwnd = nullptr;
@@ -166,7 +134,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
   // Setup the scene.
   m_exit = false;
   m_currentScene = entryScene;
-  m_currentScene->Start(Input, Graphics, Audio, Sound, Cache);
+  m_currentScene->Start(this, Input, Graphics, Audio, Sound, Cache);
   m_nextScene = nullptr;
 
   while (!m_exit)
@@ -209,10 +177,10 @@ void CobaltEngine::Run(CobaltScene* entryScene)
     // Scene transitions.
     if (m_nextScene != nullptr)
     {
-      m_currentScene->Terminate(Input, Graphics, Audio, Sound, Cache);
+      m_currentScene->Terminate(this, Input, Graphics, Audio, Sound, Cache);
       delete m_currentScene;
       m_currentScene = m_nextScene;
-      m_currentScene->Start(Input, Graphics, Audio, Sound, Cache);
+      m_currentScene->Start(this, Input, Graphics, Audio, Sound, Cache);
       m_nextScene = nullptr;
     }
 
@@ -225,7 +193,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
   if (m_nextScene != nullptr)
   {
-    m_currentScene->Terminate(Input, Graphics, Audio, Sound, Cache);
+    m_currentScene->Terminate(this, Input, Graphics, Audio, Sound, Cache);
     delete m_currentScene;
   }
 
@@ -234,7 +202,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
 
 bool CobaltEngine::Frame(float frameTime)
 {
-  m_currentScene->Update(Input, Graphics, Audio, Sound, Cache);
+  m_currentScene->Update(this, Input, Graphics, Audio, Sound, Cache);
 
   Audio->Frame(frameTime);
   return Graphics->Frame(frameTime);

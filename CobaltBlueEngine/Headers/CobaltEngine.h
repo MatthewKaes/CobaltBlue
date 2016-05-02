@@ -46,7 +46,6 @@ private:
   LPCWSTR m_appName;
   HINSTANCE m_hinstance;
   HWND m_hwnd;
-  bool m_fullScreenMode;
   bool m_exit;
 
 };
