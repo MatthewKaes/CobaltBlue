@@ -31,6 +31,7 @@ public:
   void DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic);
   void DrawScreen(Rect area, Rect source);
   void Blend(Bitmap* bitmap, Rect area, Point target);
+  void Blt(Bitmap* bitmap, Rect area, Point target);
   void Blur(unsigned size);
   void FastBlur(unsigned size);
   void Greyscale();

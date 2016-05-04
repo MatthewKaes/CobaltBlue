@@ -445,6 +445,39 @@ void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
   }
 }
 
+void Bitmap::Blt(Bitmap* bitmap, Rect area, Point target)
+{
+  if (!bitmap)
+    return;
+
+  if (area.X < 0)
+    area.X = 0;
+
+  if (area.Y < 0)
+    area.Y = 0;
+
+  if (area.Width + area.X > bitmap->Width())
+    area.Width = bitmap->Width() - area.X;
+
+  if (area.Height + area.Y > bitmap->Height())
+    area.Height = bitmap->Height() - area.Y;
+
+  if (area.Width + target.X > Width())
+    area.Width = Width() - target.X;
+
+  if (area.Height + target.Y > Height())
+    area.Height = Height() - target.Y;
+
+  m_dirty = true;
+
+  for (unsigned line = 0; line < area.Height; line++)
+  {
+    BYTE* pixelIdx = m_textureData + target.X * 4 + (target.Y + line) * 4 * Width();
+    BYTE* pixelSrc = bitmap->m_textureData + area.X * 4 + (area.Y + line) * 4 * bitmap->Width();
+    memcpy(pixelIdx, pixelSrc, area.Width * 4);
+  }
+}
+
 void Bitmap::Blur(unsigned size)
 {
   if (!size)
