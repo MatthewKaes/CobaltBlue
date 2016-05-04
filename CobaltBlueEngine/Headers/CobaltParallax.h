@@ -9,7 +9,7 @@ public:
   Parallax();
   ~Parallax();
 
-  void Create(LPWSTR textureFile, unsigned width, unsigned height);
+  void Create(LPCWSTR textureFile, unsigned width, unsigned height);
   void Create(unsigned width, unsigned height, unsigned imgWidth, unsigned imgHeight);
   unsigned ImgWidth();
   unsigned ImgHeight();

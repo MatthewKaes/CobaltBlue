@@ -3,7 +3,7 @@
 
 extern std::unordered_set<Model2D*> g_updateListings;
 
-void Animation::Create(LPWSTR textureFile, unsigned cellsX, unsigned cellsY)
+void Animation::Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY)
 {
   g_updateListings.insert(this);
   m_parallax.Create(textureFile, 1, 1);

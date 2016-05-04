@@ -5,7 +5,7 @@
 
 class Animation : public Model2D {
 public:
-  void Create(LPWSTR textureFile, unsigned cellsX, unsigned cellsY);
+  void Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY);
   void Pause();
   void Play(unsigned frameTime);
   unsigned Width();
@@ -13,8 +13,6 @@ public:
   void Update(float frameTime);
   Bitmap* Bitmap();
 
-  unsigned X;
-  unsigned Y;
   bool YRoll;
   int CellX;
   int CellY;

@@ -23,7 +23,7 @@ Parallax::~Parallax()
   Release();
 }
 
-void Parallax::Create(LPWSTR textureFile, unsigned width, unsigned height)
+void Parallax::Create(LPCWSTR textureFile, unsigned width, unsigned height)
 {
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
