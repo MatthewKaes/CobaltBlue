@@ -64,6 +64,8 @@ enum class Inputs {
   X = 0x58,
   Y = 0x59,
   Z = 0x5A,
+  MouseLeft = 0xF0,
+  MouseRight = 0xF1,
 };
 
 #endif

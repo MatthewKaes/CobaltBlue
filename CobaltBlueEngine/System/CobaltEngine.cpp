@@ -1,4 +1,5 @@
 #include "CobaltEngine.h"
+#include <Windowsx.h>
 
 // Library Global
 CobaltEngine* EngineHandle = 0;
@@ -245,6 +246,35 @@ LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wpara
     case WM_KEYUP:
     {
       Input->KeyUp((unsigned int)wparam);
+      return 0;
+    }
+    case WM_MOUSEMOVE:
+    {
+      Input->MousePos(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+      return 0;
+    }
+    case WM_LBUTTONDOWN:
+    {
+      Input->MousePos(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+      Input->KeyDown((unsigned int)Inputs::MouseLeft);
+      return 0;
+    }
+    case WM_LBUTTONUP:
+    {
+      Input->MousePos(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+      Input->KeyUp((unsigned int)Inputs::MouseLeft);
+      return 0;
+    }
+    case WM_RBUTTONDOWN:
+    {
+      Input->MousePos(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+      Input->KeyDown((unsigned int)Inputs::MouseRight);
+      return 0;
+    }
+    case WM_RBUTTONUP:
+    {
+      Input->MousePos(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+      Input->KeyUp((unsigned int)Inputs::MouseRight);
       return 0;
     }
     case COBALT_AUDIO:

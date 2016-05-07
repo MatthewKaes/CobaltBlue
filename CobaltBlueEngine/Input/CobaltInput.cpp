@@ -23,6 +23,17 @@ bool CobaltInput::Released(Inputs key)
   return !m_keys[(int)key] && m_lastKeys[(int)key];
 }
 
+Point CobaltInput::MousePos()
+{
+  return m_mousePoint;
+}
+
+void CobaltInput::MousePos(unsigned x, unsigned y)
+{
+  m_mousePoint.X = x;
+  m_mousePoint.Y = y;
+}
+
 bool CobaltInput::AnyKey()
 {
   for (int i = 0; i < 256; i++)
