@@ -13,6 +13,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   m_currentScene = nullptr;
   m_nextScene = nullptr;
   m_exit = false;
+  m_trackingMouse = false;
 
   // Get the instance of this application.
   m_hinstance = GetModuleHandle(NULL);
@@ -248,8 +249,26 @@ LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wpara
       Input->KeyUp((unsigned int)wparam);
       return 0;
     }
+    case WM_MOUSELEAVE:
+    {
+      Input->KeyUp((unsigned int)Inputs::MouseLeft);
+      Input->KeyUp((unsigned int)Inputs::MouseRight);
+      m_trackingMouse = false;
+      return 0;
+    }
     case WM_MOUSEMOVE:
     {
+      if (!m_trackingMouse)
+      {
+        TRACKMOUSEEVENT mouseEvent;
+        ZeroMemory(&mouseEvent, sizeof(TRACKMOUSEEVENT));
+        mouseEvent.cbSize = sizeof(TRACKMOUSEEVENT);
+        mouseEvent.dwFlags = TME_LEAVE;
+        mouseEvent.hwndTrack = m_hwnd;
+        BOOL ret = TrackMouseEvent(&mouseEvent);
+        m_trackingMouse = true;
+      }
+
       Input->MousePos(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
       return 0;
     }

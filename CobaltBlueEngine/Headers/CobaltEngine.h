@@ -46,6 +46,7 @@ private:
   LPCWSTR m_appName;
   HINSTANCE m_hinstance;
   HWND m_hwnd;
+  bool m_trackingMouse;
   bool m_exit;
 
 };
