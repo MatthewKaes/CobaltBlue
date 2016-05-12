@@ -52,6 +52,11 @@ Rect::Rect(int x, int y, unsigned width, unsigned height)
   Height = height;
 }
 
+bool Rect::Contains(Point pt)
+{
+  return pt.X >= X && pt.X < X + (int)Width && pt.Y >= Y && pt.Y < Y + (int)Height;
+}
+
 void Model2D::Flash(Color color, float duration)
 {
   m_colorSrc = Tint;

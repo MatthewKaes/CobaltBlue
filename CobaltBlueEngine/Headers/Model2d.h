@@ -27,6 +27,7 @@ class Rect {
 public:
   Rect();
   Rect(int x, int y, unsigned width, unsigned height);
+  bool Contains(Point pt);
   int X;
   int Y;
   unsigned Width;
