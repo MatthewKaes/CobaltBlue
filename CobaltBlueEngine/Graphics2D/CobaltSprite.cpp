@@ -21,7 +21,7 @@ Sprite::~Sprite()
   Release();
 }
 
-void Sprite::Create(LPWSTR textureFile)
+void Sprite::Create(LPCWSTR textureFile)
 {
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
@@ -194,6 +194,11 @@ void Sprite::Render()
 int Sprite::GetIndexCount()
 {
   return IndexCount;
+}
+
+D3DXVECTOR2 Sprite::Dimensions()
+{
+  return D3DXVECTOR2((float)Width(), (float)Height());
 }
 
 ID3D11ShaderResourceView* Sprite::GetTexture()

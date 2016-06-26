@@ -261,6 +261,11 @@ ID3D11ShaderResourceView* Parallax::GetTexture()
   return m_bitmap->GetTexture();
 }
 
+D3DXVECTOR2 Parallax::Dimensions()
+{
+  return D3DXVECTOR2((float)Width, (float)Height);
+}
+
 Bitmap* Parallax::Bitmap()
 {
   return m_bitmap;

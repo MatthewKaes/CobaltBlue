@@ -17,6 +17,7 @@ public:
   void Render();
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
+  D3DXVECTOR2 Dimensions();
   Bitmap* Bitmap();
 
   int Ox;

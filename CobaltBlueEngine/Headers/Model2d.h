@@ -40,6 +40,7 @@ public:
   virtual void Update(float frameTime) = 0;
   virtual void Render() { };
   virtual int GetIndexCount() { return 0; };
+  virtual D3DXVECTOR2 Dimensions() { return D3DXVECTOR2(); };
   virtual ID3D11ShaderResourceView* GetTexture() { return nullptr; };
 
   void Flash(Color color, float duration);

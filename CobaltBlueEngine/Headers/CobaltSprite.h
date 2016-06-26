@@ -9,7 +9,7 @@ public:
   Sprite();
   ~Sprite();
 
-  void Create(LPWSTR textureFile);
+  void Create(LPCWSTR textureFile);
   void Create(unsigned width, unsigned height);
   unsigned Width();
   unsigned Height();
@@ -17,6 +17,7 @@ public:
   void Render();
   int GetIndexCount();
   ID3D11ShaderResourceView* GetTexture();
+  D3DXVECTOR2 Dimensions();
   Bitmap* Bitmap();
 
 private:

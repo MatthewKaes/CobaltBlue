@@ -89,11 +89,11 @@ void ShaderCore::Shutdown()
   }
 }
 
-bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, ID3D11ShaderResourceView* texture)
+bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
 {
 
   // Set the shader parameters that it will use for rendering.
-  SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, texture);
+  SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, dimensions, texture);
 
   // Now render the prepared buffers with the shader.
   RenderShader2D(context, indexCount);
@@ -402,7 +402,7 @@ void ShaderCore::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
   MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 }
 
-void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, ID3D11ShaderResourceView* texture)
+void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
 {
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   BufferType2D* dataPtr;
@@ -425,6 +425,7 @@ void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX&
   dataPtr->projection = projectionMatrix;
   dataPtr->trans = translate;
   dataPtr->color = color;
+  dataPtr->metrics = dimensions;
 
   // Unlock the constant buffer.
   context->Unmap(m_2DmatrixBuffer, 0);
