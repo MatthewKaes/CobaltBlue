@@ -13,7 +13,7 @@ Sprite::Sprite()
   m_vertexBuffer = 0;
   X = 0;
   Y = 0;
-  Z = 0.0f;
+  Z = 0;
 }
 
 Sprite::~Sprite()
@@ -54,11 +54,11 @@ void Sprite::Update(float frameTime)
 
   if (Z > (SCREEN_DEPTH) / 2.0f - 1.0f)
   {
-    Z = (SCREEN_DEPTH) / 2.0f - 1.0f;
+    Z = (int)((SCREEN_DEPTH) / 2.0f - 1.0f);
   }
   else if (Z < -(SCREEN_DEPTH) / 2.0f - 1.0f)
   {
-    Z = -(SCREEN_DEPTH) / 2.0f - 1.0f;
+    Z = -(int)((SCREEN_DEPTH) / 2.0f - 1.0f);
   }
 }
 

@@ -108,8 +108,9 @@ bool CobaltGraphics::Render(float frameTime)
     model->Render();
 
     m_Shader.Render2D(
-      DirectX.GetDeviceContext(), 
-      model->GetIndexCount(), 
+      DirectX.GetDeviceContext(),
+      model->GetIndexCount(),
+      model->Light != Lighting::None,
       worldMatrix, viewMatrix, 
       orthoMatrix,
       D3DXVECTOR4((float)model->X, (float)-model->Y, 0.0f, 0.0f),

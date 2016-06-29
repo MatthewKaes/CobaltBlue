@@ -4,6 +4,11 @@
 #include <D3DX11.h>
 #include <D3DX10math.h>
 
+enum class Lighting {
+  None,
+  Dynamic
+};
+
 class Color {
 public:
   Color();
@@ -44,10 +49,11 @@ public:
   virtual ID3D11ShaderResourceView* GetTexture() { return nullptr; };
 
   void Flash(Color color, float duration);
-  float Z;
+  int Z;
   int X;
   int Y;
   Color Tint;
+  Lighting Light = Lighting::None;
 
 protected:
   void Frame(float frameTime);

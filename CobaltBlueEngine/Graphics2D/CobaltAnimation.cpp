@@ -27,6 +27,11 @@ void Animation::Play(unsigned frameTime)
   m_frameCount = 0;
 }
 
+bool Animation::Playing()
+{
+  return m_frameTime != 0;
+}
+
 unsigned Animation::Width()
 {
   return m_width;
@@ -64,6 +69,9 @@ void Animation::Update(float frameTime)
     }
   }
 
+  m_parallax.Tint = Tint;
+  m_parallax.Light = Light;
+  m_parallax.Z = Z;
   m_parallax.Ox = m_width * CellX;
   m_parallax.Oy = m_height * -CellY;
 }

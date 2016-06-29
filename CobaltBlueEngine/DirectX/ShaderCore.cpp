@@ -20,7 +20,8 @@ ShaderCore::~ShaderCore()
 
 void ShaderCore::Initialize(ID3D11Device* device, HWND window)
 {
-  InitializeShader2D(device, window, L"Shaders/Render2D.vs", L"Shaders/Render2D.ps");
+  InitializeShader2D(device, window, L"Shaders/Render2D.vs", L"Shaders/Render2D.ps", &m_2DpixelShader, &m_2DvertexShader);
+  InitializeShader2D(device, window, L"Shaders/Render2DL.vs", L"Shaders/Render2DL.ps", &m_2DpixelShaderLight, &m_2DvertexShaderLight);
   InitializeShader3D(device, window, L"Shaders/Render3D.vs", L"Shaders/Render3D.ps");
 }
 
@@ -89,14 +90,17 @@ void ShaderCore::Shutdown()
   }
 }
 
-bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
+bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, bool light, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
 {
 
   // Set the shader parameters that it will use for rendering.
   SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, dimensions, texture);
 
   // Now render the prepared buffers with the shader.
-  RenderShader2D(context, indexCount);
+  if (light)
+    RenderShader2D(context, indexCount, m_2DpixelShaderLight, m_2DvertexShaderLight);
+  else
+    RenderShader2D(context, indexCount, m_2DpixelShader, m_2DvertexShader);
 
   return true;
 }
@@ -113,7 +117,7 @@ bool ShaderCore::Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATR
 	return true;
 }
 
-void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* vertexShader, WCHAR* pixelShader)
+void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* vertexFile, WCHAR* pixelFile, ID3D11PixelShader** pixelShader, ID3D11VertexShader** vectorShader)
 {
   HRESULT result;
   ID3D10Blob* errorMessage;
@@ -130,18 +134,18 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
   pixelShaderBuffer = 0;
 
   // Compile the vertex shader code.
-  result = D3DX11CompileFromFile(vertexShader, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &vertexShaderBuffer, &errorMessage, 0);
+  result = D3DX11CompileFromFile(vertexFile, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &vertexShaderBuffer, &errorMessage, 0);
   if (FAILED(result))
   {
     // If the shader failed to compile it should have writen something to the error message.
     if (errorMessage)
     {
-      OutputShaderErrorMessage(errorMessage, window, vertexShader);
+      OutputShaderErrorMessage(errorMessage, window, vertexFile);
     }
     // If there was  nothing in the error message then it simply could not find the shader file itself.
     else
     {
-      MessageBox(window, vertexShader, L"Missing Shader File", MB_OK);
+      MessageBox(window, vertexFile, L"Missing Shader File", MB_OK);
       ExitProcess(-1);
     }
 
@@ -149,18 +153,18 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
   }
 
   // Compile the pixel shader code.
-  result = D3DX11CompileFromFile(pixelShader, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &pixelShaderBuffer, &errorMessage, 0);
+  result = D3DX11CompileFromFile(pixelFile, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 0, &pixelShaderBuffer, &errorMessage, 0);
   if (FAILED(result))
   {
     // If the shader failed to compile it should have writen something to the error message.
     if (errorMessage)
     {
-      OutputShaderErrorMessage(errorMessage, window, pixelShader);
+      OutputShaderErrorMessage(errorMessage, window, pixelFile);
     }
     // If there was nothing in the error message then it simply could not find the file itself.
     else
     {
-      MessageBox(window, pixelShader, L"Missing Shader File", MB_OK);
+      MessageBox(window, pixelFile, L"Missing Shader File", MB_OK);
       ExitProcess(-1);
     }
 
@@ -168,10 +172,10 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
   }
 
   // Create the vertex shader from the buffer.
-  device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_2DvertexShader);
+  device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, vectorShader);
 
   // Create the pixel shader from the buffer.
-  device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_2DpixelShader);
+  device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, pixelShader);
 
   // Create the vertex input layout description.
   // This setup needs to match the VertexType stucture in the ModelClass and in the shader.
@@ -400,6 +404,8 @@ void ShaderCore::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
 
   // Pop a message up on the screen to notify the user to check the text file for compile errors.
   MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
+
+  ExitProcess(-1);
 }
 
 void ShaderCore::SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
@@ -475,14 +481,14 @@ void ShaderCore::SetShaderParameters3D(ID3D11DeviceContext* context, D3DXMATRIX&
   context->PSSetShaderResources(0, 1, &texture);
 }
 
-void ShaderCore::RenderShader2D(ID3D11DeviceContext* context, int indexCount)
+void ShaderCore::RenderShader2D(ID3D11DeviceContext* context, int indexCount, ID3D11PixelShader* pixelShader, ID3D11VertexShader* vectorShader)
 {
   // Set the vertex input layout.
   context->IASetInputLayout(m_layout);
 
   // Set the vertex and pixel shaders that will be used to render this triangle.
-  context->VSSetShader(m_2DvertexShader, NULL, 0);
-  context->PSSetShader(m_2DpixelShader, NULL, 0);
+  context->VSSetShader(vectorShader, NULL, 0);
+  context->PSSetShader(pixelShader, NULL, 0);
 
   // Set the sampler state in the pixel shader.
   context->PSSetSamplers(0, 1, &m_2DsampleState);

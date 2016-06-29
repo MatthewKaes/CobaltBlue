@@ -99,6 +99,8 @@
   <ItemGroup>
     <None Include="Shaders\Render2D.ps" />
     <None Include="Shaders\Render2D.vs" />
+    <None Include="Shaders\Render2DL.ps" />
+    <None Include="Shaders\Render2DL.vs" />
     <None Include="Shaders\Render3D.ps" />
     <None Include="Shaders\Render3D.vs" />
   </ItemGroup>

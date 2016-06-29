@@ -160,5 +160,11 @@
     <None Include="Shaders\Render3D.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Render2DL.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Render2DL.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

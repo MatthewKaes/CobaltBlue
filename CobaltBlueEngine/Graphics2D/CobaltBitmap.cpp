@@ -60,6 +60,12 @@ void Bitmap::Release()
     m_textureView->Release();
     m_textureView = 0;
   }
+
+  if (m_textureData)
+  {
+    delete[] m_textureData;
+    m_textureData = 0;
+  }
 }
 
 void Bitmap::SetTextColor(Color textColor)

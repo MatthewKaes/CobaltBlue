@@ -10,7 +10,7 @@
 #include <D3DX11.h>
 #include <D3DX10math.h>
 
-const float SCREEN_DEPTH = 1002.0f;
+const float SCREEN_DEPTH = 2002.0f;
 const float SCREEN_NEAR = 0.1f;
 
 #define WINDOW_WIDTH_OFFSET = 6;

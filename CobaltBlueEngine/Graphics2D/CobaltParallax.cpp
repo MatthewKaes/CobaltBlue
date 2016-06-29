@@ -13,7 +13,7 @@ Parallax::Parallax()
   m_vertexBuffer = 0;
   X = 0;
   Y = 0;
-  Z = 0.0f;
+  Z = 0;
   Ox = 0;
   Oy = 0;
 }
@@ -25,6 +25,9 @@ Parallax::~Parallax()
 
 void Parallax::Create(LPCWSTR textureFile, unsigned width, unsigned height)
 {
+  if (m_bitmap)
+    Release();
+
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
 
@@ -40,6 +43,9 @@ void Parallax::Create(LPCWSTR textureFile, unsigned width, unsigned height)
 
 void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsigned imgHeight)
 {
+  if (m_bitmap)
+    Release();
+
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
   m_prevWidth = Width = width;
@@ -61,11 +67,11 @@ void Parallax::Update(float frameTime)
 
   if (Z > (SCREEN_DEPTH) / 2.0f - 1.0f)
   {
-    Z = (SCREEN_DEPTH) / 2.0f - 1.0f;
+    Z = (int)((SCREEN_DEPTH) / 2.0f - 1.0f);
   }
   else if (Z < -(SCREEN_DEPTH) / 2.0f - 1.0f)
   {
-    Z = -(SCREEN_DEPTH) / 2.0f - 1.0f;
+    Z = (int)(-(SCREEN_DEPTH) / 2.0f - 1.0f);
   }
 
   if (m_prevOx == Ox && m_prevOy == Oy &&
@@ -144,6 +150,18 @@ void Parallax::Release()
     m_bitmap->Release();
     delete m_bitmap;
     m_bitmap = 0;
+  }
+
+  if (m_vertexBuffer)
+  {
+    m_vertexBuffer->Release();
+    m_vertexBuffer = 0;
+  }
+
+  if (m_indexBuffer)
+  {
+    m_indexBuffer->Release();
+    m_indexBuffer = 0;
   }
 }
 

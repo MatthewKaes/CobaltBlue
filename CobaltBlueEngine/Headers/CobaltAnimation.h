@@ -8,6 +8,7 @@ public:
   void Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY);
   void Pause();
   void Play(unsigned frameTime);
+  bool Playing();
   unsigned Width();
   unsigned Height();
   void Update(float frameTime);
