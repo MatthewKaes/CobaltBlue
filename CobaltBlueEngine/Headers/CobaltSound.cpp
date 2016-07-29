@@ -5,6 +5,7 @@
 #include "CobaltSound.h"
 #include "Dshow.h"
 
+
 CobaltSound::CobaltSound(HWND window)
 {
   m_window = window;
@@ -20,15 +21,19 @@ CobaltSound::~CobaltSound()
 
 void CobaltSound::Play(LPCWSTR filename, float volume)
 {
-  if (m_audioGraphs.find(filename) == m_audioGraphs.end())
-  {
-    LoadSound(filename);
-  }
+  LoadSound(filename);
 
   SoundEffect* SE = m_audioGraphs[filename];
   SetVolume(volume, SE->m_audioController);
   StartPosition(SE->m_mediaSeeker);
-  SE->m_mediaController->Run();
+  if (SE->m_mediaController->Run() == S_FALSE)
+  {
+    FILTER_STATE fs;
+    HRESULT hr = SE->m_mediaController->GetState(100, (OAFilterState*)&fs);
+
+    if (fs == State_Running)
+      Play(filename, volume);
+  }
 }
 
 void CobaltSound::SetVolume(float vol, IBasicAudio* audioController)
@@ -44,6 +49,11 @@ void CobaltSound::StartPosition(IMediaSeeking* mediaSeeker)
 
 void CobaltSound::LoadSound(LPCWSTR filename)
 {
+  if (m_audioGraphs.find(filename) != m_audioGraphs.end())
+  {
+    return;
+  }
+
   if (!std::experimental::filesystem::exists(filename))
   {
     std::wstring message(L"Failed to load audio file: '");

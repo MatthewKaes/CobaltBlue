@@ -16,6 +16,7 @@ public:
   ~CobaltSound();
 
   void Play(LPCWSTR filename, float volume);
+  void LoadSound(LPCWSTR filename);
 
 private:
   class SoundEffect {
@@ -29,7 +30,6 @@ private:
     IMediaSeeking* m_mediaSeeker;
   };
 
-  void LoadSound(LPCWSTR filename);
   void SetVolume(float vol, IBasicAudio* audioController);
   void StartPosition(IMediaSeeking* mediaSeeker);
 

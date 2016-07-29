@@ -52,6 +52,7 @@ public:
   int Z;
   int X;
   int Y;
+  float Zoom = 1.0f;
   Color Tint;
   Lighting Light = Lighting::None;
 

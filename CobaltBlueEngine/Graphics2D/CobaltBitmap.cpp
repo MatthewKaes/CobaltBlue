@@ -453,7 +453,7 @@ void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
 
 void Bitmap::Blt(Bitmap* bitmap, Rect area, Point target)
 {
-  if (!bitmap)
+  if (!bitmap || area.X > (int)bitmap->Width() || area.Y > (int)bitmap->Height())
     return;
 
   if (area.X < 0)

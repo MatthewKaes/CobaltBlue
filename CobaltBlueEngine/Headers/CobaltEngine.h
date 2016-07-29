@@ -17,7 +17,7 @@ public:
   ~CobaltEngine();
   void SetFPS(unsigned fps);
   void Run(CobaltScene* entryScene);
-  bool Frame(float frameTime);
+  bool Frame(float frameTime, bool skipScene);
   void Exit();
   void GotoScene(CobaltScene* nextScene);
 

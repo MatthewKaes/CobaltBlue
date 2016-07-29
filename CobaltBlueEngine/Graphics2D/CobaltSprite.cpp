@@ -23,6 +23,7 @@ Sprite::~Sprite()
 
 void Sprite::Create(LPCWSTR textureFile)
 {
+  Release();
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
 
@@ -35,6 +36,7 @@ void Sprite::Create(LPCWSTR textureFile)
 
 void Sprite::Create(unsigned width, unsigned height)
 {
+  Release();
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
 
@@ -74,13 +76,13 @@ unsigned Sprite::Height()
 
 void Sprite::Release()
 {
-  // Remove form the bitmap listing.
-  g_renderListings.erase(std::find(g_renderListings.begin(), g_renderListings.end(), this));
-  g_updateListings.erase(this);
-
   // Release the texture object.
   if (m_bitmap)
   {
+    // Remove form the bitmap listing.
+    g_renderListings.erase(std::find(g_renderListings.begin(), g_renderListings.end(), this));
+    g_updateListings.erase(this);
+
     m_bitmap->Release();
     delete m_bitmap;
     m_bitmap = 0;

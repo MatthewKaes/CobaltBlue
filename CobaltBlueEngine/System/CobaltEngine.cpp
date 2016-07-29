@@ -130,7 +130,6 @@ void CobaltEngine::SetFPS(unsigned fps)
 void CobaltEngine::Run(CobaltScene* entryScene)
 {
   MSG msg;
-
   ZeroMemory(&msg, sizeof(MSG));
 
   // Setup the scene.
@@ -166,7 +165,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
     }
 
     // Process the frame.
-    if (!Frame(m_sync.FrameTime()))
+    if (!Frame(m_sync.FrameTime(), false))
     {
       m_exit = true;
     }
@@ -202,7 +201,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
   return;
 }
 
-bool CobaltEngine::Frame(float frameTime)
+bool CobaltEngine::Frame(float frameTime, bool skipScene)
 {
   m_currentScene->Update(this, Input, Graphics, Audio, Sound, Cache);
 

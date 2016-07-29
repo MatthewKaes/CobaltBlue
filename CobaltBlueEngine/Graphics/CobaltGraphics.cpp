@@ -107,6 +107,7 @@ bool CobaltGraphics::Render(float frameTime)
 
     model->Render();
 
+    viewMatrix._11 = viewMatrix._22 = model->Zoom;
     m_Shader.Render2D(
       DirectX.GetDeviceContext(),
       model->GetIndexCount(),
