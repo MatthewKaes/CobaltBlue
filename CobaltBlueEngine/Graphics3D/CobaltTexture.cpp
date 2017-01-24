@@ -11,7 +11,7 @@ CobaltTexture::CobaltTexture()
 
 CobaltTexture::~CobaltTexture()
 {
-  Shutdown();
+  Release();
 }
 
 bool CobaltTexture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename, TextureType usage)
@@ -92,7 +92,7 @@ bool CobaltTexture::Initialize(ID3D11Device* device, ID3D11DeviceContext* contex
   return true;
 }
 
-void CobaltTexture::Shutdown()
+void CobaltTexture::Release()
 {
   // Release the texture resource.
   if (m_textureView)

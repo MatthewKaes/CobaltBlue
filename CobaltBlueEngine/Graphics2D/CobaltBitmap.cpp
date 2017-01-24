@@ -3,10 +3,10 @@
 
 extern CobaltEngine* EngineHandle;
 
-#define KERNELSIZE 4
+#define KERNELSIZE 8
 
 const Color DefaultColor = Color(255, 255, 255);
-const Color DefaultOutline = Color(0, 0, 0, 150);
+const Color DefaultOutline = Color(0, 0, 0, 215);
 
 Bitmap::Bitmap()
 {
@@ -113,6 +113,12 @@ void Bitmap::Fill(Color color)
 
 void Bitmap::Fill(Rect area, Color color)
 {
+  if (area.X > (int)Width())
+    return;
+
+  if (area.Y > (int)Height())
+    return;
+
   if (area.X < 0)
     area.X = 0;
 
@@ -133,8 +139,8 @@ void Bitmap::Fill(Rect area, Color color)
     for (unsigned pixel = 0; pixel < area.Width; pixel++)
     {
       pixelIdx[0] = color.Red;
-      pixelIdx[1] = color.Blue;
-      pixelIdx[2] = color.Green;
+      pixelIdx[1] = color.Green;
+      pixelIdx[2] = color.Blue;
       pixelIdx[3] = color.Alpha;
       pixelIdx += 4;
     }
@@ -212,7 +218,7 @@ void Bitmap::Gradient(Rect area, Color color1, Color color2, bool horz)
 
 void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area)
 {
-  DrawText(text, size, area, false, false);
+  DrawText(text, size, area, true, false);
 }
 
 void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic)
@@ -286,7 +292,10 @@ void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool it
           if (scanlinesBlocks[(area.Height - y - 1) * area.Width + x])
           {
             int dist = xdiff * xdiff + ydiff * ydiff;
-            if (dist < distSqr)
+
+            int* pixQuad = scanlinesBlocks + (area.Height - y - 1) * area.Width + x;
+            float alphaVal = ((BYTE*)pixQuad)[0] * ((BYTE*)pixQuad)[1] * ((BYTE*)pixQuad)[2] / 16581375.0f;
+            if (dist < distSqr && alphaVal >= 0.2f)
               distSqr = dist;
 
             shaded = true;
@@ -298,23 +307,24 @@ void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool it
 
       if (shaded)
       {
-        float mod = 1.0f;
-        for (int i = 2; i < distSqr; i += 2)
-          mod *= 1.45f;
+        float mod = 0.8f;
+        for (int i = 4; i < distSqr; i += 1)
+          mod *= 1.38f;
 
-        float pixelAlpha = m_outlineColor.Alpha / (255.0f * mod);
-        pixelIdx[0] = (BYTE)(m_outlineColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
-        pixelIdx[1] = (BYTE)(m_outlineColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
-        pixelIdx[2] = (BYTE)(m_outlineColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);
-        pixelIdx[3] = (BYTE)(min(255 * pixelAlpha + (1 - pixelAlpha) * pixelIdx[3], 255));
+        if (mod > 0.05f)
+        {
+          float pixelAlpha = m_outlineColor.Alpha / max(255.0f * mod, 255.0f);
+          pixelIdx[0] = (BYTE)(m_outlineColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
+          pixelIdx[1] = (BYTE)(m_outlineColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
+          pixelIdx[2] = (BYTE)(m_outlineColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);
+          pixelIdx[3] = (BYTE)(min(255 * pixelAlpha + (1 - pixelAlpha) * pixelIdx[3], 255));
+        }
       }
 
       if (*rawQuad)
       {
         float pixelAlpha = (float)m_textColor.Alpha * pixelSrc[0] * pixelSrc[1] * pixelSrc[2] / 4228250625.0f;
 
-        // Text is blury as a result of AA. Add a factor to sharpen text.
-        pixelAlpha = min(pixelAlpha * 1.15f, 1.0f);
         pixelIdx[0] = (BYTE)(m_textColor.Red * pixelAlpha + (1 - pixelAlpha) * pixelIdx[0]);
         pixelIdx[1] = (BYTE)(m_textColor.Green * pixelAlpha + (1 - pixelAlpha) * pixelIdx[1]);
         pixelIdx[2] = (BYTE)(m_textColor.Blue * pixelAlpha + (1 - pixelAlpha) * pixelIdx[2]);

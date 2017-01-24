@@ -6,6 +6,7 @@
 
 #include "Direct3d.h"
 #include "ShaderCore.h"
+#include "TextureRender.h"
 #include "Model3d.h"
 #include "Model2d.h"
 
@@ -16,7 +17,7 @@ class CobaltGraphics
 {
 public:
   bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
-  void Shutdown();
+  void Release();
   bool Frame(float frameTime);
   unsigned Width();
   unsigned Height();
@@ -26,6 +27,7 @@ public:
 
   CobaltCamera Camera;
   Direct3D DirectX;
+  Color Illumination;
 
 private:
   bool Render(float frameTime);
@@ -34,6 +36,8 @@ private:
   bool m_full;
   HWND m_window;
   ShaderCore m_Shader;
+  TextureRender m_finalTexture;
+  TextureRender m_lightTexture;
 };
 
 #endif

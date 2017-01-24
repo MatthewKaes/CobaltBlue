@@ -3,6 +3,7 @@
 
 #include "CobaltEngine.h"
 #define COBALTSCENE CobaltEngine* Engine, CobaltInput* Input, CobaltGraphics* Graphics, CobaltAudio* Audio, CobaltSound* Sound, CobaltCache* Cache
+#define COBALTCALL Engine, Input, Graphics, Audio, Sound, Cache
 
 class CobaltScene {
 public:

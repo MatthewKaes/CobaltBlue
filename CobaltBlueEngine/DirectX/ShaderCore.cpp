@@ -15,17 +15,16 @@ ShaderCore::ShaderCore()
 
 ShaderCore::~ShaderCore()
 {
-  Shutdown();
+  Release();
 }
 
 void ShaderCore::Initialize(ID3D11Device* device, HWND window)
 {
   InitializeShader2D(device, window, L"Shaders/Render2D.vs", L"Shaders/Render2D.ps", &m_2DpixelShader, &m_2DvertexShader);
-  InitializeShader2D(device, window, L"Shaders/Render2DL.vs", L"Shaders/Render2DL.ps", &m_2DpixelShaderLight, &m_2DvertexShaderLight);
   InitializeShader3D(device, window, L"Shaders/Render3D.vs", L"Shaders/Render3D.ps");
 }
 
-void ShaderCore::Shutdown()
+void ShaderCore::Release()
 {
   // Release the matrix constant buffer.
   if (m_2DmatrixBuffer)
@@ -90,17 +89,14 @@ void ShaderCore::Shutdown()
   }
 }
 
-bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, bool light, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
+bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
 {
 
   // Set the shader parameters that it will use for rendering.
   SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, dimensions, texture);
 
   // Now render the prepared buffers with the shader.
-  if (light)
-    RenderShader2D(context, indexCount, m_2DpixelShaderLight, m_2DvertexShaderLight);
-  else
-    RenderShader2D(context, indexCount, m_2DpixelShader, m_2DvertexShader);
+  RenderShader2D(context, indexCount, m_2DpixelShader, m_2DvertexShader);
 
   return true;
 }

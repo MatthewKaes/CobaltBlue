@@ -29,10 +29,13 @@ public:
   Direct3D();
 
   bool Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear, AntiAlias antiAlias);
-  void Shutdown();
+  void Release();
 
   void BeginScene(float red, float green, float blue, float alpha);
   void EndScene();
+  void SetAlphaBlend();
+  void SetAddBlend();
+  void SetMulBlend();
 
   ID3D11Device* GetDevice();
   ID3D11DeviceContext* GetDeviceContext();
@@ -41,10 +44,12 @@ public:
   void GetWorldMatrix(D3DXMATRIX& worldMatrix);
   void GetOrthoMatrix(D3DXMATRIX& orthoMatrix);
   void GetVideoCardInfo(char*, int&);
+  ID3D11DepthStencilView* GetDepthStencilView();
   bool VSync();
 
   void SetZBuffer(bool enable);
   void SetVSync(bool vsync);
+  void SetRenderToScreen();
 
 private:
   bool m_vsync_enabled;
@@ -58,7 +63,9 @@ private:
   ID3D11DepthStencilState* m_depthStencilState;
   ID3D11DepthStencilView* m_depthStencilView;
   ID3D11DepthStencilState* m_depthDisabledStencilState;
-  ID3D11BlendState* m_alphaEnableBlendingState;
+  ID3D11BlendState* m_alphaBlendingState;
+  ID3D11BlendState* m_additiveBlendingState;
+  ID3D11BlendState* m_mulBlendingState;
   ID3D11RasterizerState* m_rasterState;
   D3DXMATRIX m_projectionMatrix;
   D3DXMATRIX m_worldMatrix;

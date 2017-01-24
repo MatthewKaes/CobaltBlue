@@ -14,8 +14,8 @@ public:
   ~ShaderCore();
 
   void Initialize(ID3D11Device* device, HWND window);
-  void Shutdown();
-  bool Render2D(ID3D11DeviceContext* context, int indexCount, bool light, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture);
+  void Release();
+  bool Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture);
   bool Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
 
 private:

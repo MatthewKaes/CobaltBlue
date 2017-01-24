@@ -3,6 +3,11 @@
 
 extern std::unordered_set<Model2D*> g_updateListings;
 
+Animation::~Animation()
+{
+  g_updateListings.erase(this);
+}
+
 void Animation::Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY)
 {
   g_updateListings.insert(this);
@@ -12,6 +17,17 @@ void Animation::Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY)
 
   m_parallax.Width = m_width;
   m_parallax.Height = m_height;
+  m_cellCountX = cellsX;
+  m_cellCountY = cellsY;
+}
+
+void Animation::Create(unsigned width, unsigned height, unsigned cellsX, unsigned cellsY)
+{
+  g_updateListings.insert(this);
+  m_width = width / cellsX;
+  m_height = height / cellsY;
+  m_parallax.Create(m_width, m_height, width, height);
+
   m_cellCountX = cellsX;
   m_cellCountY = cellsY;
 }
@@ -74,6 +90,11 @@ void Animation::Update(float frameTime)
   m_parallax.Z = Z;
   m_parallax.Ox = m_width * CellX;
   m_parallax.Oy = m_height * -CellY;
+}
+
+void Animation::Hide(bool hide)
+{
+  m_parallax.Hide = Model2D::Hide = hide;
 }
 
 Bitmap* Animation::Bitmap()

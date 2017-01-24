@@ -93,6 +93,9 @@
     <ClInclude Include="Headers\CobaltSound.h">
       <Filter>Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\TextureRender.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System\CobaltEngine.cpp">
@@ -143,7 +146,10 @@
     <ClCompile Include="Graphics2D\Model2d.cpp">
       <Filter>Graphics 2D</Filter>
     </ClCompile>
-    <ClCompile Include="Headers\CobaltSound.cpp">
+    <ClCompile Include="Graphics\TextureRender.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\CobaltSound.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>

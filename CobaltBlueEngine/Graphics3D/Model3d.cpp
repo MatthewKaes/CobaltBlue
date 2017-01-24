@@ -46,7 +46,7 @@ void Model3D::Release()
   // Release the texture object.
   if (m_Texture)
   {
-    m_Texture->Shutdown();
+    m_Texture->Release();
     delete m_Texture;
     m_Texture = 0;
   }

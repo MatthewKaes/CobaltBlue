@@ -36,7 +36,8 @@ public:
   CobaltSound* Sound;
 
   const unsigned DefaultFPS = 60;
-  const LPCWSTR DefaultFont = L"Arial";
+  const LPCWSTR DefaultFont = L"Steinem";
+  //const LPCWSTR DefaultFont = L"Arial";
 
 private:
   CobaltScene* m_currentScene;

@@ -16,6 +16,7 @@ public:
   bool Pressed(Inputs key);
   bool Triggered(Inputs key);
   bool Released(Inputs key);
+  void KeyUp(Inputs key);
   Point MousePos();
   bool AnyKey();
 

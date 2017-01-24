@@ -36,6 +36,44 @@ Point::Point(int x, int y)
   Y = y;
 }
 
+Point::Point(PointReal pr)
+{
+  X = (int)pr.X;
+  Y = (int)pr.Y;
+}
+
+bool Point::operator==(const Point& rhs)
+{
+  return X == rhs.X && Y == rhs.Y;
+}
+
+bool Point::operator!=(const Point& rhs)
+{
+  return !operator==(rhs);
+}
+
+Point Point::operator*(int scale)
+{
+  return Point(X * scale, Y * scale);
+}
+
+PointReal::PointReal()
+{
+  X = 0.0f;
+  Y = 0.0f;
+}
+
+PointReal::PointReal(float x, float y)
+{
+  X = x;
+  Y = y;
+}
+
+PointReal PointReal::operator*(float scale)
+{
+  return PointReal(X * scale, Y * scale);
+}
+
 Rect::Rect()
 {
   X = 0;

@@ -16,7 +16,7 @@ public:
   ~CobaltTexture();
 
   bool Initialize(ID3D11Device* device, ID3D11DeviceContext* context, LPCWSTR filename, TextureType usage);
-  void Shutdown();
+  void Release();
   void Update(ID3D11DeviceContext* context);
   unsigned Width();
   unsigned Height();

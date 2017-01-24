@@ -26,6 +26,9 @@ CobaltAudio::~CobaltAudio()
 
 void CobaltAudio::Play(LPCWSTR filename)
 {
+  if (!lstrcmpW(m_lastAudio, filename))
+    return;
+
   if (!std::experimental::filesystem::exists(filename))
   {
     std::wstring message(L"Failed to load audio file: '");
@@ -94,6 +97,7 @@ void CobaltAudio::Play()
       if (SUCCEEDED(hr))
       {
         m_state = AudioState::Playing;
+        SetVolume(1.0f);
       }
       else
       {
@@ -124,21 +128,31 @@ void CobaltAudio::Stop()
   Cleanup();
 }
 
-void CobaltAudio::Fade(float fadeTime)
+void CobaltAudio::FadeOut(float fadeTime)
 {
-  m_fadeOut = m_volume / fadeTime;
+  m_fade = m_volume / fadeTime;
+}
+
+void CobaltAudio::FadeIn(float fadeTime)
+{
+  m_fade = (m_volume - 1.0f) / fadeTime;
 }
 
 void CobaltAudio::Frame(float duration)
 {
-  if (m_fadeOut > 0)
+  if (m_fade != 0.0f)
   {
-    m_volume -= duration * m_fadeOut;
+    m_volume -= duration * m_fade;
 
-    if (m_volume < 0)
+    if (m_volume < 0.0f)
     {
       m_volume = 0.0f;
-      m_fadeOut = 0.0f;
+      m_fade = 0.0f;
+    }
+    else if (m_volume > 1.0f)
+    {
+      m_volume = 1.0f;
+      m_fade = 0.0f;
     }
 
     SetVolume(m_volume);
@@ -305,5 +319,7 @@ void CobaltAudio::Cleanup()
     m_eventController = nullptr;
   }
 
+  m_fade = 0.0f;
   m_state = AudioState::Standby;
+  m_lastAudio = L"";
 }

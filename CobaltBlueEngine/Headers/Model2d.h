@@ -6,6 +6,7 @@
 
 enum class Lighting {
   None,
+  Source,
   Dynamic
 };
 
@@ -20,13 +21,27 @@ public:
   BYTE Alpha;
 };
 
+class PointReal {
+public:
+  PointReal();
+  PointReal(float x, float y);
+  PointReal operator*(float scale);
+  float X;
+  float Y;
+};
+
 class Point {
 public:
   Point();
   Point(int x, int y);
+  Point(PointReal pr);
+  bool operator==(const Point& rhs);
+  bool operator!=(const Point& rhs);
+  Point operator*(int scale);
   int X;
   int Y;
 };
+
 
 class Rect {
 public:
@@ -49,12 +64,13 @@ public:
   virtual ID3D11ShaderResourceView* GetTexture() { return nullptr; };
 
   void Flash(Color color, float duration);
-  int Z;
+  double Z;
   int X;
   int Y;
   float Zoom = 1.0f;
   Color Tint;
   Lighting Light = Lighting::None;
+  bool Hide = false;
 
 protected:
   void Frame(float frameTime);

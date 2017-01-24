@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio\CobaltAudio.cpp" />
+    <ClCompile Include="Audio\CobaltSound.cpp" />
     <ClCompile Include="DirectX\Direct3d.cpp" />
     <ClCompile Include="DirectX\ShaderCore.cpp" />
     <ClCompile Include="Graphics2D\CobaltAnimation.cpp" />
@@ -46,7 +47,7 @@
     <ClCompile Include="Graphics3D\CobaltTexture.cpp" />
     <ClCompile Include="Graphics3D\Model3d.cpp" />
     <ClCompile Include="Graphics\CobaltGraphics.cpp" />
-    <ClCompile Include="Headers\CobaltSound.cpp" />
+    <ClCompile Include="Graphics\TextureRender.cpp" />
     <ClCompile Include="Input\CobaltInput.cpp" />
     <ClCompile Include="System\CobaltCache.cpp" />
     <ClCompile Include="System\CobaltEngine.cpp" />
@@ -95,6 +96,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Editor|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Headers\TextureRender.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Render2D.ps" />

@@ -183,33 +183,40 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   // Clear the blend state description.
   ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
 
+  //----------------------------------------
+  // ALPHA BLENDING
+  //----------------------------------------
   // Create an alpha enabled blend state description.
   blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
   blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
   blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
   blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
   blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-  blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+  blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
   blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-  blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+  blendStateDescription.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+  m_device->CreateBlendState(&blendStateDescription, &m_alphaBlendingState);
 
   // Create the blend state using the description.
-  result = m_device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
-  if (FAILED(result))
-  {
-    return false;
-  }
+  blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+  blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  m_device->CreateBlendState(&blendStateDescription, &m_additiveBlendingState);
 
-  float blendFactor[4];
+  // Create the blend state using the description.
+  blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ZERO;
+  blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_SRC_COLOR;
+  blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+  blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+  blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  m_device->CreateBlendState(&blendStateDescription, &m_mulBlendingState);
 
-  // Setup the blend factor.
-  blendFactor[0] = 0.0f;
-  blendFactor[1] = 0.0f;
-  blendFactor[2] = 0.0f;
-  blendFactor[3] = 0.0f;
-
-  // Turn on the alpha blending.
-  m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
+  // Default to alpha blend
+  SetAlphaBlend();
 
   // Initialize the description of the 2d stencil state.
   ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -306,7 +313,7 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   return true;
 }
 
-void Direct3D::Shutdown()
+void Direct3D::Release()
 {
   // Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
   if (m_swapChain)
@@ -344,10 +351,22 @@ void Direct3D::Shutdown()
     m_depthStencilBuffer = 0;
   }
 
-  if (m_alphaEnableBlendingState)
+  if (m_alphaBlendingState)
   {
-    m_alphaEnableBlendingState->Release();
-    m_alphaEnableBlendingState = 0;
+    m_alphaBlendingState->Release();
+    m_alphaBlendingState = 0;
+  }
+
+  if (m_additiveBlendingState)
+  {
+    m_additiveBlendingState->Release();
+    m_additiveBlendingState = 0;
+  }
+
+  if (m_mulBlendingState)
+  {
+    m_mulBlendingState->Release();
+    m_mulBlendingState = 0;
   }
 
   if (m_renderTargetView)
@@ -381,7 +400,6 @@ void Direct3D::BeginScene(float red, float green, float blue, float alpha)
 {
   float color[4];
 
-
   // Setup the color to clear the buffer to.
   color[0] = red;
   color[1] = green;
@@ -412,6 +430,48 @@ void Direct3D::EndScene()
   }
 
   return;
+}
+
+void Direct3D::SetAlphaBlend()
+{
+  float blendFactor[4];
+
+  // Setup the blend factor.
+  blendFactor[0] = 0.0f;
+  blendFactor[1] = 0.0f;
+  blendFactor[2] = 0.0f;
+  blendFactor[3] = 0.0f;
+
+  // Turn on the alpha blending.
+  m_deviceContext->OMSetBlendState(m_alphaBlendingState, blendFactor, 0xffffffff);
+}
+
+void Direct3D::SetAddBlend()
+{
+  float blendFactor[4];
+
+  // Setup the blend factor.
+  blendFactor[0] = 0.0f;
+  blendFactor[1] = 0.0f;
+  blendFactor[2] = 0.0f;
+  blendFactor[3] = 0.0f;
+
+  // Turn on the alpha blending.
+  m_deviceContext->OMSetBlendState(m_additiveBlendingState, blendFactor, 0xffffffff);
+}
+
+void Direct3D::SetMulBlend()
+{
+  float blendFactor[4];
+
+  // Setup the blend factor.
+  blendFactor[0] = 0.0f;
+  blendFactor[1] = 0.0f;
+  blendFactor[2] = 0.0f;
+  blendFactor[3] = 0.0f;
+
+  // Turn on the alpha blending.
+  m_deviceContext->OMSetBlendState(m_mulBlendingState, blendFactor, 0xffffffff);
 }
 
 ID3D11Device* Direct3D::GetDevice()
@@ -448,7 +508,11 @@ void Direct3D::GetVideoCardInfo(char* cardName, int& memory)
 {
   strcpy_s(cardName, 128, m_videoCardDescription);
   memory = m_videoCardMemory;
-  return;
+}
+
+ID3D11DepthStencilView* Direct3D::GetDepthStencilView()
+{
+  return m_depthStencilView;
 }
 
 void Direct3D::SetZBuffer(bool enable)
@@ -466,4 +530,10 @@ void Direct3D::SetZBuffer(bool enable)
 void Direct3D::SetVSync(bool vsync)
 {
   m_vsync_enabled = vsync;
+}
+
+void Direct3D::SetRenderToScreen()
+{	
+  // Bind the render target view and depth stencil buffer to the output render pipeline.
+  m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 }

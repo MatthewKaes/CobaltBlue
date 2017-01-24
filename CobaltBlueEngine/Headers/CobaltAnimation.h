@@ -5,13 +5,16 @@
 
 class Animation : public Model2D {
 public:
+  ~Animation();
   void Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY);
+  void Create(unsigned width, unsigned height, unsigned cellsX, unsigned cellsY);
   void Pause();
   void Play(unsigned frameTime);
   bool Playing();
   unsigned Width();
   unsigned Height();
   void Update(float frameTime);
+  void Hide(bool hide);
   Bitmap* Bitmap();
 
   bool YRoll;

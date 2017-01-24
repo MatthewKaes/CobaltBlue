@@ -1,5 +1,4 @@
 #include "CobaltSprite.h"
-
 #include "CobaltEngine.h"
 
 extern CobaltEngine* EngineHandle;
@@ -86,6 +85,18 @@ void Sprite::Release()
     m_bitmap->Release();
     delete m_bitmap;
     m_bitmap = 0;
+  }
+
+  if (m_vertexBuffer)
+  {
+    m_vertexBuffer->Release();
+    m_vertexBuffer = 0;
+  }
+
+  if (m_indexBuffer)
+  {
+    m_indexBuffer->Release();
+    m_indexBuffer = 0;
   }
 }
 
