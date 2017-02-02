@@ -73,13 +73,26 @@ void Animation::Update(float frameTime)
       m_frameCount = 0;
       if (++CellX % m_cellCountX == 0)
       {
-        CellX = 0;
+        if (Replay || YRoll)
+          CellX = 0;
+
         if (YRoll)
         {
           if (++CellY % m_cellCountY == 0)
           {
-            CellY = 0;
+            if (!Replay)
+            {
+              Pause();
+              CellX -= 1;
+            }
+            else
+              CellY = 0; 
           }
+        }
+        else if (!Replay)
+        {
+          Pause();
+          CellX -= 1;
         }
       }
     }

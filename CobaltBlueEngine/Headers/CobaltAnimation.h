@@ -17,6 +17,7 @@ public:
   void Hide(bool hide);
   Bitmap* Bitmap();
 
+  bool Replay = true;
   bool YRoll;
   int CellX;
   int CellY;
