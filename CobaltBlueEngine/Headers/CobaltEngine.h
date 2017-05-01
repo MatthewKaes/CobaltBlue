@@ -34,15 +34,15 @@ public:
   CobaltAudio* Audio;
   CobaltCache* Cache;
   CobaltSound* Sound;
+  CobaltSynchronizer Sync;
 
   const unsigned DefaultFPS = 60;
-  const LPCWSTR DefaultFont = L"Steinem";
+  const LPCWSTR DefaultFont = L"steinem.ttf";
   //const LPCWSTR DefaultFont = L"Arial";
 
 private:
   CobaltScene* m_currentScene;
   CobaltScene* m_nextScene;
-  CobaltSynchronizer m_sync;
 
   LPCWSTR m_appName;
   HINSTANCE m_hinstance;

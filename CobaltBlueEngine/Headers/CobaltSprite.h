@@ -11,6 +11,7 @@ public:
 
   void Create(LPCWSTR textureFile);
   void Create(unsigned width, unsigned height);
+  void Create(Bitmap* src);
   unsigned Width();
   unsigned Height();
   void Update(float frameTime);
@@ -34,6 +35,7 @@ private:
   void Release();
   void CreateBuffers(ID3D11Device* device);
 
+  bool m_own;
   ::Bitmap* m_bitmap;
   ID3D11Buffer* m_vertexBuffer;
   ID3D11Buffer* m_indexBuffer;

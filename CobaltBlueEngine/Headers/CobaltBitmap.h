@@ -7,6 +7,13 @@
 
 #undef DrawText
 
+enum class TextAlign
+{
+  Left = 0,
+  Center = 1,
+  Right = 2
+};
+
 class Bitmap
 {
 public:
@@ -28,7 +35,8 @@ public:
   void Gradient(Rect area, Color color1, Color color2);
   void Gradient(Rect area, Color color1, Color color2, bool horz);
   void DrawText(LPCWSTR text, unsigned size, Rect area);
-  void DrawText(LPCWSTR text, unsigned size, Rect area, bool bold, bool italic);
+  void DrawText(LPCWSTR text, unsigned size, Rect area, TextAlign align);
+  void DrawText(LPCWSTR text, unsigned size, Rect area, TextAlign align, bool bold, bool italic);
   void DrawScreen(Rect area, Rect source);
   void Blend(Bitmap* bitmap, Rect area, Point target);
   void Blt(Bitmap* bitmap, Rect area, Point target);
@@ -56,8 +64,8 @@ private:
   BYTE* m_textureData;
   ID3D11Texture2D* m_texture;
   ID3D11ShaderResourceView* m_textureView;
-  Color m_textColor;
-  Color m_outlineColor;
+  RealColor m_textColor;
+  RealColor m_outlineColor;
   LPCWSTR m_fontname;
 };
 

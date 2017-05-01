@@ -6,6 +6,7 @@ CobaltSynchronizer::CobaltSynchronizer()
   m_frameDuration = 1.0f;
   m_lastFrame = 0;
   m_frameCount = 0;
+  TotalTime = 0;
 }
 
 void CobaltSynchronizer::SetFPS(unsigned FPS)
@@ -40,6 +41,7 @@ void CobaltSynchronizer::Sync(bool lockFrame)
   TIMEPOINT frameTime = std::chrono::system_clock::now();
   std::chrono::duration<double> frameDur = frameTime - m_startTime;
   m_lastFrame = frameDur.count();
+  TotalTime += m_lastFrame;
 
   m_frameCount += 1;
 }

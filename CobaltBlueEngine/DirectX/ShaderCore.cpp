@@ -18,10 +18,11 @@ ShaderCore::~ShaderCore()
   Release();
 }
 
-void ShaderCore::Initialize(ID3D11Device* device, HWND window)
+void ShaderCore::Initialize(ID3D11Device* device, HWND content)
 {
-  InitializeShader2D(device, window, L"Shaders/Render2D.vs", L"Shaders/Render2D.ps", &m_2DpixelShader, &m_2DvertexShader);
-  InitializeShader3D(device, window, L"Shaders/Render3D.vs", L"Shaders/Render3D.ps");
+  InitializeShader2D(device, content, L"Shaders/Render2D.vs", L"Shaders/Render2D.ps", &m_2DpixelShader, &m_2DvertexShader);
+  InitializeShader2D(device, content, L"Shaders/Render2D.vs", L"Shaders/Render2DL.ps", &m_2DpixelShaderLight, &m_2DvertexShader);
+  InitializeShader3D(device, content, L"Shaders/Render3D.vs", L"Shaders/Render3D.ps");
 }
 
 void ShaderCore::Release()
@@ -91,7 +92,6 @@ void ShaderCore::Release()
 
 bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
 {
-
   // Set the shader parameters that it will use for rendering.
   SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, dimensions, texture);
 
@@ -101,9 +101,19 @@ bool ShaderCore::Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATR
   return true;
 }
 
+bool ShaderCore::RenderLight2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture)
+{
+  // Set the shader parameters that it will use for rendering.
+  SetShaderParameters2D(context, worldMatrix, viewMatrix, projectionMatrix, translate, color, dimensions, texture);
+
+  // Now render the prepared buffers with the shader.
+  RenderShader2D(context, indexCount, m_2DpixelShaderLight, m_2DvertexShader);
+
+  return true;
+}
+
 bool ShaderCore::Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 {
-
 	// Set the shader parameters that it will use for rendering.
 	SetShaderParameters3D(context, worldMatrix, viewMatrix, projectionMatrix, texture);
 
@@ -113,7 +123,7 @@ bool ShaderCore::Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATR
 	return true;
 }
 
-void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* vertexFile, WCHAR* pixelFile, ID3D11PixelShader** pixelShader, ID3D11VertexShader** vectorShader)
+void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND content, WCHAR* vertexFile, WCHAR* pixelFile, ID3D11PixelShader** pixelShader, ID3D11VertexShader** vectorShader)
 {
   HRESULT result;
   ID3D10Blob* errorMessage;
@@ -136,12 +146,12 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
     // If the shader failed to compile it should have writen something to the error message.
     if (errorMessage)
     {
-      OutputShaderErrorMessage(errorMessage, window, vertexFile);
+      OutputShaderErrorMessage(errorMessage, content, vertexFile);
     }
     // If there was  nothing in the error message then it simply could not find the shader file itself.
     else
     {
-      MessageBox(window, vertexFile, L"Missing Shader File", MB_OK);
+      MessageBox(content, vertexFile, L"Missing Shader File", MB_OK);
       ExitProcess(-1);
     }
 
@@ -155,12 +165,12 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
     // If the shader failed to compile it should have writen something to the error message.
     if (errorMessage)
     {
-      OutputShaderErrorMessage(errorMessage, window, pixelFile);
+      OutputShaderErrorMessage(errorMessage, content, pixelFile);
     }
     // If there was nothing in the error message then it simply could not find the file itself.
     else
     {
-      MessageBox(window, pixelFile, L"Missing Shader File", MB_OK);
+      MessageBox(content, pixelFile, L"Missing Shader File", MB_OK);
       ExitProcess(-1);
     }
 
@@ -242,7 +252,7 @@ void ShaderCore::InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* ve
   device->CreateSamplerState(&samplerDesc, &m_2DsampleState);
 }
 
-void ShaderCore::InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* vertexShader, WCHAR* pixelShader)
+void ShaderCore::InitializeShader3D(ID3D11Device* device, HWND content, WCHAR* vertexShader, WCHAR* pixelShader)
 {
   HRESULT result;
   ID3D10Blob* errorMessage;
@@ -265,12 +275,12 @@ void ShaderCore::InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* ve
     // If the shader failed to compile it should have writen something to the error message.
     if (errorMessage)
     {
-      OutputShaderErrorMessage(errorMessage, window, vertexShader);
+      OutputShaderErrorMessage(errorMessage, content, vertexShader);
     }
     // If there was  nothing in the error message then it simply could not find the shader file itself.
     else
     {
-      MessageBox(window, vertexShader, L"Missing Shader File", MB_OK);
+      MessageBox(content, vertexShader, L"Missing Shader File", MB_OK);
     }
 
     return;
@@ -283,12 +293,12 @@ void ShaderCore::InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* ve
     // If the shader failed to compile it should have writen something to the error message.
     if (errorMessage)
     {
-      OutputShaderErrorMessage(errorMessage, window, pixelShader);
+      OutputShaderErrorMessage(errorMessage, content, pixelShader);
     }
     // If there was nothing in the error message then it simply could not find the file itself.
     else
     {
-      MessageBox(window, pixelShader, L"Missing Shader File", MB_OK);
+      MessageBox(content, pixelShader, L"Missing Shader File", MB_OK);
     }
 
     return;

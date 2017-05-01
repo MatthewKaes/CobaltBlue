@@ -13,7 +13,7 @@ Direct3D::Direct3D()
   m_rasterState = 0;
 }
 
-bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool fullscreen, float screenDepth, float screenNear, AntiAlias antiAlias)
+bool Direct3D::Initialize(int width, int height, bool vsync, HWND content, bool fullscreen, float screenDepth, float screenNear, AntiAlias antiAlias)
 {
   HRESULT result;
   IDXGIFactory* factory;
@@ -92,7 +92,7 @@ bool Direct3D::Initialize(int width, int height, bool vsync, HWND window, bool f
   swapChainDesc.BufferDesc.RefreshRate.Numerator = 1000;
   swapChainDesc.BufferDesc.RefreshRate.Denominator = 60000;
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-  swapChainDesc.OutputWindow = window;
+  swapChainDesc.OutputWindow = content;
   swapChainDesc.SampleDesc.Count = (UINT)antiAlias;
   swapChainDesc.SampleDesc.Quality = MULTISAMPLE_QUALITY;
   swapChainDesc.Windowed = !fullscreen;

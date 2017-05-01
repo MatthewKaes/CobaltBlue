@@ -28,6 +28,7 @@ void Parallax::Create(LPCWSTR textureFile, unsigned width, unsigned height)
   if (m_bitmap)
     Release();
 
+  m_own = true;
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
 
@@ -46,6 +47,7 @@ void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsign
   if (m_bitmap)
     Release();
 
+  m_own = true;
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
   m_prevWidth = Width = width;
@@ -56,6 +58,23 @@ void Parallax::Create(unsigned width, unsigned height, unsigned imgWidth, unsign
   m_bitmap->Create(
     imgWidth,
     imgHeight);
+
+  CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
+}
+
+void Parallax::Create(::Bitmap* src, unsigned width, unsigned height)
+{
+  if (m_bitmap)
+    Release();
+
+  m_own = false;
+  g_renderListings.push_back(this);
+  g_updateListings.insert(this);
+  m_prevWidth = Width = width;
+  m_prevHeight = Height = height;
+
+  // Use the bitmap directly
+  m_bitmap = src;
 
   CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
@@ -147,8 +166,11 @@ void Parallax::Release()
   // Release the texture object.
   if (m_bitmap)
   {
-    m_bitmap->Release();
-    delete m_bitmap;
+    if (m_own)
+    {
+      m_bitmap->Release();
+      delete m_bitmap;
+    }
     m_bitmap = 0;
   }
 

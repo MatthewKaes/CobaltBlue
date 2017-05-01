@@ -5,23 +5,23 @@ unordered_map<int, Model3D*> g_modelListings;
 std::vector<Model2D*> g_renderListings;
 std::unordered_set<Model2D*> g_updateListings;
 
-bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias)
+bool CobaltGraphics::Initialize(unsigned width, unsigned height, bool fullScreen, HWND content, AntiAlias antiAlias)
 {
   m_width = width;
   m_height = height;
   m_full = fullScreen;
-  m_window = window;
+  m_window = content;
 
   // Set the initial position of the camera.
   Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
-  bool result = DirectX.Initialize(width, height, true, window, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, antiAlias);
+  bool result = DirectX.Initialize(width, height, true, content, fullScreen, SCREEN_DEPTH, SCREEN_NEAR, antiAlias);
   if (!result)
   {
 	  return false;
   }
 
-  m_Shader.Initialize(DirectX.GetDevice(), window);
+  m_Shader.Initialize(DirectX.GetDevice(), content);
 
   m_finalTexture.Initialize(DirectX.GetDevice(), width, height);
   m_lightTexture.Initialize(DirectX.GetDevice(), width, height);
@@ -163,7 +163,7 @@ bool CobaltGraphics::Render(float frameTime)
     model->Render();
 
     viewMatrix._11 = viewMatrix._22 = model->Zoom;
-    m_Shader.Render2D(
+    m_Shader.RenderLight2D(
       DirectX.GetDeviceContext(),
       model->GetIndexCount(),
       worldMatrix, viewMatrix,

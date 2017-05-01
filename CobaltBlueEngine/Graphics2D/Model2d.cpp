@@ -1,28 +1,18 @@
 #include "Model2d.h"
 
-Color::Color()
-{
-  Red = 255;
-  Green = 255;
-  Blue = 255;
-  Alpha = 255;
-}
+Color::Color() : Red(255), Green(255), Blue(255), Alpha(255) { }
 
-Color::Color(BYTE red, BYTE green, BYTE blue)
-{
-  Red = red;
-  Green = green;
-  Blue = blue;
-  Alpha = 255;
-}
+Color::Color(BYTE red, BYTE green, BYTE blue) : Red(red), Green(green), Blue(blue), Alpha(255) { }
 
-Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha)
-{
-  Red = red;
-  Green = green;
-  Blue = blue;
-  Alpha = alpha;
-}
+Color::Color(BYTE red, BYTE green, BYTE blue, BYTE alpha) : Red(red), Green(green), Blue(blue), Alpha(alpha) { }
+
+RealColor::RealColor() : Red(1.0f), Green(1.0f), Blue(1.0f), Alpha(1.0f) { }
+
+RealColor::RealColor(Color color) : Red(color.Red / 255.0f), Green(color.Green / 255.0f), Blue(color.Blue / 255.0f), Alpha(color.Alpha / 255.0f) { }
+
+RealColor::RealColor(float red, float green, float blue) : Red(red), Green(green), Blue(blue), Alpha(1.0f) { }
+
+RealColor::RealColor(float red, float green, float blue, float alpha) : Red(red), Green(green), Blue(blue), Alpha(alpha) { }
 
 Point::Point()
 {

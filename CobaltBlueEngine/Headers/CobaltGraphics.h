@@ -16,7 +16,7 @@
 class CobaltGraphics
 {
 public:
-  bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND window, AntiAlias antiAlias);
+  bool Initialize(unsigned width, unsigned height, bool fullScreen, HWND content, AntiAlias antiAlias);
   void Release();
   bool Frame(float frameTime);
   unsigned Width();

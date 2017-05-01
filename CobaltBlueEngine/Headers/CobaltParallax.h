@@ -11,6 +11,7 @@ public:
 
   void Create(LPCWSTR textureFile, unsigned width, unsigned height);
   void Create(unsigned width, unsigned height, unsigned imgWidth, unsigned imgHeight);
+  void Create(Bitmap* src, unsigned width, unsigned height);
   unsigned ImgWidth();
   unsigned ImgHeight();
   void Update(float frameTime);
@@ -39,6 +40,7 @@ private:
   void Release();
   void CreateBuffers(ID3D11Device* device);
 
+  int m_own;
   int m_prevOx;
   int m_prevOy;
   int m_prevWidth;

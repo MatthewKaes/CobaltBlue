@@ -41,6 +41,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Editor|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Graphics2D\CobaltWindow.cpp" />
     <ClCompile Include="Graphics2D\Model2d.cpp" />
     <ClCompile Include="Graphics2D\CobaltParallax.cpp" />
     <ClCompile Include="Graphics3D\CobaltCamera.cpp" />
@@ -75,6 +76,7 @@
     <ClInclude Include="Headers\CobaltScene.h" />
     <ClInclude Include="Headers\CobaltSound.h" />
     <ClInclude Include="Headers\CobaltSynchronizer.h" />
+    <ClInclude Include="Headers\CobaltWindow.h" />
     <ClInclude Include="Headers\Direct3d.h" />
     <ClInclude Include="Headers\CobaltTexture.h" />
     <ClInclude Include="Headers\InputTable.h" />

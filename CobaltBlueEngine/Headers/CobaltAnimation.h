@@ -8,6 +8,7 @@ public:
   ~Animation();
   void Create(LPCWSTR textureFile, unsigned cellsX, unsigned cellsY);
   void Create(unsigned width, unsigned height, unsigned cellsX, unsigned cellsY);
+  void Create(Bitmap* src, unsigned cellsX, unsigned cellsY);
   void Pause();
   void Play(unsigned frameTime);
   bool Playing();

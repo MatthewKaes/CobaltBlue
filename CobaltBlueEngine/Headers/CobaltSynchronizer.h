@@ -15,6 +15,8 @@ public:
   void Start();
   void Sync(bool lockFrame);
   float FrameTime();
+
+  double TotalTime;
 private:
   TIMEPOINT m_startTime;
   double m_frameDuration;

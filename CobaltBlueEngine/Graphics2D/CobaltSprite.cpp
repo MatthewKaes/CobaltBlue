@@ -48,6 +48,16 @@ void Sprite::Create(unsigned width, unsigned height)
   CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
+void Sprite::Create(::Bitmap* src)
+{
+  Release();
+  g_renderListings.push_back(this);
+  g_updateListings.insert(this);
+
+  // Use bitmap
+  m_bitmap = src;
+}
+
 void Sprite::Update(float frameTime)
 {
   Model2D::Frame(frameTime);
@@ -82,8 +92,11 @@ void Sprite::Release()
     g_renderListings.erase(std::find(g_renderListings.begin(), g_renderListings.end(), this));
     g_updateListings.erase(this);
 
-    m_bitmap->Release();
-    delete m_bitmap;
+    if (m_own)
+    {
+      m_bitmap->Release();
+      delete m_bitmap;
+    }
     m_bitmap = 0;
   }
 

@@ -5,7 +5,7 @@
 #include "CobaltAudio.h"
 #include "Dshow.h"
 
-CobaltAudio::CobaltAudio(HWND window)
+CobaltAudio::CobaltAudio(HWND content)
 {
   m_graphBuilder = nullptr;
   m_mediaController = nullptr;
@@ -16,7 +16,7 @@ CobaltAudio::CobaltAudio(HWND window)
   m_loop = true;
   m_volume = 1.0f;
   m_state = AudioState::Standby;
-  m_window = window;
+  m_window = content;
 }
 
 CobaltAudio::~CobaltAudio()

@@ -27,13 +27,15 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
   wc.hInstance = m_hinstance;
-  wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-  wc.hIconSm = wc.hIcon;
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
   wc.lpszMenuName = NULL;
   wc.lpszClassName = m_appName;
   wc.cbSize = sizeof(WNDCLASSEX);
+
+  wc.hIcon = (HICON)LoadImage(NULL, L"system\\game.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_LOADTRANSPARENT | LR_DEFAULTSIZE);
+  wc.hIconSm = NULL;
+  DWORD err = GetLastError();
 
   // Register the window class.
   RegisterClassEx(&wc);
@@ -81,7 +83,7 @@ CobaltEngine::CobaltEngine(unsigned graphicsWidth, unsigned graphicsHeight, LPCW
   Cache = new CobaltCache();
   Font = DefaultFont;
 
-  m_sync.SetFPS(DefaultFPS);
+  Sync.SetFPS(DefaultFPS);
   Graphics->Initialize(screenWidth, screenHeight, fullScreen, m_hwnd, antiAlias);
 
   return;
@@ -124,7 +126,7 @@ CobaltEngine::~CobaltEngine()
 
 void CobaltEngine::SetFPS(unsigned fps)
 {
-  m_sync.SetFPS(fps);
+  Sync.SetFPS(fps);
 }
 
 void CobaltEngine::Run(CobaltScene* entryScene)
@@ -141,7 +143,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
   while (!m_exit)
   {
     // Start Frame Time
-    m_sync.Start();
+    Sync.Start();
 
     bool still_messages = true;
     while (still_messages)
@@ -165,7 +167,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
     }
 
     // Process the frame.
-    if (!Frame(m_sync.FrameTime(), false))
+    if (!Frame(Sync.FrameTime(), false))
     {
       m_exit = true;
     }
@@ -186,7 +188,7 @@ void CobaltEngine::Run(CobaltScene* entryScene)
     }
 
     // Sync Frame
-    m_sync.Sync(!Graphics->VSync());
+    Sync.Sync(!Graphics->VSync());
 
     // Update Inputs from the last frame
     Input->Frame();
@@ -221,17 +223,17 @@ void CobaltEngine::GotoScene(CobaltScene* nextScene)
 
 unsigned CobaltEngine::FPS()
 {
-  return m_sync.FPS();
+  return Sync.FPS();
 }
 
 unsigned CobaltEngine::FrameCount()
 {
-  return m_sync.FrameCount();
+  return Sync.FrameCount();
 }
 
 float CobaltEngine::FrameTime()
 {
-  return m_sync.FrameTime();
+  return Sync.FrameTime();
 }
 
 LRESULT CALLBACK CobaltEngine::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)

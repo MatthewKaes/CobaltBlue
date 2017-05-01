@@ -32,6 +32,19 @@ void Animation::Create(unsigned width, unsigned height, unsigned cellsX, unsigne
   m_cellCountY = cellsY;
 }
 
+void Animation::Create(::Bitmap* src, unsigned cellsX, unsigned cellsY)
+{
+  g_updateListings.insert(this);
+  m_parallax.Create(src, 1, 1);
+  m_width = m_parallax.ImgWidth() / cellsX;
+  m_height = m_parallax.ImgHeight() / cellsY;
+
+  m_parallax.Width = m_width;
+  m_parallax.Height = m_height;
+  m_cellCountX = cellsX;
+  m_cellCountY = cellsY;
+}
+
 void Animation::Pause()
 {
   m_frameTime = 0;

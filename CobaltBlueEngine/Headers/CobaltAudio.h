@@ -22,7 +22,7 @@ enum class AudioState {
 class CobaltAudio
 {
 public:
-  CobaltAudio(HWND window);
+  CobaltAudio(HWND content);
   ~CobaltAudio();
 
   void Play(LPCWSTR filename);

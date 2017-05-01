@@ -6,9 +6,9 @@
 #include "Dshow.h"
 
 
-CobaltSound::CobaltSound(HWND window)
+CobaltSound::CobaltSound(HWND content)
 {
-  m_window = window;
+  m_window = content;
 }
 
 CobaltSound::~CobaltSound()

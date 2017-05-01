@@ -13,9 +13,10 @@ public:
   ShaderCore();
   ~ShaderCore();
 
-  void Initialize(ID3D11Device* device, HWND window);
+  void Initialize(ID3D11Device* device, HWND content);
   void Release();
   bool Render2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture);
+  bool RenderLight2D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture);
   bool Render3D(ID3D11DeviceContext* context, int indexCount, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
 
 private:
@@ -37,8 +38,8 @@ private:
     D3DXVECTOR2 buffer;
   };
 
-  void InitializeShader2D(ID3D11Device* device, HWND window, WCHAR* vertexFile, WCHAR* pixelFile, ID3D11PixelShader** pixelShader, ID3D11VertexShader** vectorShader);
-  void InitializeShader3D(ID3D11Device* device, HWND window, WCHAR* vertexShader, WCHAR* pixelShader);
+  void InitializeShader2D(ID3D11Device* device, HWND content, WCHAR* vertexFile, WCHAR* pixelFile, ID3D11PixelShader** pixelShader, ID3D11VertexShader** vectorShader);
+  void InitializeShader3D(ID3D11Device* device, HWND content, WCHAR* vertexShader, WCHAR* pixelShader);
   void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename);
 
   void SetShaderParameters2D(ID3D11DeviceContext* context, D3DXMATRIX& worldMatrix, D3DXMATRIX& viewMatrix, D3DXMATRIX& projectionMatrix, D3DXVECTOR4 translate, D3DXVECTOR4 color, D3DXVECTOR2 dimensions, ID3D11ShaderResourceView* texture);

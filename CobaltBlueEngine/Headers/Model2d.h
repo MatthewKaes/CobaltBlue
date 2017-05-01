@@ -21,6 +21,18 @@ public:
   BYTE Alpha;
 };
 
+class RealColor {
+public:
+  RealColor();
+  RealColor(Color color);
+  RealColor(float Red, float Green, float Blue);
+  RealColor(float Red, float Green, float Blue, float Alpha);
+  float Red;
+  float Green;
+  float Blue;
+  float Alpha;
+};
+
 class PointReal {
 public:
   PointReal();

@@ -12,7 +12,7 @@
 
 class CobaltSound {
 public:
-  CobaltSound(HWND window);
+  CobaltSound(HWND content);
   ~CobaltSound();
 
   void Play(LPCWSTR filename, float volume);
