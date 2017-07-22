@@ -7,6 +7,7 @@ class Window : public Model2D {
 public:
   ~Window();
   void Create(LPCWSTR textureFile);
+  void Create(Bitmap* src);
   unsigned Width();
   unsigned Height();
   void Update(float frameTime);

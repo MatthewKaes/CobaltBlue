@@ -25,6 +25,7 @@ void Sprite::Create(LPCWSTR textureFile)
   Release();
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
+  m_own = true;
 
   // Create a bitmap to use for 2D graphics
   m_bitmap = new ::Bitmap();
@@ -38,6 +39,7 @@ void Sprite::Create(unsigned width, unsigned height)
   Release();
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
+  m_own = true;
 
   // Create a bitmap to use for 2D graphics
   m_bitmap = new ::Bitmap();
@@ -53,9 +55,12 @@ void Sprite::Create(::Bitmap* src)
   Release();
   g_renderListings.push_back(this);
   g_updateListings.insert(this);
+  m_own = false;
 
   // Use bitmap
   m_bitmap = src;
+
+  CreateBuffers(EngineHandle->Graphics->DirectX.GetDevice());
 }
 
 void Sprite::Update(float frameTime)

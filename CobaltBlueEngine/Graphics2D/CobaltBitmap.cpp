@@ -90,7 +90,7 @@ void Bitmap::SetFont(LPWSTR fontname)
   m_fontname = fontname;
 }
 
-Color Bitmap::Pixel(unsigned x, unsigned y)
+Color Bitmap::Pixel(unsigned x, unsigned y) const
 {
   if (x > Width() || y > Height())
     return Color();
@@ -295,6 +295,9 @@ void Bitmap::DrawText(LPCWSTR text, unsigned size, Rect area, TextAlign align, b
     0,
     DWRITE_FONT_SIMULATIONS_NONE,
     &pFontFace);
+
+  if (pFontFace == nullptr)
+    return;
 
   ID2D1PathGeometry* pPathGeometry;
   ID2D1GeometrySink* pGeometrySink;
@@ -552,7 +555,7 @@ void Bitmap::DrawScreen(Rect area, Rect source)
   ReleaseDC(NULL, hdc);
 }
 
-void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
+void Bitmap::Blend(const Bitmap* bitmap, Rect area, Point target)
 {
   if (!bitmap)
     return;
@@ -598,7 +601,7 @@ void Bitmap::Blend(Bitmap* bitmap, Rect area, Point target)
   }
 }
 
-void Bitmap::Blt(Bitmap* bitmap, Rect area, Point target)
+void Bitmap::Blt(const Bitmap* bitmap, Rect area, Point target)
 {
   if (!bitmap || area.X > (int)bitmap->Width() || area.Y > (int)bitmap->Height())
     return;
@@ -892,12 +895,12 @@ ID3D11ShaderResourceView* Bitmap::GetTexture()
   return m_textureView;
 }
 
-unsigned Bitmap::Width()
+unsigned Bitmap::Width() const
 {
   return m_width;
 }
 
-unsigned Bitmap::Height()
+unsigned Bitmap::Height() const
 {
   return m_height;
 }

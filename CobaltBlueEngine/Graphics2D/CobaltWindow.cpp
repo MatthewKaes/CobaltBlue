@@ -15,6 +15,13 @@ void Window::Create(LPCWSTR textureFile)
   m_foreground.Create(m_background.Width(), m_background.Height());
 }
 
+void Window::Create(Bitmap* src)
+{
+  g_updateListings.insert(this);
+  m_background.Create(src);
+  m_foreground.Create(m_background.Width(), m_background.Height());
+}
+
 unsigned Window::Width()
 {
   return m_background.Width();

@@ -38,8 +38,8 @@ public:
   void DrawText(LPCWSTR text, unsigned size, Rect area, TextAlign align);
   void DrawText(LPCWSTR text, unsigned size, Rect area, TextAlign align, bool bold, bool italic);
   void DrawScreen(Rect area, Rect source);
-  void Blend(Bitmap* bitmap, Rect area, Point target);
-  void Blt(Bitmap* bitmap, Rect area, Point target);
+  void Blend(const Bitmap* bitmap, Rect area, Point target);
+  void Blt(const Bitmap* bitmap, Rect area, Point target);
   void Blur(unsigned size);
   void FastBlur(unsigned size);
   void Greyscale();
@@ -47,9 +47,9 @@ public:
 
 
   ID3D11ShaderResourceView* GetTexture();
-  unsigned Width();
-  unsigned Height();
-  Color Pixel(unsigned x, unsigned y);
+  unsigned Width() const;
+  unsigned Height() const;
+  Color Pixel(unsigned x, unsigned y) const;
 
 private:
   void BlurH(unsigned size);
